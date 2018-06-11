@@ -19,18 +19,19 @@
       <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
     </form>
     <a href="/pages/counter/main" class="counter">去往Vuex示例页面</a>
+    <a href="/pages/manage/main?hello=123&tm=12312" class="counter">去往manage页面</a>
   </div>
 </template>
 
 <script>
-import card from '@/components/card'
+import card from '@/components/card';
 
 export default {
     data () {
         return {
             motto: 'Hello World',
             userInfo: {}
-        }
+        };
     },
 
     components: {
@@ -39,8 +40,8 @@ export default {
 
     methods: {
         bindViewTap () {
-            const url = '../logs/main'
-            wx.navigateTo({ url })
+            const url = '../logs/main';
+            wx.navigateTo({ url });
         },
         getUserInfo () {
             // 调用登录接口
@@ -48,22 +49,22 @@ export default {
                 success: () => {
                     wx.getUserInfo({
                         success: (res) => {
-                            this.userInfo = res.userInfo
+                            this.userInfo = res.userInfo;
                         }
-                    })
+                    });
                 }
-            })
+            });
         },
         clickHandle (msg, ev) {
-            console.log('clickHandle:', msg, ev)
+            // console.log('clickHandle:', msg, ev)
         }
     },
 
     created () {
-    // 调用应用实例的方法获取全局数据
-        this.getUserInfo()
+        // 调用应用实例的方法获取全局数据
+        this.getUserInfo();
     }
-}
+};
 </script>
 
 <style scoped>

@@ -6,8 +6,8 @@ const ajax = function (params, isLoading = false) {
         !isLoading && wx.showLoading({
             title: '正在加载...',
             mask: true
-        })
-        wx.showNavigationBarLoading()
+        });
+        wx.showNavigationBarLoading();
         wx.request({
             method: params.method || 'GET',
             url: params.url,
@@ -17,26 +17,26 @@ const ajax = function (params, isLoading = false) {
                 // 'content-type': 'application/x-www-form-urlencoded' // 默认值
             },
             success: function (options) {
-                let result = options.data
-                resolve(result)
+                let result = options.data;
+                resolve(result);
             },
             fail: function (err) {
                 wx.showToast({
                     title: '请求失败',
                     icon: 'none'
-                })
-                reject(err)
+                });
+                reject(err);
                 wx.showModal({
                     title: '警告',
                     content: `接口请求失败,错误${JSON.stringify(err)}`
-                })
+                });
             },
             complete: function () {
-                wx.hideNavigationBarLoading()
-                !isLoading && wx.hideLoading()
+                wx.hideNavigationBarLoading();
+                !isLoading && wx.hideLoading();
             }
-        })
-    })
-}
+        });
+    });
+};
 
-export default ajax
+export default ajax;
