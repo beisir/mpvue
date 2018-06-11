@@ -8,25 +8,25 @@
 
 <script>
 export default {
-  data: {
-    hello: 'hello wrodvvvvv'
-  },
-  methods: {
-    async fn () {
-      const index = await wx.request({
-        url: 'https://wsprod.hc360.com/get/prodbytime?pageSize=10&pageNo=0',
-        success (options) {
-          console.log(options)
+    data: {
+        hello: 'hello wrodvvvvv'
+    },
+    methods: {
+        async fn () {
+            const index = await wx.request({
+                url: 'https://wsprod.hc360.com/get/prodbytime?pageSize=10&pageNo=0',
+                success (options) {
+                    console.log(options)
+                }
+            })
+            return index
         }
-      })
-      return index
+    },
+    created () {
+        this.fn().then((options) => {
+            console.log(options)
+        })
     }
-  },
-  created () {
-    this.fn().then((options) => {
-      console.log(options)
-    })
-  }
 
 }
 </script>
