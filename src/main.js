@@ -13,12 +13,59 @@ export default {
     // 这个字段走 app.json
     config: {
     // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
-        pages: ['pages/manage/main', 'pages/logs/main', '^pages/index/main'],
-        window: {
-            backgroundTextStyle: 'light',
-            navigationBarBackgroundColor: '#fff',
-            navigationBarTitleText: 'WeChat',
-            navigationBarTextStyle: 'black'
-        }
+        'pages': [
+            'pages/railtrack/main',
+            '^pages/range/main',
+            'pages/socket/main',
+            'pages/picker/main',
+            'pages/leran/main',
+            'pages/index/main',
+            'pages/manage/main',
+            'pages/logs/main'
+        ],
+        'window': {
+            'backgroundTextStyle': 'light',
+            'navigationBarBackgroundColor': '#EA5149',
+            'navigationBarTitleText': 'WeChat',
+            'navigationBarTextStyle': 'light'
+        },
+        'tabBar': {
+            'color': '#333',
+            'selectedColor': '#fea200',
+            'borderStyle': '#e4e4e4',
+            'backgroundColor': '#fff',
+            'font-size': '22rpx',
+            'list': [
+                {
+                    'pagePath': 'pages/railtrack/main',
+                    'text': '国内运踪',
+                    'iconPath': '/static/image/plan.png',
+                    'selectedIconPath': '/static/image/plan-cur.png'
+                },
+                {
+                    'pagePath': 'pages/range/main',
+                    'text': '国外运踪',
+                    'iconPath': '/static/image/run.png',
+                    'selectedIconPath': '/static/image/run-cur.png'
+                },
+                {
+                    'pagePath': 'pages/picker/main',
+                    'text': '客服中心',
+                    'iconPath': '/static/image/phone.png',
+                    'selectedIconPath': '/static/image/phone-cur.png'
+                },
+                {
+                    'pagePath': 'pages/manage/main',
+                    'text': '个人中心',
+                    'iconPath': '/static/image/mange.png',
+                    'selectedIconPath': '/static/image/mange-cur.png'
+                }
+            ]
+        },
+        'networkTimeout': {
+            'request': 10000,
+            'downloadFile': 10000
+        },
+        'debug': false
     }
 };

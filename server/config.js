@@ -41,10 +41,10 @@ const CONF = {
     // },
     mysql: {
         host: 'localhost',
-        port: 8889,
+        port: 3306,
         user: 'root',
         db: 'cAuth',
-        pass: '5211314',
+        pass: '5211314..',
         char: 'utf8mb4'
     },
 

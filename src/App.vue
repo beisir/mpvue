@@ -1,3 +1,9 @@
+<template lang="html">
+    <div class="">
+
+    </div>
+</template>
+
 <script>
 export default {
     created () {
@@ -5,27 +11,47 @@ export default {
         const logs = wx.getStorageSync('logs') || [];
         logs.unshift(Date.now());
         wx.setStorageSync('logs', logs);
-
-        console.log('app created and cache logs by setStorageSync');
     }
 };
 </script>
+<style media="screen">
+    @import url('../static/css/font/iconfont.css');
 
-<style>
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
-  box-sizing: border-box;
-}
-/* this rule will be remove */
-* {
-  transition: width 2s;
-  -moz-transition: width 2s;
-  -webkit-transition: width 2s;
-  -o-transition: width 2s;
-}
+    page{
+        font-size: 14px;
+    }
+
+    /* railtrack 页面公共模块样式 */
+
+    .range-title {
+        font-size: 14px;
+        height: 36px;
+        line-height: 36px;
+        padding: 0 20px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid rgb(242, 240, 242);
+    }
+
+    .range-title p{
+        padding: 0 10px;
+        font-weight: bold;
+    }
+
+    .iconfont {
+        font-size: 24px;
+    }
+
+    .range-text{
+        padding: 10px 22px 20px 22px;
+        position: relative;
+        border-bottom: 1px solid rgb(242, 240, 242);
+    }
+    .range-text ul li{
+        font-size: 14px;
+        height: 22px;
+        line-height: 22px;
+    }
+
 </style>
