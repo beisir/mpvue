@@ -114,7 +114,7 @@ export default {
     color: #1aac19;
 }
 .range-balance .range-ace {
-    margin-left: 100px;
+    margin-left: 90px;
 }
 
 .range-whole {
@@ -128,32 +128,6 @@ export default {
     font-weight: bold;
 }
 
-.range-valid li {
-    padding-left: 10px;
-    border-bottom: 1px solid #cccccc;
-}
-.range-valid .valid-box {
-    display: flex;
-    align-items: center;
-    padding: 8px  10px;
-
-}
-
-.valid-left{
-    /* flex: 3; */
-    width: 110px;
-    font-weight: bold;
-}
-
-.valid-input {
-    width: 160px;
-    padding: 0 10px;
-    height: 24px;
-    line-height: 24px;
-    border: 1px solid #bfbfbf;
-    border-radius: 3px;
-    position: relative;
-}
 .valid-time {
     text-align: center;
 }
@@ -163,31 +137,6 @@ export default {
     right: 0;
     top: 0;
     z-index: 100;
-}
-
-.valid-input .input {
-    text-align:center;
-}
-.valid-btn{
-    color: #ffffff;
-    height: 24px;
-    line-height: 24px;
-    padding: 0 10px;
-    background-color: #fea200;
-    border-radius: 3px;
-    margin-left: 10px;
-}
-.valid-prompt{
-    font-size: 12px;
-    margin-left: 10px;
-    padding-bottom: 8px;
-    color: #bfbfbf;
-}
-
-.valid-confim {
-    color: #ffffff;
-    background-color: #fea200;
-    margin-top: 10px;
 }
 
 </style>

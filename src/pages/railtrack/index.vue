@@ -1,13 +1,10 @@
 <template lang="html">
     <div class="railt-index">
-        <div class='tabTitBox'>
-            <div class='tabTit'
-                v-for="(item, index) in titleList"
-                :key="item.key"
-                @click="toogerTitle(item.key, index)">
-                <span :class="currentTab === index ? 'cur': ''">{{item.text}}</span>
-            </div>
-        </div>
+        <titleBar
+            :titleList="titleList"
+            :currentTab="currentTab"
+            @toogerTitle="toogerFn"
+            />
         <div :class="['track-box', currentTab === 0 ? 'track-abroad': 'track-domestic']">
             <swiper
                 :current="currentTab"
@@ -129,6 +126,7 @@
 </template>
 
 <script>
+import titleBar from '../../components/titleBar.vue';
 export default {
     /**
      * 组件的初始数据
@@ -167,9 +165,8 @@ export default {
             let current = e.mp.detail.current;
             this.currentTab = current;
         },
-        toogerTitle (options, index) {
+        toogerFn (index) {
             this.currentTab = index;
-            console.log(options, index);
         },
 
         heightWin () {
@@ -184,50 +181,14 @@ export default {
     },
     created () {
         this.heightWin();
+    },
+    components: {
+        titleBar
     }
 };
 </script>
 
 <style lang="css">
-.tabTitBox {
-    height: 45px;
-    line-height: 45px;
-    background: #fff;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    z-index: 50;
-    box-shadow: 0rpx 0rpx 10px #ddd;
-    display: flex;
-}
-
-.tabTit {
-    flex: 1;
-    text-align: center;
-    font-size: 14px;
-    position: relative;
-}
-
-span.cur {
-    color: #101010;
-}
-
-span.cur::after {
-    content: "";
-    margin: 0 auto;
-    position: absolute;
-    bottom: 0;
-    display: block;
-    width: 100%;
-    height: 3px;
-    background: #fea200;
-    border-radius: 5px;
-}
-
-.track-box {
-    margin-top: 45px;
-}
 
 /* 国外样式 */
 .track-abroad .iconfont,.track-abroad .range-head {
