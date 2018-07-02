@@ -13,8 +13,7 @@
                 :current="currentTab"
                 duration="300"
                 @change="switchTab"
-                :style="{'height':winHeight + 'px'}"
-                >
+                :style="{'height':winHeight + 'px'}">
                 <swiper-item>
                     <scroll-view scroll-y="true" class="scoll-h" >
                         <div class="track-range">
@@ -135,7 +134,6 @@ export default {
      */
     data () {
         return {
-            titleCur: 'detail',
             currentTab: 0,
             winHeight: '',
             titleList: [
