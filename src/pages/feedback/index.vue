@@ -3,39 +3,45 @@
         <titleBar
             :titleList="titleList"
             :currentTab="currentTab"
-            @toogerTitle="toogerFn" />
+            @toogerTitle="toogerFn"
+        />
+        <div class="feed-title" v-if="!currentTab">
+            <div class="feed-back">
+                <p class="feed-back-title">全程跟踪</p>
+                <ul>
+                    <li>集装箱号码/车号：44472058</li>
+                    <li>发运日期 2017-12-25</li>
+                    <li>发站：后贝加尔斯克-出口</li>
+                    <li>到站：Vorsino,MOS</li>
+                </ul>
+            </div>
+            <div class="feed-data">
+                <h3>追踪数据</h3>
+                <ul>
+                    <li>
+                        <h4>反馈时间：2018-01-19 14:54:00</h4>
+                        <p>当前位置：Vorsino，MOS，拼车号：无，操作：到达，距离目的地距离：0</p>
+                    </li>
+                    <li>
+                        <h4>反馈时间：2018-01-19 14:54:00</h4>
+                        <p>当前位置：Vorsino，MOS，拼车号：无，操作：到达，距离目的地距离：0</p>
+                    </li>
+                    <li>
+                        <h4>反馈时间：2018-01-19 14:54:00</h4>
+                        <p>当前位置：Vorsino，MOS，拼车号：无，操作：到达，距离目的地距离：0</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <RoadMap v-else />
 
-        <div class="feed-back">
-            <p class="feed-back-title">全程跟踪</p>
-            <ul>
-                <li>集装箱号码/车号：44472058</li>
-                <li>发运日期 2017-12-25</li>
-                <li>发站：后贝加尔斯克-出口</li>
-                <li>到站：Vorsino,MOS</li>
-            </ul>
-        </div>
-        <div class="feed-data">
-            <h3>追踪数据</h3>
-            <ul>
-                <li>
-                    <h4>反馈时间：2018-01-19 14:54:00</h4>
-                    <p>当前位置：Vorsino，MOS，拼车号：无，操作：到达，距离目的地距离：0</p>
-                </li>
-                <li>
-                    <h4>反馈时间：2018-01-19 14:54:00</h4>
-                    <p>当前位置：Vorsino，MOS，拼车号：无，操作：到达，距离目的地距离：0</p>
-                </li>
-                <li>
-                    <h4>反馈时间：2018-01-19 14:54:00</h4>
-                    <p>当前位置：Vorsino，MOS，拼车号：无，操作：到达，距离目的地距离：0</p>
-                </li>
-            </ul>
-        </div>
+
     </div>
 </template>
 
 <script>
 import titleBar from '../../components/titleBar.vue';
+import RoadMap from '../../components/RoadMap.vue';
 export default {
     data () {
         return {
@@ -56,10 +62,10 @@ export default {
         toogerFn (index) {
             this.currentTab = index;
         }
-
     },
     components: {
-        titleBar
+        titleBar,
+        RoadMap
     }
 };
 </script>

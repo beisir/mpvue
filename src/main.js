@@ -14,23 +14,25 @@ export default {
     config: {
     // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
         'pages': [
-            'pages/customer/main',
-            'pages/railtrack/main',
-            'pages/range/main',
+            '^pages/index/main', // 首页
+            'pages/range/main', // 国外全程运踪
             'pages/picker/main',
-            'pages/manage/main',
-            '^pages/recharge/main',
-            'pages/personinfo/main',
-            'pages/feedback/main',
-            'pages/trahistory/main',
-            'pages/lmmediate/main',
-            'pages/myaccount/main',
-            'pages/redenvelopes/main'
+            'pages/personinfo/main', // 个人信息
+            'pages/feedback/main', // 铁路运踪查询历史
+            'pages/trahistory/main', // 铁路运踪查询历史
+            'pages/lmmediate/main', // 国内即时运踪
+            'pages/myaccount/main', // 我的账户
+            'pages/recharge/main', // 充值明细
+            // 'pages/map/main',
+            'pages/customer/main', // 客服中心
+            'pages/redenvelopes/main', // 我的红包
+            'pages/manage/main' // 个人中心
 
         ],
         'window': {
             'backgroundTextStyle': 'light',
-            'navigationBarBackgroundColor': '#EA5149',
+            'navigationBarBackgroundColor': '#fea200',
+            // 'navigationBarBackgroundColor': '#EA5149',
             'navigationBarTitleText': 'WeChat',
             'navigationBarTextStyle': 'light'
         },
@@ -42,19 +44,19 @@ export default {
             'font-size': '22rpx',
             'list': [
                 {
-                    'pagePath': 'pages/railtrack/main',
+                    'pagePath': 'pages/index/main',
                     'text': '国内运踪',
                     'iconPath': '/static/image/plan.png',
                     'selectedIconPath': '/static/image/plan-cur.png'
                 },
                 {
-                    'pagePath': 'pages/lmmediate/main',
+                    'pagePath': 'pages/index/main',
                     'text': '国外运踪',
                     'iconPath': '/static/image/run.png',
                     'selectedIconPath': '/static/image/run-cur.png'
                 },
                 {
-                    'pagePath': 'pages/range/main',
+                    'pagePath': 'pages/customer/main',
                     'text': '客服中心',
                     'iconPath': '/static/image/phone.png',
                     'selectedIconPath': '/static/image/phone-cur.png'

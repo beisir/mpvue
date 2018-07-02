@@ -9,24 +9,24 @@
         </div>
         <ul class="manage-list">
             <li>
-                <span class="icon iconfont icon-27"></span>
+                <span class="icon iconfont icon-wode-"></span>
                 <p>个人信息</p>
-                <span class="icon iconfont icon-27"></span>
+                <span class="icon iconfont icon-icon-arrow-right2"></span>
             </li>
             <li>
-                <span class="icon iconfont icon-27"></span>
+                <span class="icon iconfont icon-icon--"></span>
                 <p>我的踪迹</p>
-                <span class="icon iconfont icon-27"></span>
+                <span class="icon iconfont icon-icon-arrow-right2"></span>
             </li>
             <li>
-                <span class="icon iconfont icon-27"></span>
+                <span class="icon iconfont icon-zhanghuxinx"></span>
                 <p>我的账户</p>
-                <span class="icon iconfont icon-27"></span>
+                <span class="icon iconfont icon-icon-arrow-right2"></span>
             </li>
             <li>
-                <span class="icon iconfont icon-27"></span>
+                <span class="icon iconfont icon-msnui-telephone"></span>
                 <p>客服中心</p>
-                <span class="icon iconfont icon-27"></span>
+                <span class="icon iconfont icon-icon-arrow-right2"></span>
             </li>
         </ul>
     </div>
