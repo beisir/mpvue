@@ -14,14 +14,19 @@ export default {
     config: {
     // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
         'pages': [
+            'pages/customer/main',
             'pages/railtrack/main',
-            '^pages/range/main',
-            'pages/socket/main',
+            'pages/range/main',
             'pages/picker/main',
-            'pages/leran/main',
-            'pages/index/main',
             'pages/manage/main',
-            'pages/logs/main'
+            '^pages/recharge/main',
+            'pages/personinfo/main',
+            'pages/feedback/main',
+            'pages/trahistory/main',
+            'pages/lmmediate/main',
+            'pages/myaccount/main',
+            'pages/redenvelopes/main'
+
         ],
         'window': {
             'backgroundTextStyle': 'light',
@@ -43,13 +48,13 @@ export default {
                     'selectedIconPath': '/static/image/plan-cur.png'
                 },
                 {
-                    'pagePath': 'pages/range/main',
+                    'pagePath': 'pages/lmmediate/main',
                     'text': '国外运踪',
                     'iconPath': '/static/image/run.png',
                     'selectedIconPath': '/static/image/run-cur.png'
                 },
                 {
-                    'pagePath': 'pages/picker/main',
+                    'pagePath': 'pages/range/main',
                     'text': '客服中心',
                     'iconPath': '/static/image/phone.png',
                     'selectedIconPath': '/static/image/phone-cur.png'

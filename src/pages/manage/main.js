@@ -1,11 +1,11 @@
 import Vue from 'vue';
-import App from './index';
+import Manage from './index';
 
-const app = new Vue(App);
+const app = new Vue(Manage);
 app.$mount();
 
 export default {
     config: {
-        navigationBarTitleText: 'hello word'
+        navigationBarTitleText: '个人中心'
     }
 };
