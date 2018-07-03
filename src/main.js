@@ -32,8 +32,7 @@ export default {
         'window': {
             'backgroundTextStyle': 'light',
             'navigationBarBackgroundColor': '#fea200',
-            // 'navigationBarBackgroundColor': '#EA5149',
-            'navigationBarTitleText': 'WeChat',
+            'navigationBarTitleText': '铁路追中',
             'navigationBarTextStyle': 'light'
         },
         'tabBar': {
@@ -46,31 +45,31 @@ export default {
                 {
                     'pagePath': 'pages/index/main',
                     'text': '国内运踪',
-                    'iconPath': '/static/image/plan.png',
-                    'selectedIconPath': '/static/image/plan-cur.png'
-                },
-                {
-                    'pagePath': 'pages/index/main',
-                    'text': '国外运踪',
                     'iconPath': '/static/image/run.png',
                     'selectedIconPath': '/static/image/run-cur.png'
                 },
                 {
+                    'pagePath': 'pages/feedback/main',
+                    'text': '国外运踪',
+                    'iconPath': '/static/image/train.png',
+                    'selectedIconPath': '/static/image/train-cur.png'
+                },
+                {
                     'pagePath': 'pages/customer/main',
                     'text': '客服中心',
-                    'iconPath': '/static/image/phone.png',
-                    'selectedIconPath': '/static/image/phone-cur.png'
+                    'iconPath': '/static/image/tel.png',
+                    'selectedIconPath': '/static/image/tel-cur.png'
                 },
                 {
                     'pagePath': 'pages/manage/main',
                     'text': '个人中心',
-                    'iconPath': '/static/image/mange.png',
-                    'selectedIconPath': '/static/image/mange-cur.png'
+                    'iconPath': '/static/image/my.png',
+                    'selectedIconPath': '/static/image/my-cur.png'
                 }
             ]
         },
         'networkTimeout': {
-            'request': 10000,
+            'request': 5000,
             'downloadFile': 10000
         },
         'debug': false

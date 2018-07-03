@@ -11,110 +11,31 @@
                 duration="300"
                 @change="switchTab"
                 :style="{'height':winHeight + 'px'}">
-                <swiper-item>
+                <swiper-item
+                    v-for="(swipeItem, swipeIndex) in domesticArr"
+                    :key="swipeIndex">
                     <scroll-view scroll-y="true" class="scoll-h" >
-                        <div class="track-range">
+                        <div class="track-range"
+                            v-for="(domesticItem, domesticIndex) in swipeItem"
+                            :key="domesticItem.title">
                             <div class="range-title">
                                 <span class="icon iconfont icon-27"></span>
-                                <p class="range-head">国外全程追踪</p>
+                                <p class="range-head">{{domesticItem.title}}</p>
                                 <span class="icon iconfont icon-huo3"></span>
-                                <button class="range-btn" type="button" name="button" @click="trackingRangeFn">追踪范围</button>
+                                <button
+                                    v-if="domesticItem.rangeBtn"
+                                    class="range-btn"
+                                    type="button"
+                                    @click="trackingRangeFn">追踪范围</button>
                             </div>
                             <div class="range-text">
                                 <ul>
-                                    <li>输入：车皮/集装箱号；境外发到站；发运日期</li>
-                                    <li>跟踪周期：全程（持续跟踪至终点）</li>
-                                    <li>反馈时间：8分钟（在运踪查询历史中查看）</li>
-                                    <li>运踪结果：一般每天持续反馈2条-30条信息</li>
-                                    <li>适用情形：经常查某个车皮/集装箱运踪，最划算</li>
+                                    <li v-for="(resultItem, resultIndex) in domesticItem.resultList" :key="resultItem">{{resultItem}}</li>
                                 </ul>
-                                <a class="range-go" href="/pages/range/main">去追踪</a>
-                            </div>
-                        </div>
-                        <div class="track-range">
-                            <div class="range-title">
-                                <span class="icon iconfont icon-yuandian"></span>
-                                <p class="range-head">国外即时运踪</p>
-                            </div>
-                            <div class="range-text">
-                                <ul>
-                                    <li>输入：车皮/集装箱号；境外发到站；发运日期</li>
-                                    <li>跟踪周期：全程（持续跟踪至终点）</li>
-                                    <li>反馈时间：8分钟（在运踪查询历史中查看）</li>
-                                    <li>运踪结果：一般每天持续反馈2条-30条信息</li>
-                                    <li>适用情形：经常查某个车皮/集装箱运踪，最划算</li>
-                                </ul>
-                                <a class="range-go" href="/pages/range/main">去追踪</a>
-                            </div>
-                        </div>
-                        <div class="track-range">
-                            <div class="range-title">
-                                <span class="icon iconfont icon-7"></span>
-                                <p class="range-head">国外时段追踪</p>
-                            </div>
-                            <div class="range-text">
-                                <ul>
-                                    <li>输入：车皮/集装箱号；境外发到站；发运日期</li>
-                                    <li>跟踪周期：全程（持续跟踪至终点）</li>
-                                    <li>反馈时间：8分钟（在运踪查询历史中查看）</li>
-                                    <li>运踪结果：一般每天持续反馈2条-30条信息</li>
-                                    <li>适用情形：经常查某个车皮/集装箱运踪，最划算</li>
-                                </ul>
-                                <a class="range-go" href="/pages/range/main">去追踪</a>
-                            </div>
-                        </div>
-                    </scroll-view>
-                </swiper-item>
-                <swiper-item>
-                    <scroll-view scroll-y="true" class="scoll-h" >
-                        <div class="track-range">
-                            <div class="range-title">
-                                <span class="icon iconfont icon-27"></span>
-                                <p class="range-head">国外全程追踪</p>
-                                <span class="icon iconfont icon-huo3"></span>
-                                <button class="range-btn" type="button" name="button">追踪范围</button>
-                            </div>
-                            <div class="range-text">
-                                <ul>
-                                    <li>输入：车皮/集装箱号；境外发到站；发运日期</li>
-                                    <li>跟踪周期：全程（持续跟踪至终点）</li>
-                                    <li>反馈时间：8分钟（在运踪查询历史中查看）</li>
-                                    <li>运踪结果：一般每天持续反馈2条-30条信息</li>
-                                    <li>适用情形：经常查某个车皮/集装箱运踪，最划算</li>
-                                </ul>
-                                <a class="range-go" href="/pages/range/main">去追踪</a>
-                            </div>
-                        </div>
-                        <div class="track-range">
-                            <div class="range-title">
-                                <span class="icon iconfont icon-yuandian"></span>
-                                <p class="range-head">国外即时运踪</p>
-                            </div>
-                            <div class="range-text">
-                                <ul>
-                                    <li>输入：车皮/集装箱号；境外发到站；发运日期</li>
-                                    <li>跟踪周期：全程（持续跟踪至终点）</li>
-                                    <li>反馈时间：8分钟（在运踪查询历史中查看）</li>
-                                    <li>运踪结果：一般每天持续反馈2条-30条信息</li>
-                                    <li>适用情形：经常查某个车皮/集装箱运踪，最划算</li>
-                                </ul>
-                                <a class="range-go" href="/pages/range/main">去追踪</a>
-                            </div>
-                        </div>
-                        <div class="track-range">
-                            <div class="range-title">
-                                <span class="icon iconfont icon-7"></span>
-                                <p class="range-head">国外时段追踪</p>
-                            </div>
-                            <div class="range-text">
-                                <ul>
-                                    <li>输入：车皮/集装箱号；境外发到站；发运日期</li>
-                                    <li>跟踪周期：全程（持续跟踪至终点）</li>
-                                    <li>反馈时间：8分钟（在运踪查询历史中查看）</li>
-                                    <li>运踪结果：一般每天持续反馈2条-30条信息</li>
-                                    <li>适用情形：经常查某个车皮/集装箱运踪，最划算</li>
-                                </ul>
-                                <a class="range-go" href="/pages/range/main">去追踪</a>
+                                <button class='range-go'
+                                    open-type="getPhoneNumber"
+                                    @getphonenumber="application">去追踪</button>
+                                <!-- <a class="range-go" href="/pages/range/main">去追踪</a> -->
                             </div>
                         </div>
                     </scroll-view>
@@ -126,6 +47,7 @@
 
 <script>
 import titleBar from '../../components/titleBar.vue';
+import {indexData} from '../../utils/data.js';
 export default {
     /**
      * 组件的初始数据
@@ -143,7 +65,8 @@ export default {
                     key: 'news',
                     text: '国内运踪'
                 }
-            ]
+            ],
+            domesticArr: indexData.indexContent // 国内运踪数据
         };
     },
 
@@ -155,7 +78,7 @@ export default {
         trackingRangeFn () {
             wx.showModal({
                 title: '追踪范围',
-                content: '俄罗斯、白俄罗斯、蒙古、哈萨克斯坦、乌兹别克斯坦、吉尔吉斯斯坦、塔吉克斯坦、土库曼斯坦、乌克兰、摩尔多瓦、阿塞拜疆、格鲁吉亚、拉脱维亚、立陶宛、爱沙尼亚、芬兰',
+                content: indexData.indexDialong.join('、'),
                 showCancel: false
             });
         },
@@ -175,7 +98,11 @@ export default {
                     _this.winHeight = clientHeight;
                 }
             });
+        },
+        application (e) {
+            console.log(e);
         }
+
     },
     created () {
         this.heightWin();
@@ -231,10 +158,10 @@ export default {
 .range-text .range-go{
     font-size: 12px;
     color: #ffffff;
+    height: 30px;
+    line-height: 30px;
     text-align: center;
     border-radius: 5px;
-    /* background-color: #1aac19; */
-    padding: 6px 10px;
     position: absolute;
     bottom: 60px;
     right: 24px;

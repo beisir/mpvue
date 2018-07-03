@@ -55,19 +55,19 @@ export default {
 }
 
 .myaccount-btn {
-    line-height: 40px;
+    line-height: 50px;
     text-align: center;
     border-bottom: solid #f5f4f5 1px;
 }
 .myaccount-btn span {
-    padding: 3px 20px;
+    padding: 5px 20px;
     background-color: #fea202;
     color: #ffffff;
     border-radius: 5px;
     font-size: 12px;
 }
 .myaccount-list li {
-    line-height: 30px;
+    line-height: 40px;
     padding-left: 10px;
     border-bottom: solid #f5f4f5 1px;
 }
@@ -88,8 +88,8 @@ export default {
     transform: translateY(100);
 }
 .myaccount-dialong p {
-    font-size: 12px;
-    line-height: 30px;
+    font-size: 14px;
+    line-height: 40px;
     text-align: center;
     border-top: 1px solid #f5f4f5;
     background-color: #ffffff;
@@ -107,7 +107,7 @@ export default {
 }
 .myaccount-td {
     width: 32.333333%;
-    line-height: 40px;
+    line-height: 50px;
     text-align: center;
     border: 1px solid #f5f4f5;
 }

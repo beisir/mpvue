@@ -7,28 +7,28 @@
                 <div class="manage-phone">联系电话：13031115726</div>
             </div>
         </div>
-        <ul class="manage-list">
-            <li>
+        <div class="manage-list">
+            <a href="/pages/personinfo/main">
                 <span class="icon iconfont icon-wode-"></span>
                 <p>个人信息</p>
                 <span class="icon iconfont icon-icon-arrow-right2"></span>
-            </li>
-            <li>
+            </a>
+            <a href="/pages/lmmediate/main">
                 <span class="icon iconfont icon-icon--"></span>
                 <p>我的踪迹</p>
                 <span class="icon iconfont icon-icon-arrow-right2"></span>
-            </li>
-            <li>
-                <span class="icon iconfont icon-zhanghuxinx"></span>
+            </a>
+            <a href="/pages/myaccount/main">
+                <span class="icon iconfont icon-zhanghuxinxi"></span>
                 <p>我的账户</p>
                 <span class="icon iconfont icon-icon-arrow-right2"></span>
-            </li>
-            <li>
+            </a>
+            <a href="/pages/customer/main">
                 <span class="icon iconfont icon-msnui-telephone"></span>
                 <p>客服中心</p>
                 <span class="icon iconfont icon-icon-arrow-right2"></span>
-            </li>
-        </ul>
+            </a>
+        </div>
     </div>
 </template>
 
@@ -59,16 +59,23 @@ export default {
     margin-left: 30px;
 }
 
-.manage-list li {
+.manage-list a {
+    width: 100%;
     padding: 0 20px;
+    box-sizing: border-box;
     display: flex;
     line-height: 40px;
     border-bottom: 1px #f2f1f1 dashed;
 }
-.manage-list li p {
+.manage-list p {
     padding-left: 30px;
     flex: 1;
 }
-
+.manage-list .iconfont {
+    color: #fea200;
+}
+.manage-list .icon-icon-arrow-right2 {
+    font-size: 18px;
+}
 
 </style>
