@@ -32,10 +32,14 @@
                                 <ul>
                                     <li v-for="(resultItem, resultIndex) in domesticItem.resultList" :key="resultItem">{{resultItem}}</li>
                                 </ul>
-                                <button class='range-go'
+                                <button v-if="!phoneNumber"
+                                    class='range-go'
                                     open-type="getPhoneNumber"
                                     @getphonenumber="application">去追踪</button>
-                                <!-- <a class="range-go" href="/pages/range/main">去追踪</a> -->
+                                <button v-else
+                                    class='range-go'
+                                    @click="getlication"
+                                    >追踪</button>
                             </div>
                         </div>
                     </scroll-view>
@@ -48,6 +52,7 @@
 <script>
 import titleBar from '../../components/titleBar.vue';
 import {indexData} from '../../utils/data.js';
+import UTIL from '../../util.js';
 export default {
     /**
      * 组件的初始数据
@@ -66,6 +71,7 @@ export default {
                     text: '国内运踪'
                 }
             ],
+            phoneNumber: '',
             domesticArr: indexData.indexContent // 国内运踪数据
         };
     },
@@ -99,12 +105,26 @@ export default {
                 }
             });
         },
-        application (e) {
-            console.log(e);
+        async application (e) {
+            try {
+                let result = await UTIL.getMobilePhone(e);
+                result && this.goRange();
+            } catch (err) {
+                console.log(err);
+            };
+        },
+        goRange () {
+            let url = '/pages/range/main';
+            wx.navigateTo({url});
+        },
+        // 获取电话
+        getlication () {
+            this.goRange();
         }
-
     },
     created () {
+        let phoneNumber = wx.getStorageSync('mobile');
+        this.phoneNumber = phoneNumber;
         this.heightWin();
     },
     components: {

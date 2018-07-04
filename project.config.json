@@ -10,8 +10,9 @@
 	"miniprogramRoot": "./dist/",
 	"qcloudRoot": "./server",
 	"compileType": "miniprogram",
-	"appid": "wx4ab81cf09eebe848",
+	"appid": "wxe8717e21dd179314",
 	"projectname": "mpvue",
+	"libVersion": "1.9.98",
 	"condition": {
 		"search": {
 			"current": -1,
