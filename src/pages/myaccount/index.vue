@@ -8,21 +8,22 @@
             <div class="myaccount-btn">
                 <span @click="isshow=true">充值</span>
             </div>
-            <ul class="myaccount-list">
-                <li>我的红包</li>
-                <li>充值明细</li>
-            </ul>
+            <div class="myaccount-list">
+                <a href="/pages/redenvelopes/main">我的红包</a>
+                <a href="/pages/recharge/main">充值明细</a>
+            </div>
         </div>
         <div class="signClassAlert" v-if="isshow">
             <div :class="['myaccount-dialong', isshow ? 'slideup': 'slidedown']">
                 <p>选择充值金额 <span @click="isshow=false">关闭</span></p>
                 <div class="myaccount-tr">
-                    <span class="myaccount-td">50元</span>
-                    <span class="myaccount-td">100元</span>
-                    <span class="myaccount-td">200元</span>
-                    <span class="myaccount-td">500元</span>
-                    <span class="myaccount-td">1000元</span>
-                    <span class="myaccount-td">2000元</span>
+                    <span
+                        class="myaccount-td"
+                        v-for="(priceItem, priceIndex) in priceList"
+                        :key="priceIndex"
+                        @click="submitOrder"
+                        :data-price="priceItem"
+                        >{{priceItem}}元</span>
                 </div>
             </div>
         </div>
@@ -33,12 +34,22 @@
 export default {
     data () {
         return {
-            isshow: false
+            isshow: false,
+            priceList: [0.001, 100, 200, 500, 1000, 2000]
         };
     },
     methods: {
-        showTost () {
-            this.isshow = true;
+        async submitOrder (e) {
+            let {price} = e.mp.currentTarget.dataset;
+            try {
+                let prepay_id = await this.$UTIL.WeChatPayment(price);
+                if (prepay_id !== '') {
+                    console.log('支付成功', prepay_id);
+                };
+            } catch (err) {
+                console.log(err);
+            };
+            this.isshow = false;
         }
     }
 };
@@ -66,7 +77,8 @@ export default {
     border-radius: 5px;
     font-size: 12px;
 }
-.myaccount-list li {
+.myaccount-list a {
+    display: block;
     line-height: 40px;
     padding-left: 10px;
     border-bottom: solid #f5f4f5 1px;

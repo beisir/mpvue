@@ -1,19 +1,16 @@
 import Vue from 'vue';
 import App from './App';
 import ajax from './utils/http.js';
-import UTIL from './util.js';
+import UTIL from './utils/util.js';
 Vue.config.productionTip = false;
 Vue.prototype.$ajax = ajax;
-
+Vue.prototype.$UTIL = UTIL;
 App.mpType = 'app';
 
 const app = new Vue(App);
 app.$mount();
 
-UTIL.wechatLogin((options) => {
-    wx.setStorageSync('openid', options);
-});
-
+// app.$UTIL.wechatLogin();
 export default {
     // 这个字段走 app.json
     config: {
@@ -74,7 +71,7 @@ export default {
             ]
         },
         'networkTimeout': {
-            'request': 5000,
+            'request': 10000,
             'downloadFile': 10000
         },
         'debug': false

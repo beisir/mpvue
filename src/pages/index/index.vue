@@ -4,12 +4,12 @@
             :titleList="titleList"
             :currentTab="currentTab"
             @toogerTitle="toogerFn"
-            />
+        />
         <div :class="['track-box', currentTab === 0 ? 'track-abroad': 'track-domestic']">
             <swiper
-                :current="currentTab"
                 duration="300"
                 @change="switchTab"
+                :current="currentTab"
                 :style="{'height':winHeight + 'px'}">
                 <swiper-item
                     v-for="(swipeItem, swipeIndex) in domesticArr"
@@ -19,27 +19,32 @@
                             v-for="(domesticItem, domesticIndex) in swipeItem"
                             :key="domesticItem.title">
                             <div class="range-title">
-                                <span class="icon iconfont icon-27"></span>
+                                <span :class="['icon', 'iconfont', domesticItem.icon]"></span>
                                 <p class="range-head">{{domesticItem.title}}</p>
                                 <span class="icon iconfont icon-huo3"></span>
                                 <button
                                     v-if="domesticItem.rangeBtn"
                                     class="range-btn"
                                     type="button"
-                                    @click="trackingRangeFn">追踪范围</button>
+                                    @click="trackingRangeFn"
+                                >追踪范围</button>
                             </div>
                             <div class="range-text">
                                 <ul>
-                                    <li v-for="(resultItem, resultIndex) in domesticItem.resultList" :key="resultItem">{{resultItem}}</li>
+                                    <li
+                                        v-for="(resultItem, resultIndex) in domesticItem.resultList"
+                                        :key="resultItem"
+                                    >{{resultItem}}</li>
                                 </ul>
                                 <button v-if="!phoneNumber"
                                     class='range-go'
                                     open-type="getPhoneNumber"
-                                    @getphonenumber="application">去追踪</button>
+                                    @getphonenumber="application"
+                                >去追踪</button>
                                 <button v-else
                                     class='range-go'
-                                    @click="getlication"
-                                    >追踪</button>
+                                    @click="goRange(phoneNumber)"
+                                >追踪</button>
                             </div>
                         </div>
                     </scroll-view>
@@ -52,7 +57,6 @@
 <script>
 import titleBar from '../../components/titleBar.vue';
 import {indexData} from '../../utils/data.js';
-import UTIL from '../../util.js';
 export default {
     /**
      * 组件的初始数据
@@ -107,19 +111,16 @@ export default {
         },
         async application (e) {
             try {
-                let result = await UTIL.getMobilePhone(e);
-                result && this.goRange();
+                let result = await this.$UTIL.getMobilePhone(e);
+                result && this.goRange(result);
+                this.phoneNumber = result;
             } catch (err) {
                 console.log(err);
             };
         },
-        goRange () {
-            let url = '/pages/range/main';
+        goRange (phone) {
+            let url = `/pages/range/main?phone=${phone}`;
             wx.navigateTo({url});
-        },
-        // 获取电话
-        getlication () {
-            this.goRange();
         }
     },
     created () {

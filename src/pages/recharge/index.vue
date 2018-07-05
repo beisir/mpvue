@@ -71,6 +71,9 @@ export default {
 </script>
 
 <style lang="css">
+.recharge {
+    font-family: 'myfont';
+}
 .re-title {
     font-weight: bold;
     height: 40px;

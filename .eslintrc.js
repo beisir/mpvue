@@ -28,7 +28,9 @@ module.exports = {
     'indent': [2, 4],
     'camelcase': 0,
     'prefer-promise-reject-errors': 0,
-    "semi": [2, "always"]
+    "semi": [2, "always"],
+    'no-useless-constructor': 0,
+    'no-warning-comments': 0
   },
   globals: {
     App: true,

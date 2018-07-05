@@ -87,7 +87,7 @@
                 <li>
                     <div class="valid-box">
                         <div class="valid-left">选择红包</div>
-                        <div class="valid-input" @click="validSelect">{{selectArray[selectIndex]}}</div>
+                        <div class="valid-input valid-triangle" @click="validSelect">{{selectArray[selectIndex]}}</div>
                     </div>
                 </li>
             </ul>
@@ -156,6 +156,12 @@ export default {
                 console.log(result);
             };
         }
+    },
+    onLoad (e) {
+        console.log(e);
+        console.log(this.$root.$mp);
+        // console.log(this.$root.$mp.appOptions);
+        // console.log(this.$root.$mp.query);
     }
 };
 </script>
@@ -188,6 +194,20 @@ export default {
     right: 0;
     top: 0;
     z-index: 100;
+}
+.valid-triangle::after, .valid-triangle::before {
+    content: '';
+    border: 5px solid transparent;
+    position: absolute;
+    right: 10px;
+}
+.valid-triangle::after {
+    top: 3%;
+    border-bottom-color: #888888;
+}
+.valid-triangle::before {
+    bottom: 3%;
+    border-top-color: #888888;
 }
 
 </style>
