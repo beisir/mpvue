@@ -1,11 +1,18 @@
 <template lang="html">
     <div class="manage">
         <div class="manage-top">
-            <div class="manage-image"><img src="https://pro.modao.cc/uploads3/images/1876/18764020/raw_1523341889.jpeg" /> </div>
+            <div class="manage-image">
+                <img :src="userInfo.avatarUrl" />
+            </div>
             <div class="manage-userinfo">
-                <div class="manage-name">王玉</div>
+                <div class="manage-name">{{userInfo.nickName}}</div>
                 <div class="manage-phone">联系电话：13031115726</div>
             </div>
+            <button
+                class="user-btn"
+                open-type="getUserInfo"
+                @getuserinfo="userInfoHandler">
+            </button>
         </div>
         <div class="manage-list">
             <a href="/pages/personinfo/main">
@@ -33,15 +40,56 @@
 </template>
 
 <script>
+import {manage} from '../../utils/data.js';
 export default {
+    data () {
+        return {
+            userBtn: true,
+            userInfo: {
+                nickName: '点击授权',
+                avatarUrl: manage.avatarUrl
+            }
+        };
+    },
+    methods: {
+        async userInfoHandler (e) {
+            try {
+                let userInfo = await this.$UTIL.AuthorIzation(e);
+                this.userInfo = userInfo;
+                this.userBtn = false;
+            } catch (err) {
+                console.log(err);
+            };
+        }
+    },
+    created () {
+        const _this = this;
+        this.$UTIL.AuthorIzation().then(result => {
+            _this.userInfo = result;
+            _this.userBtn = false;
+        });
+    }
 };
 </script>
 
 <style lang="css">
 .manage-top {
     padding: 20px;
+    position: relative;
     display: flex;
 }
+
+.user-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    /* background-color: #ff0000; */
+
+    opacity: 0;
+}
+
 .manage-image {
     width: 80px;
     height: 80px;
