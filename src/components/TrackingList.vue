@@ -26,11 +26,12 @@
                     <button v-if="!phoneNumber"
                         class='range-go'
                         open-type="getPhoneNumber"
+                        :data-domesticIndex="domesticIndex"
                         @getphonenumber="application"
                     >去追踪</button>
                     <button v-else
                         class='range-go'
-                        @click="goRange(phoneNumber)"
+                        @click="goRange(phoneNumber, domesticIndex)"
                     >追踪</button>
                 </div>
             </div>
@@ -41,11 +42,14 @@
 
 <script>
 import {indexData} from '../utils/data.js';
+import rule from '../utils/rule.js';
 export default {
     props: {
         activeIndex: {
-            type: Number,
-            default: []
+            type: Number
+        },
+        clickIndex: {
+            type: Number
         }
     },
     data () {
@@ -62,14 +66,6 @@ export default {
                 showCancel: false
             });
         },
-        switchTab (e) {
-            let current = e.mp.detail.current;
-            this.currentTab = current;
-        },
-        toogerFn (index) {
-            this.currentTab = index;
-        },
-
         heightWin () {
             const _this = this;
             wx.getSystemInfo({
@@ -80,6 +76,7 @@ export default {
             });
         },
         async application (e) {
+            let domesticindex = e.mp.currentTarget.dataset.domesticindex;
             // try {
             //     let result = await this.$UTIL.getMobilePhone(e);
             //     result && this.goRange(result);
@@ -87,10 +84,14 @@ export default {
             // } catch (err) {
             //     console.log(err);
             // };
-            this.goRange('13031115726');
+            this.goRange('13031115726', domesticindex);
         },
-        goRange (phone) {
-            let url = this.activeIndex ? `/pages/lmmediate/main?phone=${phone}` : `/pages/range/main?phone=${phone}`;
+        goRange (phone, domesticindex) {
+            let activeIndex = this.activeIndex;
+            let ruleData = rule[activeIndex][domesticindex];
+            let dataString = `phone=${phone}&rule=${JSON.stringify(ruleData)}`;
+
+            let url = activeIndex ? `/pages/lmmediate/main?${dataString}` : `/pages/range/main?${dataString}`;
             wx.navigateTo({url});
         }
     },

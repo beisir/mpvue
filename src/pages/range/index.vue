@@ -1,19 +1,9 @@
 <template lang="html">
     <div class="range">
-        <div class="range-balance">
-            <div class="range-title">
-                <span class="icon iconfont icon-27"></span>
-                <p class="range-head">国外全程追踪</p>
-                <span class="range-ace">账户余额: 0.00 元</span>
-            </div>
-        </div>
-        <div class="range-whole">
-            <p>￥52元/次·全程</p>
-            <p>物畅网会员尊享7折—9折优惠，低至21元</p>
-        </div>
+        <Balance />
         <div class="range-valid">
             <ul>
-                <li>
+                <li v-if="rule.chepi">
                     <div class="valid-box">
                         <div class="valid-left">车皮/集装箱号</div>
                         <div class="valid-input">
@@ -23,11 +13,10 @@
                                 v-model="sendData.containerNo"
                             />
                         </div>
-                        <div class="valid-btn">效验</div>
                     </div>
                     <div class="valid-prompt">示例：集装箱号：TKRU4096807  车皮号：44472058</div>
                 </li>
-                <li>
+                <li v-if="rule.fazhan">
                     <div class="valid-box">
                         <div class="valid-left">发站</div>
                         <div class="valid-input">
@@ -41,7 +30,7 @@
                         </div>
                     </div>
                 </li>
-                <li>
+                <li v-if="rule.daozhan">
                     <div class="valid-box">
                         <div class="valid-left">到站</div>
                         <div class="valid-input">
@@ -55,7 +44,7 @@
                         </div>
                     </div>
                 </li>
-                <li>
+                <li v-if="rule.fayun">
                     <div class="valid-box">
                         <div class="valid-left">发运日期</div>
                         <div class="valid-input">
@@ -76,40 +65,37 @@
                         </div>
                     </div>
                 </li>
-                <li>
+                <li v-if="rule.shiduan">
                     <div class="valid-box">
                         <div class="valid-left">时段追踪</div>
-                        <div class="valid-input">
-                            <input
-                                class="valid-time"
-                                placeholder-class="input"
-                                v-model="sendData.sendDates"
-                            />
+                        <div class="valid-input" style="font-size:12px;position:relative;">
+                            {{startTime}} 至 {{endTime}}
                             <picker
-                                class="valid-picker"
+                                class="valid-shiduan"
                                 mode="date"
-                                :value="sendData.sendDates"
-                                start="2015-09-01"
-                                end="2017-09-01"
-                                @change="bindDateChange">
-                                <span class="icon iconfont icon-rili"></span>
+                                :value="startTime"
+                                :start="initStartTime"
+                                :end="initEndTime"
+                                @change="SdDateChange">
+                                <div class="shiduan-block"></div>
                             </picker>
+
                         </div>
                     </div>
                 </li>
-                <li>
+                <li v-if="rule.kehu">
                     <div class="valid-box">
                         <div class="valid-left">客户标签</div>
-                        <div class="valid-input" @click="scrolltost=true">{{selectOptionl}}
-                            <!-- <input
+                        <div class="valid-input">
+                            <input
                                 placeholder="选填"
                                 placeholder-class="input"
                                 v-model="sendData.remCus"
-                            /> -->
+                            />
                         </div>
                     </div>
                 </li>
-                <li>
+                <li v-if="rule.hongbao">
                     <div class="valid-box">
                         <div class="valid-left">选择红包</div>
                         <div class="valid-input valid-triangle" @click="validSelect">{{selectArray[selectIndex]}}</div>
@@ -156,13 +142,20 @@
 </template>
 
 <script>
+import Balance from '../../components/balance.vue';
 import inputDlong from '../../components/inputDlong.vue';
 export default {
     data () {
         return {
+            rule: {},
+            shiduanTime: '',
             inputTost: false,
             scrolltost: false,
             dlongName: '',
+            endTime: '',
+            startTime: '',
+            initEndTime: '',
+            initStartTime: '',
             selectIndex: 0,
             selectArray: ['30元红包', '50元红包', '不用红包'],
             validTime: '2016-09-01',
@@ -258,24 +251,60 @@ export default {
         },
         closeEvent (flag) {
             this.inputTost = false;
+        },
+        getEndTime (month, day) {
+            let dt = new Date(month, day, 1);
+            let cdt = new Date(dt.getTime() - 1000 * 60 * 60 * 24);
+            return cdt;
+        },
+        initData () {
+            let now = new Date();
+            let year = now.getFullYear();
+            let month = now.getMonth() + 1;
+            let day = this.transTime(now.getDate());
+            let initEndTime = this.getEndTime(year, month + 2);
+
+            console.log(this.transTime(month));
+            this.initStartTime = `${year}-${this.transTime(month)}-${day}`;
+            this.startTime = this.initStartTime;
+            this.initEndTime = `${initEndTime.getFullYear()}-${this.transTime(Number(initEndTime.getMonth()) + 1)}-${this.transTime(initEndTime.getDate())}`;
+
+            let date = this.getEndTime(year, month);
+            this.endTime = `${date.getFullYear()}-${this.transTime(Number(date.getMonth()) + 1)}-${this.transTime(date.getDate())}`;
+            console.log(this.initStartTime);
+            console.log(this.startTime);
+            console.log(this.initEndTime);
+            console.log(this.endTime);
+        },
+        transTime (num) {
+            return num < 10 ? '0' + num : num;
+        },
+        SdDateChange (e) {
+            let changeTime = e.mp.detail.value.split('-');
+            let date = this.getEndTime(changeTime[0], changeTime[1]);
+            this.startTime = e.mp.detail.value;
+            this.endTime = `${date.getFullYear()}-${this.transTime(Number(date.getMonth()) + 1)}-${this.transTime(date.getDate())}`;
+            // wx.showModal({
+            //     title: 'time',
+            //     content: `${cdt.getFullYear()},${Number(cdt.getMonth()) + 1},${cdt.getDate()}`
+            // });
         }
     },
-    onLoad (e) {
-        console.log(e);
-        console.log(this.$root.$mp);
-        // console.log(this.$root.$mp.appOptions);
-        // console.log(this.$root.$mp.query);
+    onLoad (options) {
+        this.rule = JSON.parse(options.rule);
+        console.log(this.rule);
+        this.initData();
+        // console.log(this.rule);
+        // console.log(this.$root.$mp.query.rule);
     },
     components: {
-        inputDlong
+        inputDlong,
+        Balance
     }
 };
 </script>
 
 <style lang="css">
-
-
-
 .range-fexid {
     position: fixed;
     width: 100%;
@@ -349,12 +378,6 @@ export default {
 }
 
 
-.range-balance .range-title {
-    color: #1aac19;
-}
-.range-balance .range-ace {
-    margin-left: 90px;
-}
 
 .range-whole {
     text-align: center;
@@ -391,5 +414,16 @@ export default {
     bottom: 3%;
     border-top-color: #888888;
 }
-
+.valid-shiduan {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+.shiduan-block {
+    width: 100%;
+    height: 24px;
+}
 </style>
