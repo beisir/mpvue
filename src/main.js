@@ -17,6 +17,7 @@ export default {
     // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
         'pages': [
             '^pages/index/main', // 首页
+            'pages/domestic/main', // 首页2
             'pages/range/main', // 国外全程运踪
             'pages/picker/main',
             'pages/personinfo/main', // 个人信息
@@ -51,7 +52,7 @@ export default {
                     'selectedIconPath': '/static/image/run-cur.png'
                 },
                 {
-                    'pagePath': 'pages/feedback/main',
+                    'pagePath': 'pages/domestic/main',
                     'text': '国外运踪',
                     'iconPath': '/static/image/train.png',
                     'selectedIconPath': '/static/image/train-cur.png'

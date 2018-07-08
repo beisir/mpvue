@@ -34,6 +34,8 @@
                             <input
                                 placeholder="输入国外的站点编码"
                                 placeholder-class="input"
+                                data-name="sendStationCode"
+                                @focus="dlongContainer"
                                 v-model="sendData.sendStationCode"
                             />
                         </div>
@@ -46,6 +48,8 @@
                             <input
                                 placeholder="输入国内的站点编码"
                                 placeholder-class="input"
+                                data-name="arrStationCode"
+                                @focus="dlongContainer"
                                 v-model="sendData.arrStationCode"
                             />
                         </div>
@@ -74,13 +78,34 @@
                 </li>
                 <li>
                     <div class="valid-box">
-                        <div class="valid-left">客户标签</div>
+                        <div class="valid-left">时段追踪</div>
                         <div class="valid-input">
                             <input
+                                class="valid-time"
+                                placeholder-class="input"
+                                v-model="sendData.sendDates"
+                            />
+                            <picker
+                                class="valid-picker"
+                                mode="date"
+                                :value="sendData.sendDates"
+                                start="2015-09-01"
+                                end="2017-09-01"
+                                @change="bindDateChange">
+                                <span class="icon iconfont icon-rili"></span>
+                            </picker>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="valid-box">
+                        <div class="valid-left">客户标签</div>
+                        <div class="valid-input" @click="scrolltost=true">{{selectOptionl}}
+                            <!-- <input
                                 placeholder="选填"
                                 placeholder-class="input"
                                 v-model="sendData.remCus"
-                            />
+                            /> -->
                         </div>
                     </div>
                 </li>
@@ -103,13 +128,41 @@
                 <li>适用情形：经常查某个车皮/集装箱运踪，最划算</li>
             </ul>
         </div>
+
+        <div class="range-fexid" v-if="scrolltost">
+            <div class="fexid-content">
+                <span class="close-btn" @click="scrolltost=false">X</span>
+                <scroll-view :scroll-y="true" class="fexid-scroll">
+                    <ul class="fexid-list">
+                        <li
+                            v-for="(optItem, optIndex) in optionalArr"
+                            :class="optItem.flag ? 'list-cur' : ''"
+                            :key="optItem.text"
+                            @click="optionaSelect(optIndex)"
+                            >{{optItem.text}}</li>
+                    </ul>
+                </scroll-view>
+                <div class="fexid-comfim">
+                    <span @click="optionAcomfim">确定</span>
+                </div>
+            </div>
+        </div>
+        <inputDlong
+            :inputTost="inputTost"
+            :dlongName="dlongName"
+            @closeEvent="closeEvent"
+            @dlongEvent="dlongEvent"/>
     </div>
 </template>
 
 <script>
+import inputDlong from '../../components/inputDlong.vue';
 export default {
     data () {
         return {
+            inputTost: false,
+            scrolltost: false,
+            dlongName: '',
             selectIndex: 0,
             selectArray: ['30元红包', '50元红包', '不用红包'],
             validTime: '2016-09-01',
@@ -125,7 +178,26 @@ export default {
                 arrStationName: '', // 到站名车
                 arrStationCode: '', // 到站代码
                 sendStationCode: '' // 发站代码
-            }
+            },
+            optionalArr: [
+                {
+                    flag: false,
+                    text: '我的就是'
+                },
+                {
+                    flag: false,
+                    text: '我我的就是的就是'
+                },
+                {
+                    flag: false,
+                    text: '我的是'
+                },
+                {
+                    flag: false,
+                    text: '我的'
+                }
+            ],
+            selectOptionl: ''
         };
     },
     methods: {
@@ -155,6 +227,37 @@ export default {
                 });
                 console.log(result);
             };
+        },
+        optionaSelect (index) {
+            let optionalArr = this.optionalArr;
+            optionalArr[index].flag = !optionalArr[index].flag;
+            this.optionalArr = optionalArr;
+            // console.log(this.optionalArr);
+            // this.optionAcomfim();
+        },
+        optionAcomfim () {
+            let optionalArr = this.optionalArr;
+            let selectOptionl = [];
+            optionalArr.map(item => {
+                if (item.flag) {
+                    selectOptionl.push(item.text);
+                };
+            });
+            this.selectOptionl = selectOptionl.join('、');
+            this.scrolltost = false;
+        },
+        dlongEvent (options) {
+            this.sendData[options.dlongName] = options.val;
+            this.inputTost = false;
+        },
+        dlongContainer (e) {
+            let dlongName = e.mp.target.dataset.name;
+
+            this.inputTost = true;
+            this.dlongName = dlongName;
+        },
+        closeEvent (flag) {
+            this.inputTost = false;
         }
     },
     onLoad (e) {
@@ -162,11 +265,90 @@ export default {
         console.log(this.$root.$mp);
         // console.log(this.$root.$mp.appOptions);
         // console.log(this.$root.$mp.query);
+    },
+    components: {
+        inputDlong
     }
 };
 </script>
 
 <style lang="css">
+
+
+
+.range-fexid {
+    position: fixed;
+    width: 100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    z-index:500;
+    left:0;
+    top:0;
+    display: flex;
+    justify-content: center;
+}
+.fexid-content {
+    height: 350px;
+    width: 80%;
+    height: 350px;
+    margin: 50px auto;
+    background-color: #ffffff;
+    border-radius: 5px;
+    position: relative;
+
+}
+.fexid-scroll {
+    height: 310px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.fexid-list {
+}
+.fexid-list li {
+    padding: 0 5px;
+    height: 30px;
+    line-height: 30px;
+    float: left;
+    border:solid #888888 1px;
+    text-align:center;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+.fexid-list li.list-cur {
+    border-color: red;
+    color: red;
+}
+.fexid-comfim {
+    display: flex;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-top: solid 1px #888888;
+}
+.fexid-comfim span {
+    padding: 5px 10px;
+    background-color: #1aac19;
+    color: #ffffff;
+    border-radius: 3px;
+}
+
+
+.close-btn {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    width: 30px;
+    line-height: 30px;
+    background-color: #000000;
+    opacity: .8;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 50%;
+    z-index: 100;
+}
+
+
 .range-balance .range-title {
     color: #1aac19;
 }

@@ -2,48 +2,64 @@
     <div class="customer">
         <div class="customer-title">物畅网</div>
         <div class="customer-container">
-            <div class="customer-tr">
-                <div class="customer-name">王玉</div>
+            <div class="customer-tr"
+                v-for="(telItem, telIndex) in phoneList"
+                :key="telItem.name">
+                <div class="customer-name">{{telItem.name}}</div>
                 <ul class="customer-list">
-                    <li>电话：13031115726</li>
-                    <li>QQ：1459341196</li>
-                    <li>邮箱：hsy7426@163.com</li>
+                    <li>电话：{{telItem.tel}}</li>
+                    <li>QQ：{{telItem.QQ}}</li>
+                    <li>邮箱：{{telItem.email}}</li>
                 </ul>
-                <div class="customer-contacts"><a class="customer-link" href="">联系他</a></div>
+                <div class="customer-contacts">
+                    <a class="customer-link" @click="callTel(telItem.tel)">联系他</a>
+                </div>
             </div>
-            <div class="customer-tr">
-                <div class="customer-name">王玉</div>
-                <ul class="customer-list">
-                    <li>电话：13031115726</li>
-                    <li>QQ：1459341196</li>
-                    <li>邮箱：hsy7426@163.com</li>
-                </ul>
-                <div class="customer-contacts"><a class="customer-link" href="">联系他</a></div>
-            </div>
-            <div class="customer-tr">
-                <div class="customer-name">王玉</div>
-                <ul class="customer-list">
-                    <li>电话：13031115726</li>
-                    <li>QQ：1459341196</li>
-                    <li>邮箱：hsy7426@163.com</li>
-                </ul>
-                <div class="customer-contacts"><a class="customer-link" href="">联系他</a></div>
-            </div>
-            <div class="customer-tr">
-                <div class="customer-name">王玉</div>
-                <ul class="customer-list">
-                    <li>电话：13031115726</li>
-                    <li>QQ：1459341196</li>
-                    <li>邮箱：hsy7426@163.com</li>
-                </ul>
-                <div class="customer-contacts"><a class="customer-link" href="">联系他</a></div>
-            </div>
+
         </div>
     </div>
 </template>
 
 <script>
 export default {
+    data () {
+        return {
+            phoneList: [
+                {
+                    name: '王玉',
+                    tel: '13031115726',
+                    QQ: 1459341196,
+                    email: 'hsy7426@163.com'
+                },
+                {
+                    name: '王玉',
+                    tel: '13031115726',
+                    QQ: 1459341196,
+                    email: 'hsy7426@163.com'
+                },
+                {
+                    name: '王玉',
+                    tel: '13031115726',
+                    QQ: 1459341196,
+                    email: 'hsy7426@163.com'
+                },
+                {
+                    name: '王玉',
+                    tel: '13031115726',
+                    QQ: 1459341196,
+                    email: 'hsy7426@163.com'
+                }
+            ]
+        };
+    },
+    methods: {
+        callTel (tel) {
+            console.log(tel);
+            wx.makePhoneCall({
+                phoneNumber: tel
+            });
+        }
+    }
 };
 </script>
 

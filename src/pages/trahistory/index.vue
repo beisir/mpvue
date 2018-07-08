@@ -49,7 +49,7 @@
                 <p>车皮/集装箱号：44472058（国外全程运踪）</p>
                 <div class="tra-pls">
                     <span>追踪完成</span>
-                    <a href="">查看追踪详情</a>
+                    <a href="/pages/feedback/main">查看追踪详情</a>
                 </div>
                 <div class="tra-date">2018-03-04 18:13:47</div>
             </li>
@@ -57,7 +57,7 @@
                 <p>车皮/集装箱号：44472058（国外全程运踪）</p>
                 <div class="tra-pls">
                     <span>追踪完成</span>
-                    <a href="">查看追踪详情</a>
+                    <a href="/pages/feedback/main">查看追踪详情</a>
                 </div>
                 <div class="tra-date">2018-03-04 18:13:47</div>
             </li>
