@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="range">
-        <Balance v-if="rule.yu" :ruleTitle="rule.name" />
+        <Balance v-if="rule.yu" :ruleOptions="rule.ruleOptions" />
         <div class="range-valid">
             <ul>
                 <li v-if="rule.chepi">
@@ -11,8 +11,11 @@
                                 placeholder="TKRU4096807"
                                 placeholder-class="input"
                                 v-model="sendData.containerNo"
+                                @blur="inputBlur"
+                                @focus="validErr=false"
                             />
                         </div>
+                        <span class="valid-err" v-if="validErr">格式错误</span>
                     </div>
                     <div class="valid-prompt">示例：集装箱号：TKRU4096807  车皮号：44472058</div>
                 </li>
@@ -102,7 +105,7 @@
             </ul>
             <button type="button" class="valid-confim" @click="submitVakid">提交查询</button>
         </div>
-        <Explain />
+        <Explain :explainList="rule.explain"/>
         <inputDlong
             v-if="rule.fazhan && rule.daozhan"
             :inputTost="inputTost"
@@ -116,9 +119,12 @@
 import Balance from '../../components/balance.vue';
 import inputDlong from '../../components/inputDlong.vue';
 import Explain from '../../components/explain.vue';
+import rule from '../../utils/rule.js';
 export default {
     data () {
         return {
+            activeIndex: 0, // 国外国内之分
+            validErr: false, // 站点正则
 
             rule: {}, // 列表显示规则
             inputTost: false, // 站点列表弹框 是否开启
@@ -135,6 +141,11 @@ export default {
         };
     },
     methods: {
+        inputBlur (e) {
+            let reg = this.activeIndex ? /^([A-Z]{4}\d{7}|\d{7})$/ : /^([A-Z]{4}\d{7}|\d{8})$/;
+            let containerNo = this.sendData.containerNo;
+            this.validErr = reg.test(containerNo) ? 0 : 1;
+        },
         // 日期选择框
         bindDateChange (options) {
             let validTime = options.mp.detail.value;
@@ -208,9 +219,11 @@ export default {
             // });
         }
     },
-    onLoad (options) {
-        this.rule = JSON.parse(options.rule);
-        console.log(this.rule);
+    onLoad ({activeIndex, domesticindex}) {
+        // this.rule = JSON.parse(options.rule);
+        this.rule = rule[activeIndex][domesticindex];
+        this.activeIndex = activeIndex;
+        // console.log(this.rule.explain);
         this.initData();
 
         this.sendData = { // 表单数据绑定
@@ -227,7 +240,8 @@ export default {
             sendStationCode: '' // 发站代码
         }; // 初始化数据
         this.selectIndex = 0;
-        console.log(this.sendData);
+        this.validErr = false;
+        // console.log(this.sendData);
     },
     components: {
         inputDlong,
@@ -248,6 +262,11 @@ export default {
     top:0;
     display: flex;
     justify-content: center;
+}
+.valid-err {
+    font-size:12px;
+    padding-left:5px;
+    color: #ff0000;
 }
 .fexid-content {
     height: 350px;

@@ -42,7 +42,6 @@
 
 <script>
 import {indexData} from '../utils/data.js';
-import rule from '../utils/rule.js';
 export default {
     props: {
         activeIndex: {
@@ -88,11 +87,11 @@ export default {
         },
         goRange (phone, domesticindex) {
             let activeIndex = this.activeIndex;
-            let ruleData = rule[activeIndex][domesticindex];
-            let dataString = `phone=${phone}&rule=${JSON.stringify(ruleData)}`;
+            // let ruleData = rule[activeIndex][domesticindex];
+            let dataString = `phone=${phone}&activeIndex=${activeIndex}&domesticindex=${domesticindex}`;
 
             // let url = activeIndex ? `/pages/lmmediate/main?${dataString}` : `/pages/range/main?${dataString}`;
-            let url = activeIndex = `/pages/range/main?${dataString}`;
+            let url = `/pages/range/main?${dataString}`;
             wx.navigateTo({url});
         }
     },
@@ -148,7 +147,7 @@ export default {
 .range-text{
     padding: 10px 22px 20px 22px;
     position: relative;
-    border-bottom: 1px solid rgb(242, 240, 242);
+    /* border-bottom: 1px solid rgb(242, 240, 242); */
 }
 .range-text ul li{
     font-size: 12px;

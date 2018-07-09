@@ -40,7 +40,7 @@ export default {
     .range-text{
         padding: 10px 22px 20px 22px;
         position: relative;
-        border-bottom: 1px solid rgb(242, 240, 242);
+        /* border-bottom: 1px solid rgb(242, 240, 242); */
     }
     .range-text ul li{
         font-size: 14px;
