@@ -1,7 +1,7 @@
 <template lang="html">
     <div :class="['input-dlong', inputTost ? 'input-dlong-1' : '']">
         <div class="dlong-title">
-            <input type="text" focus="true" v-model="ipnutTxt" />
+            <input type="text" :focus="inputTost" v-model="ipnutTxt" />
             <span class="input-close" @click="closeLong">取消</span>
         </div>
         <scroll-view class="dlong-scroll" :scroll-y="true">

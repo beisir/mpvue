@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="range">
-        <Balance />
+        <Balance v-if="rule.yu" :ruleTitle="rule.name" />
         <div class="range-valid">
             <ul>
                 <li v-if="rule.chepi">
@@ -57,8 +57,6 @@
                                 class="valid-picker"
                                 mode="date"
                                 :value="sendData.sendDates"
-                                start="2015-09-01"
-                                end="2017-09-01"
                                 @change="bindDateChange">
                                 <span class="icon iconfont icon-rili"></span>
                             </picker>
@@ -104,36 +102,9 @@
             </ul>
             <button type="button" class="valid-confim" @click="submitVakid">提交查询</button>
         </div>
-        <div class="range-text">
-            <ul>
-                <li>服务说明：</li>
-                <li>输&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;入：车皮/集装箱号；境外发到站；发运日期</li>
-                <li>跟踪周期：全程（持续跟踪至终点）</li>
-                <li>反馈时间：8分钟（在查询记录中查看）</li>
-                <li>运踪结果：一般每天持续反馈2条-30条信息</li>
-                <li>适用情形：经常查某个车皮/集装箱运踪，最划算</li>
-            </ul>
-        </div>
-
-        <div class="range-fexid" v-if="scrolltost">
-            <div class="fexid-content">
-                <span class="close-btn" @click="scrolltost=false">X</span>
-                <scroll-view :scroll-y="true" class="fexid-scroll">
-                    <ul class="fexid-list">
-                        <li
-                            v-for="(optItem, optIndex) in optionalArr"
-                            :class="optItem.flag ? 'list-cur' : ''"
-                            :key="optItem.text"
-                            @click="optionaSelect(optIndex)"
-                            >{{optItem.text}}</li>
-                    </ul>
-                </scroll-view>
-                <div class="fexid-comfim">
-                    <span @click="optionAcomfim">确定</span>
-                </div>
-            </div>
-        </div>
+        <Explain />
         <inputDlong
+            v-if="rule.fazhan && rule.daozhan"
             :inputTost="inputTost"
             :dlongName="dlongName"
             @closeEvent="closeEvent"
@@ -144,53 +115,23 @@
 <script>
 import Balance from '../../components/balance.vue';
 import inputDlong from '../../components/inputDlong.vue';
+import Explain from '../../components/explain.vue';
 export default {
     data () {
         return {
-            rule: {},
-            shiduanTime: '',
-            inputTost: false,
-            scrolltost: false,
-            dlongName: '',
-            endTime: '',
-            startTime: '',
-            initEndTime: '',
-            initStartTime: '',
-            selectIndex: 0,
-            selectArray: ['30元红包', '50元红包', '不用红包'],
-            validTime: '2016-09-01',
-            sendData: {
-                userRedCouId: '', // '红包'
-                trackType: '', // 查询类型
-                queryType: '', // 集装箱/整车
-                containerNo: '', // 箱号
-                sourceData: '', // 接口类型
-                remCus: '', // 客户标签
-                sendDates: '', // 发站日期
-                sendStationName: '', // 发站名称
-                arrStationName: '', // 到站名车
-                arrStationCode: '', // 到站代码
-                sendStationCode: '' // 发站代码
-            },
-            optionalArr: [
-                {
-                    flag: false,
-                    text: '我的就是'
-                },
-                {
-                    flag: false,
-                    text: '我我的就是的就是'
-                },
-                {
-                    flag: false,
-                    text: '我的是'
-                },
-                {
-                    flag: false,
-                    text: '我的'
-                }
-            ],
-            selectOptionl: ''
+
+            rule: {}, // 列表显示规则
+            inputTost: false, // 站点列表弹框 是否开启
+            dlongName: '', // 设置站点弹框区分
+
+            startTime: '', // 选择当前日期
+            endTime: '', // 选择当前日期的 当前月最后一天
+            initStartTime: '', // 规定日期组件从n-年-月-日 开始
+            initEndTime: '', // 规定日期组件从n-年-月-日 结束
+
+            selectIndex: 0, // 红包选择Index
+            selectArray: ['30元红包', '50元红包', '不用红包'], // 红包列表
+            sendData: {} // 表单数据绑定
         };
     },
     methods: {
@@ -199,7 +140,7 @@ export default {
             let validTime = options.mp.detail.value;
             this.sendData.sendDates = validTime;
         },
-        // 红包选择时间
+        // 选择红包
         validSelect () {
             const _this = this;
             let selectArray = this.selectArray;
@@ -210,6 +151,7 @@ export default {
                 }
             });
         },
+        // 提交查询
         async submitVakid () {
             const _this = this;
             let {containerNo} = this.sendData;
@@ -221,24 +163,7 @@ export default {
                 console.log(result);
             };
         },
-        optionaSelect (index) {
-            let optionalArr = this.optionalArr;
-            optionalArr[index].flag = !optionalArr[index].flag;
-            this.optionalArr = optionalArr;
-            // console.log(this.optionalArr);
-            // this.optionAcomfim();
-        },
-        optionAcomfim () {
-            let optionalArr = this.optionalArr;
-            let selectOptionl = [];
-            optionalArr.map(item => {
-                if (item.flag) {
-                    selectOptionl.push(item.text);
-                };
-            });
-            this.selectOptionl = selectOptionl.join('、');
-            this.scrolltost = false;
-        },
+
         dlongEvent (options) {
             this.sendData[options.dlongName] = options.val;
             this.inputTost = false;
@@ -263,18 +188,11 @@ export default {
             let month = now.getMonth() + 1;
             let day = this.transTime(now.getDate());
             let initEndTime = this.getEndTime(year, month + 2);
-
-            console.log(this.transTime(month));
             this.initStartTime = `${year}-${this.transTime(month)}-${day}`;
             this.startTime = this.initStartTime;
             this.initEndTime = `${initEndTime.getFullYear()}-${this.transTime(Number(initEndTime.getMonth()) + 1)}-${this.transTime(initEndTime.getDate())}`;
-
             let date = this.getEndTime(year, month);
             this.endTime = `${date.getFullYear()}-${this.transTime(Number(date.getMonth()) + 1)}-${this.transTime(date.getDate())}`;
-            console.log(this.initStartTime);
-            console.log(this.startTime);
-            console.log(this.initEndTime);
-            console.log(this.endTime);
         },
         transTime (num) {
             return num < 10 ? '0' + num : num;
@@ -294,12 +212,27 @@ export default {
         this.rule = JSON.parse(options.rule);
         console.log(this.rule);
         this.initData();
-        // console.log(this.rule);
-        // console.log(this.$root.$mp.query.rule);
+
+        this.sendData = { // 表单数据绑定
+            userRedCouId: '', // '红包'
+            trackType: '', // 查询类型
+            queryType: '', // 集装箱/整车
+            containerNo: '', // 箱号
+            sourceData: '', // 接口类型
+            remCus: '', // 客户标签
+            sendDates: '', // 发站日期
+            sendStationName: '', // 发站名称
+            arrStationName: '', // 到站名车
+            arrStationCode: '', // 到站代码
+            sendStationCode: '' // 发站代码
+        }; // 初始化数据
+        this.selectIndex = 0;
+        console.log(this.sendData);
     },
     components: {
         inputDlong,
-        Balance
+        Balance,
+        Explain
     }
 };
 </script>

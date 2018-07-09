@@ -3,7 +3,7 @@
         <div class="range-balance">
             <div class="range-title">
                 <span class="icon iconfont icon-27"></span>
-                <p class="range-head">国外全程追踪</p>
+                <p class="range-head">{{ruleTitle}}</p>
                 <span class="range-ace">账户余额: 0.00 元</span>
             </div>
         </div>
@@ -16,6 +16,17 @@
 
 <script>
 export default {
+    props: {
+        ruleTitle: {
+            type: String
+        }
+    },
+    created () {
+        const title = this.ruleTitle;
+        wx.setNavigationBarTitle({
+            title: title
+        });
+    }
 };
 </script>
 

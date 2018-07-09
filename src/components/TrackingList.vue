@@ -91,7 +91,8 @@ export default {
             let ruleData = rule[activeIndex][domesticindex];
             let dataString = `phone=${phone}&rule=${JSON.stringify(ruleData)}`;
 
-            let url = activeIndex ? `/pages/lmmediate/main?${dataString}` : `/pages/range/main?${dataString}`;
+            // let url = activeIndex ? `/pages/lmmediate/main?${dataString}` : `/pages/range/main?${dataString}`;
+            let url = activeIndex = `/pages/range/main?${dataString}`;
             wx.navigateTo({url});
         }
     },
