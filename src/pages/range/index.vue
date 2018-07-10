@@ -141,17 +141,26 @@ export default {
         };
     },
     methods: {
+        /**
+         * 车皮集装箱 input 离开事件，判断当前输入是否 符合规范.
+         * @param {object} e - 事件对象.
+         */
         inputBlur (e) {
             let reg = this.activeIndex ? /^([A-Z]{4}\d{7}|\d{7})$/ : /^([A-Z]{4}\d{7}|\d{8})$/;
             let containerNo = this.sendData.containerNo;
             this.validErr = reg.test(containerNo) ? 0 : 1;
         },
-        // 日期选择框
+        /**
+         * 发运日期 选择日期选择对象
+         * @param {object} options - 事件对象.返回当前选择日期返回值
+         */
         bindDateChange (options) {
             let validTime = options.mp.detail.value;
             this.sendData.sendDates = validTime;
         },
-        // 选择红包
+        /**
+         * 选择红包组件返回弹出模块 选择值下标
+         */
         validSelect () {
             const _this = this;
             let selectArray = this.selectArray;
@@ -162,7 +171,9 @@ export default {
                 }
             });
         },
-        // 提交查询
+        /**
+         * 提交查询 点击事件
+         */
         async submitVakid () {
             const _this = this;
             let {containerNo} = this.sendData;
@@ -174,25 +185,44 @@ export default {
                 console.log(result);
             };
         },
-
+        /**
+         * inputDlong 组件 派发事件 监听返回值，
+         * @param {object} options - 派发事件返回参数.获取状态：当前选择值为 发站状态 还是到站状态
+         */
         dlongEvent (options) {
             this.sendData[options.dlongName] = options.val;
             this.inputTost = false;
         },
+        /**
+         * 发站 和 到站 焦点事件，获取焦点时触发 inputDlong 组件弹框
+         * @param {object} e - 事件对象 获取当前触发 弹框的是 发站  还是   到站状态
+         */
         dlongContainer (e) {
             let dlongName = e.mp.target.dataset.name;
-
             this.inputTost = true;
             this.dlongName = dlongName;
         },
+        /**
+         * inputDlong 派发事件，是否关闭 inputDlong 弹框
+         * @param {boolean} flag - 派发事件 参数 关闭弹窗
+         */
         closeEvent (flag) {
-            this.inputTost = false;
+            this.inputTost = flag;
         },
-        getEndTime (month, day) {
-            let dt = new Date(month, day, 1);
+        /**
+         * 获取当前年，当前月 数最后一天的 日期对象
+         * @param {string} year - 当前年
+         * @param {string} month - 当前月
+         * @return {object} cdt - 返回日期对象
+         */
+        getEndTime (year, month) {
+            let dt = new Date(year, month, 1);
             let cdt = new Date(dt.getTime() - 1000 * 60 * 60 * 24);
             return cdt;
         },
+        /**
+         * 初始化所有的日期对象, 日期picker 限制从那年月 到哪年月份展示选择等。。。
+         */
         initData () {
             let now = new Date();
             let year = now.getFullYear();
@@ -205,6 +235,12 @@ export default {
             let date = this.getEndTime(year, month);
             this.endTime = `${date.getFullYear()}-${this.transTime(Number(date.getMonth()) + 1)}-${this.transTime(date.getDate())}`;
         },
+        /**
+         * 因为日期 picker 不接受 2018-9-10 的规则，需要2018-09-10,将小于10的值做0 + *拼接
+         * @param {string} year - 当前年
+         * @param {string} month - 当前月
+         * @return {object} cdt -  吧
+         */
         transTime (num) {
             return num < 10 ? '0' + num : num;
         },
