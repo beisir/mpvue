@@ -50,9 +50,7 @@ export default {
             // 'pages/map/main',
             'pages/customer/main', // 客服中心
             'pages/redenvelopes/main', // 我的红包
-            'pages/manage/main', // 个人中心
-            'pages/index2/main' // 个人中心
-
+            'pages/manage/main'
         ],
         'window': {
             'backgroundTextStyle': 'light',
