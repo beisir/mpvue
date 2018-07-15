@@ -1,35 +1,12 @@
 export default {
     '0': [
         {
-            yu: true,
-            chepi: true,
-            fazhan: true,
-            daozhan: true,
-            fayun: true,
-            kehu: true,
-            hongbao: true,
-            explain: [
-                [
-                    '服务说明：',
-                    '输       入：车皮/集装箱号；境外发到站；发运日期',
-                    '跟踪周期：全程（持续跟踪至终点）',
-                    '反馈时间：8分钟（在查询记录中查看）',
-                    '运踪结果：一般每天持续反馈2条-30条信息',
-                    '适用情形：经常查某个车皮/集装箱运踪，最划算'
-                ]
-            ],
-            ruleOptions: {
-                name: '国外全程追踪',
-                price: 52,
-                discount: 21
-            }
-        },
-        {
 
             yu: true,
             chepi: true,
             kehu: true,
             hongbao: true,
+            key: 'amount',
             explain: [
                 [
 
@@ -54,6 +31,31 @@ export default {
 
         },
         {
+            yu: true,
+            chepi: true,
+            fazhan: true,
+            daozhan: true,
+            fayun: true,
+            kehu: true,
+            hongbao: true,
+            key: 'qc',
+            explain: [
+                [
+                    '服务说明：',
+                    '输       入：车皮/集装箱号；境外发到站；发运日期',
+                    '跟踪周期：全程（持续跟踪至终点）',
+                    '反馈时间：8分钟（在查询记录中查看）',
+                    '运踪结果：一般每天持续反馈2条-30条信息',
+                    '适用情形：经常查某个车皮/集装箱运踪，最划算'
+                ]
+            ],
+            ruleOptions: {
+                name: '国外全程追踪',
+                price: 52,
+                discount: 21
+            }
+        },
+        {
 
             yu: true,
             chepi: true,
@@ -63,6 +65,7 @@ export default {
             shiduan: true,
             kehu: true,
             hongbao: true,
+            key: 'sdmount',
             explain: [
                 [
                     '服务说明：',
@@ -85,7 +88,6 @@ export default {
         {
             chepi: true,
             kehu: true,
-            hongbao: true,
             explain: [],
             ruleOptions: {
                 name: '国内即时运踪'
@@ -96,6 +98,7 @@ export default {
             yu: true,
             kehu: true,
             hongbao: true,
+            key: 'domesticmount',
             explain: [],
             ruleOptions: {
                 name: '国内全程运踪',
@@ -109,6 +112,7 @@ export default {
             shiduan: true,
             kehu: true,
             hongbao: true,
+            key: 'domesticinterval',
             explain: [],
             ruleOptions: {
                 name: '国内时段运踪',

@@ -1,7 +1,7 @@
 <template lang="html">
     <div class="myaccount">
         <div class="myaccount-top">
-            <p>0.0元</p>
+            <p>{{some}}元</p>
             <p>可用余额</p>
         </div>
         <div class="myaccount-content">
@@ -31,26 +31,90 @@
 </template>
 
 <script>
+import {saveWxXd, util} from '../../utils/config.js';
 export default {
     data () {
         return {
+            some: 0,
             isshow: false,
-            priceList: [0.001, 100, 200, 500, 1000, 2000]
+            priceList: [0.01, 100, 200, 500, 1000, 2000]
         };
     },
     methods: {
+        async getYUe () {
+            let openid = await this.$UTIL.Login();
+            let some = await this.$ajax({
+                url: util.queryTraceType,
+                data: {
+                    openId: openid.openid
+                }
+            });
+            this.some = some.data.accountBlance.transOriPrice;
+        },
         async submitOrder (e) {
             let {price} = e.mp.currentTarget.dataset;
             try {
-                let prepay_id = await this.$UTIL.WeChatPayment(price);
-                if (prepay_id !== '') {
-                    console.log('支付成功', prepay_id);
-                };
+                let options = await this.$UTIL.WeChatRechat(price);
+                this.timerDate(options.r.recOrderNo); // accRechargeId
+                // if (prepay_id !== '') {
+                //     console.log('支付成功', prepay_id);
+                // };
             } catch (err) {
                 console.log(err);
             };
             this.isshow = false;
+        },
+        async timerDate (recOrderNo) {
+            const _this = this;
+            let url = saveWxXd.query;
+            let count = 0;
+            wx.showLoading({
+                title: '正在支付',
+                mask: true
+            });
+            let timer = setInterval(() => {
+                if (count < 20) {
+                    wx.request({
+                        url: url,
+                        data: {
+                            recOrderNo: recOrderNo
+                        },
+                        success (result) {
+                            let data = result.data;
+                            if (data.state === '200') {
+                                clearInterval(timer);
+                                wx.showToast({
+                                    title: data.msg,
+                                    icon: 'none'
+                                });
+                                _this.getYUe();
+                            } else {
+                                if (count >= 20) {
+                                    wx.showToast({
+                                        title: data.msg,
+                                        icon: 'none'
+                                    });
+                                    clearInterval(timer);
+                                };
+                            }
+                            console.log(result);
+                        }
+                    });
+                    count++;
+                    console.log(count);
+                } else {
+                    clearInterval(timer);
+                    wx.showToast({
+                        title: '充值失败',
+                        icon: 'none'
+                    });
+                    wx.hideLoading();
+                };
+            }, 2000);
         }
+    },
+    onLoad () {
+        this.getYUe();
     }
 };
 </script>

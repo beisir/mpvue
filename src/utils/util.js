@@ -1,6 +1,6 @@
 
 import ajax from './http.js';
-import {util} from './config.js';
+import {util, saveWxXd} from './config.js';
 class UTIL {
     constructor () {
         this.introduce = `
@@ -21,7 +21,7 @@ class UTIL {
         wx.login({
             success: res => {
                 ajax({
-                    url: util.login,
+                    url: util.openid,
                     data: {
                         code: res.code
                     }
@@ -143,31 +143,89 @@ class UTIL {
         });
     };
     // // 微信支付
-    WeChatPayment (price) {
+    WeChatPayment (isurl, msg) {
+        const _this = this;
+        return new Promise(async (resolve, reject) => {
+            try {
+                let url = isurl === '1' ? util.domestic : util.foreign;
+                let params = isurl === '1' ? {internaId: msg} : {traQueryId: msg};
+                let {openid} = await _this.Login();
+                let result = await ajax({
+                    url: url,
+                    method: 'POST',
+                    data: Object.assign({
+                        openId: openid
+                    }, params)
+                });
+                wx.requestPayment({
+                    timeStamp: result.timeStamp,
+                    nonceStr: result.nonceStr,
+                    package: result['package'],
+                    signType: 'MD5',
+                    paySign: result.paySign,
+                    success (res) {
+                        // 如果支付成功 发送推送消息模板
+                        let prepay_id = result['package'].split('=')[1];
+                        if (res.errMsg.includes('ok')) {
+                            resolve({
+                                prepay_id: prepay_id,
+                                r: result.r
+                            });
+                            wx.showToast({
+                                title: '支付成功',
+                                icon: 'none'
+                            });
+                        } else {
+                            reject('失败');
+                        };
+                    },
+                    fail (res) {
+                        console.log(res);
+                        reject(res);
+                        let errMsg = res.errMsg.includes('cancel') ? '取消支付' : '支付失败，请重试';
+                        wx.showToast({
+                            title: errMsg,
+                            icon: 'none'
+                        });
+                    }
+                });
+            } catch (err) {
+                wx.showToast({
+                    title: '请求错误',
+                    icon: 'none'
+                });
+            }
+        });
+    };
+
+    WeChatRechat (price) {
         const _this = this;
         return new Promise(async (resolve, reject) => {
             try {
                 let {openid} = await _this.Login();
                 let result = await ajax({
-                    url: util.recharge,
+                    url: saveWxXd.saveWxXd,
                     method: 'POST',
                     data: {
-                        openid: openid,
-                        amount: price
+                        openId: openid,
+                        recAmount: price
                     }
                 });
-                let { timestamp, noncestr, wxpackage, paySign } = result.payInfo;
+                let { timeStamp, nonceStr, paySign } = result.map;
                 wx.requestPayment({
-                    timeStamp: timestamp,
-                    nonceStr: noncestr,
-                    package: wxpackage,
+                    timeStamp: timeStamp,
+                    nonceStr: nonceStr,
+                    package: result.map['package'],
                     signType: 'MD5',
                     paySign: paySign,
                     success (res) {
                         // 如果支付成功 发送推送消息模板
-                        let prepay_id = wxpackage.split('=')[1];
+                        let prepay_id = result.map['package'].split('=')[1];
                         if (res.errMsg.includes('ok')) {
-                            resolve(prepay_id);
+                            resolve({
+                                prepay_id: prepay_id,
+                                r: result
+                            });
                             wx.showToast({
                                 title: '支付成功',
                                 icon: 'none'

@@ -1,18 +1,20 @@
 <template lang="html">
     <div class="customer">
         <div class="customer-title">物畅网</div>
-        <div class="customer-container">
+        <div class="customer-container"
+            v-for="(phoneItem, phoneIndex) in phoneList"
+            :key="phoneItem.departName">
             <div class="customer-tr"
-                v-for="(telItem, telIndex) in phoneList"
-                :key="telItem.name">
-                <div class="customer-name">{{telItem.name}}</div>
+                v-for="(telItem, telIndex) in phoneItem.bos"
+                :key="telItem.qqNum">
+                <div class="customer-name">{{telItem.cuserName}}</div>
                 <ul class="customer-list">
-                    <li>电话：{{telItem.tel}}</li>
-                    <li>QQ：{{telItem.QQ}}</li>
-                    <li>邮箱：{{telItem.email}}</li>
+                    <li>电话：{{telItem.cuserPhone}}</li>
+                    <li>QQ：{{telItem.qqNum}}</li>
+                    <li>邮箱：{{telItem.wechatNum}}</li>
                 </ul>
                 <div class="customer-contacts">
-                    <a class="customer-link" @click="callTel(telItem.tel)">联系他</a>
+                    <a class="customer-link" @click="callTel(telItem.cuserPhone)">联系他</a>
                 </div>
             </div>
 
@@ -21,35 +23,11 @@
 </template>
 
 <script>
+import {customers} from '../../utils/config.js';
 export default {
     data () {
         return {
-            phoneList: [
-                {
-                    name: '王玉',
-                    tel: '13031115726',
-                    QQ: 1459341196,
-                    email: 'hsy7426@163.com'
-                },
-                {
-                    name: '王玉',
-                    tel: '13031115726',
-                    QQ: 1459341196,
-                    email: 'hsy7426@163.com'
-                },
-                {
-                    name: '王玉',
-                    tel: '13031115726',
-                    QQ: 1459341196,
-                    email: 'hsy7426@163.com'
-                },
-                {
-                    name: '王玉',
-                    tel: '13031115726',
-                    QQ: 1459341196,
-                    email: 'hsy7426@163.com'
-                }
-            ]
+            phoneList: []
         };
     },
     methods: {
@@ -59,6 +37,14 @@ export default {
                 phoneNumber: tel
             });
         }
+    },
+    onLoad () {
+        const _this = this;
+        let url = customers.queryCustomers;
+        this.$ajax({url}).then(res => {
+            console.log(res);
+            _this.phoneList = res.data;
+        });
     }
 };
 </script>

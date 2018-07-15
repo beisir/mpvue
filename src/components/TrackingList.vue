@@ -41,7 +41,10 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 import {indexData} from '../utils/data.js';
+import {util} from '../utils/config.js';
+import Vue from 'vue';
 export default {
     props: {
         activeIndex: {
@@ -53,9 +56,11 @@ export default {
     },
     data () {
         return {
-            indexList: indexData.indexContent
+            indexList: indexData.indexContent,
+            phoneNumber: Vue.prototype.$phone_num
         };
     },
+    computed: mapGetters(['phoneNumber']),
     methods: {
         // 追踪范围点击事件
         trackingRangeFn () {
@@ -76,14 +81,23 @@ export default {
         },
         async application (e) {
             let domesticindex = e.mp.currentTarget.dataset.domesticindex;
-            // try {
-            //     let result = await this.$UTIL.getMobilePhone(e);
-            //     result && this.goRange(result);
-            //     this.phoneNumber = result;
-            // } catch (err) {
-            //     console.log(err);
-            // };
-            this.goRange('13031115726', domesticindex);
+            try {
+                let result = await this.$UTIL.getMobilePhone(e);
+                console.log(result);
+                let openid = await this.$UTIL.Login();
+                let registerInfo = await this.$ajax({
+                    url: util.register,
+                    data: {
+                        openId: openid.openid,
+                        userName: result
+                    }
+                });
+                registerInfo && this.goRange(result, domesticindex);
+                this.phoneNumber = result;
+            } catch (err) {
+                console.log(err);
+            };
+            // this.goRange('13031115726', domesticindex);
         },
         goRange (phone, domesticindex) {
             let activeIndex = this.activeIndex;
@@ -96,17 +110,12 @@ export default {
         }
     },
     created () {
-        // console.log(this.indexList);
-        // console.log(this.activeIndex);
-        // let phoneNumber = wx.getStorageSync('mobile');
-        // this.phoneNumber = phoneNumber;
-        // this.heightWin();
+        // console.log(this.phoneNumber);
     }
 };
 </script>
 
 <style lang="css">
-
 .railt-title {
     line-height: 40px;
     padding-left: 20px;

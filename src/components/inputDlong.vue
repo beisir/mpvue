@@ -1,20 +1,21 @@
 <template lang="html">
     <div :class="['input-dlong', inputTost ? 'input-dlong-1' : '']">
         <div class="dlong-title">
-            <input type="text" :focus="inputTost" v-model="ipnutTxt" />
+            <input type="text" :focus="inputTost" @input="enterInput" />
             <span class="input-close" @click="closeLong">取消</span>
         </div>
         <scroll-view class="dlong-scroll" :scroll-y="true">
             <ul>
                 <li v-for="(dlongItem, dlongIndex) in dlongList"
                     @click="dlongText(dlongItem)"
-                    :key="dlongItem">{{dlongItem}}</li>
+                    :key="dlongItem.value">{{dlongItem.value}}</li>
             </ul>
         </scroll-view>
     </div>
 </template>
 
 <script>
+import {querySend} from '../utils/config.js';
 export default {
     props: {
         ipnutTxt: {
@@ -28,6 +29,10 @@ export default {
         dlongName: {
             type: String,
             default: ''
+        },
+        codeName: {
+            type: String,
+            default: ''
         }
     },
     data () {
@@ -38,14 +43,41 @@ export default {
     methods: {
         dlongText (val) {
             let dlongName = this.dlongName;
+            let codeName = this.codeName;
+            console.log(codeName, dlongName);
             this.$emit('dlongEvent', {
-                val: val,
-                dlongName: dlongName
+                val: val.value,
+                dlongName: dlongName,
+                codeName: codeName,
+                code: val.data
             });
         },
         closeLong () {
             this.$emit('closeEvent', false);
+        },
+        enterInput (e) {
+            let value = e.mp.detail.value;
+            if (value !== '') {
+                this.getData(value);
+            };
+        },
+        async getData (options) {
+            try {
+                let result = await this.$ajax({
+                    url: querySend.querySend,
+                    method: 'POST',
+                    data: {
+                        standName: options
+                    }
+                });
+                this.dlongList = result.data.suggestions;
+            } catch (e) {
+                console.log(e);
+            };
         }
+    },
+    created () {
+        console.log(querySend);
     }
 };
 </script>

@@ -1,22 +1,33 @@
 <template lang="html">
-    <div class="">
-
-    </div>
+    <div class=""></div>
 </template>
-
 <script>
+import {util} from './utils/config.js';
 export default {
+    methods: {
+        async getInfo () {
+            let openid = await this.$UTIL.Login();
+            let info = await this.$ajax({
+                url: util.login,
+                data: {
+                    openId: openid.openid
+                }
+            });
+            this.$store.commit('phoneNumber', info.data.phone_num);
+        }
+    },
+    created () {
+        console.log(this.$store);
+        this.getInfo();
+    }
 };
 </script>
 <style media="screen">
     @import url('../static/css/font/iconfont.css');
-    /* @import url('../static/css/font/xkfont.css'); */
     page{
         font-size: 14px;
     }
-
     /* railtrack 页面公共模块样式 */
-
     .range-title {
         font-size: 14px;
         height: 36px;

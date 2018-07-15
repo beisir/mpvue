@@ -1,14 +1,14 @@
 <template lang="html">
-    <div class="balance">
+    <div class="balance" v-if="yu">
         <div class="range-balance">
             <div class="range-title">
                 <span class="icon iconfont icon-27"></span>
                 <p class="range-head">{{ruleOptions.name}}</p>
-                <span class="range-ace">账户余额: 0.00 元</span>
+                <span class="range-ace">账户余额: {{transOriPrice}} 元</span>
             </div>
         </div>
         <div class="range-whole">
-            <p>￥{{ruleOptions.price}}/次·全程</p>
+            <p>￥{{price}}/次·全程</p>
             <p>物畅网会员尊享7折—9折优惠，低至{{ruleOptions.discount}}元</p>
         </div>
     </div>
@@ -19,9 +19,21 @@ export default {
     props: {
         ruleOptions: {
             type: Object
+        },
+        // 余额
+        transOriPrice: {
+            type: Number,
+            default: 0
+        },
+        price: {
+            type: Number,
+            default: 0
+        },
+        yu: {
+            type: Boolean
         }
     },
-    created () {
+    onLoad () {
         const title = this.ruleOptions.name;
         wx.setNavigationBarTitle({
             title: title

@@ -20,6 +20,7 @@
 export default {
     data () {
         return {
+            props: ['GPS'],
             mapDataOptions: {
                 iconPath: '/static/image/location.png',
                 width: 24,
@@ -168,21 +169,19 @@ export default {
         },
         async getMapData () {
             const _this = this;
-            const dataList = await this.$ajax({url: 'https://www.easy-mock.com/mock/5b39baec73a49f4fe3433dd9/xcx/map'});
-            let newList = dataList.map((item, index) => {
+            let newList = this.GPS.map((item, index) => {
                 let mapdata = JSON.stringify(_this.mapDataOptions);
                 let newData = JSON.parse(mapdata);
                 return Object.assign(newData, {
                     id: index,
-                    latitude: item.latitude,
-                    longitude: item.longitude,
+                    latitude: item.wgLat,
+                    longitude: item.wgLon,
                     callout: {
                         ...newData.callout,
                         content: item.content
                     }
                 });
             });
-            console.log(newList);
             this.markers = newList;
         }
     },

@@ -1,6 +1,10 @@
 <template lang="html">
     <div class="range">
-        <Balance v-if="rule.yu" :ruleOptions="rule.ruleOptions" />
+        <Balance
+            :yu="rule.yu"
+            :ruleOptions="rule.ruleOptions"
+            :transOriPrice="queryTraceData.accountBlance.transOriPrice"
+            :price="price" />
         <div class="range-valid">
             <ul>
                 <li v-if="rule.chepi">
@@ -26,9 +30,10 @@
                             <input
                                 placeholder="输入国外的站点编码"
                                 placeholder-class="input"
-                                data-name="sendStationCode"
+                                data-name="sendStationName"
+                                data-codeName="sendStationCode"
                                 @focus="dlongContainer"
-                                v-model="sendData.sendStationCode"
+                                v-model="sendData.sendStationName"
                             />
                         </div>
                     </div>
@@ -40,9 +45,10 @@
                             <input
                                 placeholder="输入国内的站点编码"
                                 placeholder-class="input"
-                                data-name="arrStationCode"
+                                data-codeName="arrStationCode"
+                                data-name="arrStationName"
                                 @focus="dlongContainer"
-                                v-model="sendData.arrStationCode"
+                                v-model="sendData.arrStationName"
                             />
                         </div>
                     </div>
@@ -61,7 +67,7 @@
                                 mode="date"
                                 :value="sendData.sendDates"
                                 @change="bindDateChange">
-                                <span class="icon iconfont icon-rili"></span>
+                                <span class="icon iconfont icon-shijian"></span>
                             </picker>
                         </div>
                     </div>
@@ -110,6 +116,7 @@
             v-if="rule.fazhan && rule.daozhan"
             :inputTost="inputTost"
             :dlongName="dlongName"
+            :codeName="codeName"
             @closeEvent="closeEvent"
             @dlongEvent="dlongEvent"/>
     </div>
@@ -120,6 +127,7 @@ import Balance from '../../components/balance.vue';
 import inputDlong from '../../components/inputDlong.vue';
 import Explain from '../../components/explain.vue';
 import rule from '../../utils/rule.js';
+import {util, range, queryInstant} from '../../utils/config.js';
 export default {
     data () {
         return {
@@ -129,6 +137,7 @@ export default {
             rule: {}, // 列表显示规则
             inputTost: false, // 站点列表弹框 是否开启
             dlongName: '', // 设置站点弹框区分
+            codeName: '',
 
             startTime: '', // 选择当前日期
             endTime: '', // 选择当前日期的 当前月最后一天
@@ -136,8 +145,15 @@ export default {
             initEndTime: '', // 规定日期组件从n-年-月-日 结束
 
             selectIndex: 0, // 红包选择Index
-            selectArray: ['30元红包', '50元红包', '不用红包'], // 红包列表
-            sendData: {} // 表单数据绑定
+            selectArray: ['无红包'], // 红包列表
+            sendData: {}, // 表单数据绑定
+            price: 0,
+            queryTraceData: {
+                accountBlance: {
+                    transOriPrice: 0.05
+                },
+                hb: []
+            }
         };
     },
     methods: {
@@ -171,19 +187,133 @@ export default {
                 }
             });
         },
+        redList (selectArray) {
+            let defaultSelect = this.selectArray;
+            if (!selectArray.length) {
+                selectArray = ['无红包'];
+            } else {
+                selectArray = selectArray.map(item => item.redAmount + '');
+                selectArray = selectArray.concat(defaultSelect);
+            };
+            this.selectArray = selectArray;
+        },
         /**
          * 提交查询 点击事件
          */
         async submitVakid () {
             const _this = this;
-            let {containerNo} = this.sendData;
-            if (containerNo !== '') {
-                let result = await this.$ajax({
-                    url: 'https://www.easy-mock.com/mock/5b39baec73a49f4fe3433dd9/xcx/form',
-                    data: _this.sendData
-                });
-                console.log(result);
+            let rule = this.rule;
+            let containerNo = this.sendData.containerNo;
+            let num = containerNo.length === 11 ? 1 : 2;
+            let selectIndex = this.selectIndex;
+            let hb = this.queryTraceData.hb;
+            let userRedCouId;
+            if (hb[selectIndex] && hb[selectIndex] !== '无红包') {
+                userRedCouId = hb[selectIndex].userRedCouId;
+            } else {
+                userRedCouId = '';
             };
+            let openid = await this.$UTIL.Login();
+            let data = Object.assign(this.sendData, {
+                userRedCouId: userRedCouId,
+                queryType: num,
+                eDate: _this.startTime,
+                sDate: _this.endTime,
+                openId: openid.openid,
+                queryState: _this.domesticindex
+            });
+            let flag = false;
+            let stringTxt = '';
+            if (rule.chepi && data.containerNo === '') {
+                stringTxt = '请填写车皮/集装箱号';
+            } else if (rule.fazhan && data.sendStationName === '') {
+                stringTxt = '请填选择发站编码';
+            } else if (rule.daozhan && data.arrStationName === '') {
+                stringTxt = '请填选择到站编码';
+            } else if (rule.fayun && data.sendDates === '') {
+                stringTxt = '请选择发运日期';
+            } else {
+                flag = true;
+            };
+            if (!flag) {
+                wx.showToast({
+                    title: stringTxt,
+                    icon: 'none'
+                });
+            } else {
+                this.submitRange(data);
+            };
+        },
+        async submitRange (data) {
+            try {
+                let activeIndex = this.activeIndex;
+                let url = activeIndex === '1' ? range.domestic : range.foreign;
+                console.log(url);
+                let initData = await this.$ajax({
+                    url: url,
+                    data: data,
+                    method: 'POST'
+                });
+                if (initData.state === '600') {
+                    let resultOptions = await this.$UTIL.WeChatPayment(activeIndex, initData.msg);
+                    console.log(resultOptions);
+                    this.timerDate(resultOptions.r.traQueryId, activeIndex);
+                } else {
+                    wx.navigateTo({
+                        url: `/pages/trahistory/main?active=${activeIndex}`
+                    });
+                };
+            } catch (e) {
+                console.log(e);
+            };
+        },
+        async timerDate (traQueryId, activeIndex) {
+            let url = activeIndex === '1' ? queryInstant.domestic : queryInstant.foreign;
+            let params = activeIndex === '1' ? {internaId: traQueryId} : {traQueryId: traQueryId};
+            let count = 0;
+            wx.showLoading({
+                title: '正在支付',
+                mask: true
+            });
+            let timer = setInterval(() => {
+                if (count < 20) {
+                    wx.request({
+                        url: url,
+                        data: params,
+                        success (result) {
+                            let data = result.data;
+                            if (data.state === '200') {
+                                clearInterval(timer);
+                                wx.showToast({
+                                    title: data.msg,
+                                    icon: 'none'
+                                });
+                                wx.navigateTo({
+                                    url: `/pages/trahistory/main?active=${activeIndex}`
+                                });
+                            } else {
+                                if (count >= 20) {
+                                    wx.showToast({
+                                        title: data.msg,
+                                        icon: 'none'
+                                    });
+                                    clearInterval(timer);
+                                };
+                            }
+                            console.log(result);
+                        }
+                    });
+                    count++;
+                    console.log(count);
+                } else {
+                    clearInterval(timer);
+                    wx.showToast({
+                        title: '充值失败',
+                        icon: 'none'
+                    });
+                    wx.hideLoading();
+                };
+            }, 2000);
         },
         /**
          * inputDlong 组件 派发事件 监听返回值，
@@ -191,6 +321,7 @@ export default {
          */
         dlongEvent (options) {
             this.sendData[options.dlongName] = options.val;
+            this.sendData[options.codeName] = options.code;
             this.inputTost = false;
         },
         /**
@@ -199,8 +330,11 @@ export default {
          */
         dlongContainer (e) {
             let dlongName = e.mp.target.dataset.name;
+            let codename = e.mp.target.dataset.codename;
             this.inputTost = true;
             this.dlongName = dlongName;
+            this.codeName = codename;
+            console.log(e.mp);
         },
         /**
          * inputDlong 派发事件，是否关闭 inputDlong 弹框
@@ -224,6 +358,9 @@ export default {
          * 初始化所有的日期对象, 日期picker 限制从那年月 到哪年月份展示选择等。。。
          */
         initData () {
+            if (!this.rule.shiduan) {
+                return false;
+            };
             let now = new Date();
             let year = now.getFullYear();
             let month = now.getMonth() + 1;
@@ -253,31 +390,54 @@ export default {
             //     title: 'time',
             //     content: `${cdt.getFullYear()},${Number(cdt.getMonth()) + 1},${cdt.getDate()}`
             // });
+        },
+        async queryTrace () {
+            try {
+                let openid = await this.$UTIL.Login();
+                let result = await this.$ajax({
+                    url: util.queryTraceType,
+                    data: {
+                        openId: openid.openid
+                    }
+                });
+                this.queryTraceData = result.data;
+                let key = this.rule.key;
+                this.price = result.data.amountTimes[key];
+                this.redList(result.data.hb);
+                this.sendData.sendDates = result.data.date;
+            } catch (e) {
+                console.log(e);
+            };
         }
     },
     onLoad ({activeIndex, domesticindex}) {
-        // this.rule = JSON.parse(options.rule);
         this.rule = rule[activeIndex][domesticindex];
+        this.domesticindex = Number(domesticindex) + 1;
         this.activeIndex = activeIndex;
         // console.log(this.rule.explain);
-        this.initData();
-
         this.sendData = { // 表单数据绑定
             userRedCouId: '', // '红包'
-            trackType: '', // 查询类型
+            trackType: Number(domesticindex) + 1, // 查询类型
             queryType: '', // 集装箱/整车
             containerNo: '', // 箱号
-            sourceData: '', // 接口类型
+            sourceData: '04', // 接口类型
             remCus: '', // 客户标签
             sendDates: '', // 发站日期
             sendStationName: '', // 发站名称
             arrStationName: '', // 到站名车
             arrStationCode: '', // 到站代码
-            sendStationCode: '' // 发站代码
+            sendStationCode: '', // 发站代码
+            eDate: '',
+            sDate: ''
         }; // 初始化数据
+        this.endTime = '';
+        this.startTime = '';
         this.selectIndex = 0;
         this.validErr = false;
-        // console.log(this.sendData);
+        this.selectArray = ['无红包'];
+        this.initData();
+
+        this.queryTrace();
     },
     components: {
         inputDlong,

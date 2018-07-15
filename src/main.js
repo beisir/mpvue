@@ -2,15 +2,17 @@ import Vue from 'vue';
 import App from './App';
 import ajax from './utils/http.js';
 import UTIL from './utils/util.js';
+import store from './store/index.js';
+
+Vue.prototype.$store = store;
+
 Vue.config.productionTip = false;
 Vue.prototype.$ajax = ajax;
 Vue.prototype.$UTIL = UTIL;
 App.mpType = 'app';
-
 const app = new Vue(App);
 app.$mount();
 
-// app.$UTIL.wechatLogin();
 export default {
     // 这个字段走 app.json
     config: {
@@ -73,7 +75,7 @@ export default {
             ]
         },
         'networkTimeout': {
-            'request': 10000,
+            'request': 1000000,
             'downloadFile': 10000
         },
         'debug': false

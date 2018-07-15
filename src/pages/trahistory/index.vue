@@ -4,70 +4,27 @@
             :titleList="titleList"
             :currentTab="currentTab"
             @toogerTitle="toogerFn" />
-        <div class="tra-container">
-            <div class="tra-time">
-                <span>查询时间</span>
-                <div class="tra-input tra-left tra-line">
-                    <input type="text" :value="validTime0">
-                    <picker
-                        class="valid-picker"
-                        mode="date"
-                        :value="validTime0"
-                        id="0"
-                        start="2015-09-01"
-                        end="2017-09-01"
-                        @change="bindDateChange">
-                        <span class="icon iconfont icon-27"></span>
-                    </picker>
-                </div>
-                <div class="tra-input">
-                    <input type="text" :value="validTime1">
-                    <picker
-                        class="valid-picker"
-                        mode="date"
-                        :value="validTime1"
-                        id="1"
-                        start="2015-09-01"
-                        end="2017-09-01"
-                        @change="bindDateChange">
-                        <span class="icon iconfont icon-27"></span>
-                    </picker>
-                </div>
-            </div>
-            <div class="tra-time">
-                <span>客户标签</span>
-                <div class="tra-input tra-left">
-                    <input type="text" value=" ">
-                </div>
-                <div class="tra-input">
-                    <span class="tra-btn">查询</span>
-                </div>
-            </div>
-        </div>
-        <ul class="tra-detail">
-            <li>
-                <p>车皮/集装箱号：44472058（国外全程运踪）</p>
-                <div class="tra-pls">
-                    <span>追踪完成</span>
-                    <a href="/pages/feedback/main">查看追踪详情</a>
-                </div>
-                <div class="tra-date">2018-03-04 18:13:47</div>
-            </li>
-            <li>
-                <p>车皮/集装箱号：44472058（国外全程运踪）</p>
-                <div class="tra-pls">
-                    <span>追踪完成</span>
-                    <a href="/pages/feedback/main">查看追踪详情</a>
-                </div>
-                <div class="tra-date">2018-03-04 18:13:47</div>
-            </li>
-        </ul>
+            <swiper style="height: 550px;"
+                :current="currentTab"
+                @change="changeEvent">
+                <swiper-item>
+                    <selectFile :currentTab="currentTab" />
+                </swiper-item>
+                <swiper-item>
+                    <selectFile2 :currentTab="currentTab" />
+                </swiper-item>
+            </swiper>
+
     </div>
 </template>
 
 <script>
+
 import titleBar from '../../components/titleBar.vue';
+import selectFile from '../../components/selectFile.vue';
+import selectFile2 from '../../components/selectFile2.vue';
 export default {
+    props: ['active'],
     data () {
         return {
             currentTab: 0,
@@ -80,27 +37,24 @@ export default {
                     key: 'news',
                     text: '国内运踪历史记录'
                 }
-            ],
-            validTime0: '',
-            validTime1: ''
+            ]
         };
     },
     methods: {
         toogerFn (index) {
             this.currentTab = index;
         },
-        bindDateChange (options) {
-            let validTime = options.mp.detail.value;
-            let index = options.mp.target.id;
-            if (index === '0') {
-                this.validTime0 = validTime;
-            } else {
-                this.validTime1 = validTime;
-            };
+        changeEvent (e) {
+            this.currentTab = e.mp.detail.current;
         }
     },
+    onLoad () {
+        this.currentTab = this.active;
+    },
     components: {
-        titleBar
+        titleBar,
+        selectFile,
+        selectFile2
     }
 };
 </script>
@@ -114,6 +68,8 @@ export default {
     display: flex;
     align-items: center;
     height: 45px;
+    justify-content:center;
+
 }
 .tra-time .tra-left {
     margin-left: 15px;

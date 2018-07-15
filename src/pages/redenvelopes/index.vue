@@ -1,8 +1,22 @@
 <template lang="html">
     <div class="redenvel">
         <h4 class="red-title">您的红包列表</h4>
-        <ul class="red-list">
-            <li>
+        <ul class="red-list" v-if="resultList.length">
+            <li v-for="(redItem, redIndex) in resultList"
+                :key="redItem.regTime">
+                <div class="red-top">
+                    <div class="red-price">{{redItem.redAmount}}<span>元</span></div>
+                    <div class="">
+                        <p>无门槛使用（剩余：{{redItem.remain}}元）</p>
+                        <p class="red-ps">适用于国外追踪所有产品</p>
+                    </div>
+                </div>
+                <div class="red-bottom">
+                    <span class="red-span">有效日期</span>
+                    <span class="red-time">{{redItem.sdate}} 至 {{redItem.edate}}</span>
+                </div>
+            </li>
+            <!-- <li>
                 <div class="red-top">
                     <div class="red-price">100<span>元</span></div>
                     <div class="">
@@ -27,26 +41,39 @@
                     <span class="red-span">有效日期</span>
                     <span class="red-time">2018-06-21 00:00:00 至 2018-06-21 00:00:00</span>
                 </div>
-            </li>
-            <li>
-                <div class="red-top">
-                    <div class="red-price">100<span>元</span></div>
-                    <div class="">
-                        <p>无门槛使用（剩余：10元）</p>
-                        <p class="red-ps">适用于国外追踪所有产品</p>
-                    </div>
-                </div>
-                <div class="red-bottom">
-                    <span class="red-span">有效日期</span>
-                    <span class="red-time">2018-06-21 00:00:00 至 2018-06-21 00:00:00</span>
-                </div>
-            </li>
+            </li> -->
         </ul>
     </div>
 </template>
 
 <script>
+import {redList} from '../../utils/config.js';
 export default {
+    data () {
+        return {
+            resultList: []
+        };
+    },
+    methods: {
+        async getRedList () {
+            try {
+                let openid = await this.$UTIL.Login();
+                let result = await this.$ajax({
+                    url: redList.queryHbDetails,
+                    data: {
+                        openId: openid.openid
+                    }
+                });
+                console.log(result.data);
+                this.resultList = result.data;
+            } catch (e) {
+                console.log(e);
+            };
+        }
+    },
+    onLoad () {
+        this.getRedList();
+    }
 };
 </script>
 

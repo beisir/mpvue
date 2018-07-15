@@ -14,7 +14,7 @@ const ajax = function (params, isLoading = false) {
             data: params.data || {},
             header: params.header || {
                 'Accept': 'application/json, text/javascript, */*',
-                'Content-type': 'application/x-www-form-urlencoded' // 默认值
+                'Content-type': 'application/x-www-form-urlencoded;charset=utf-8;' // 默认值
             },
             success: function (options) {
                 let result = options.data;

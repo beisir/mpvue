@@ -20,7 +20,7 @@
                 <p>个人信息</p>
                 <span class="icon iconfont icon-icon-arrow-right2"></span>
             </a>
-            <a href="/pages/trahistory/main">
+            <a href="/pages/trahistory/main?active=0">
                 <span class="icon iconfont icon-icon--"></span>
                 <p>我的踪迹</p>
                 <span class="icon iconfont icon-icon-arrow-right2"></span>

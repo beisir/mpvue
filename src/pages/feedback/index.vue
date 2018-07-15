@@ -7,33 +7,27 @@
         />
         <div class="feed-title" v-if="!currentTab">
             <div class="feed-back">
-                <p class="feed-back-title">全程跟踪</p>
+                <p class="feed-back-title" v-if="result.TI.trackType === '1'">即时追踪</p>
+                <p class="feed-back-title" v-else-if="result.TI.trackType === '2'">全程追踪</p>
+                <p class="feed-back-title" v-else-if="result.TI.trackType === '3'">时段追踪</p>
                 <ul>
-                    <li>集装箱号码/车号：44472058</li>
-                    <li>发运日期 2017-12-25</li>
-                    <li>发站：后贝加尔斯克-出口</li>
-                    <li>到站：Vorsino,MOS</li>
+                    <li v-if="result.TI.containerNo">{{result.TI.queryType === '1' ? '集装箱' : '车号'}}：{{result.TI.containerNo}}</li>
+                    <li v-if="result.TI.sendDate">发运日期 {{result.TI.sendDate}}</li>
+                    <li v-if="result.TI.sendStationName">发站：{{result.TI.sendStationName}}</li>
+                    <li v-if="result.TI.arrStationName">到站：{{result.TI.arrStationName}}</li>
                 </ul>
             </div>
-            <div class="feed-data">
+            <div class="feed-data" v-if="result.TQ.length">
                 <h3>追踪数据</h3>
                 <ul>
-                    <li>
-                        <h4>反馈时间：2018-01-19 14:54:00</h4>
-                        <p>当前位置：Vorsino，MOS，拼车号：无，操作：到达，距离目的地距离：0</p>
-                    </li>
-                    <li>
-                        <h4>反馈时间：2018-01-19 14:54:00</h4>
-                        <p>当前位置：Vorsino，MOS，拼车号：无，操作：到达，距离目的地距离：0</p>
-                    </li>
-                    <li>
-                        <h4>反馈时间：2018-01-19 14:54:00</h4>
-                        <p>当前位置：Vorsino，MOS，拼车号：无，操作：到达，距离目的地距离：0</p>
+                    <li v-for="(item, index) in result.TQ" :key="item.traOperation">
+                        <h4>反馈时间：{{item.opeDatetime}}</h4>
+                        <p>当前位置：{{item.opeStation}}，拼车号：{{item.platformNo || ''}}，操作：{{item.operation}}，距离目的地距离：{{item.traEndDis}}</p>
                     </li>
                 </ul>
             </div>
         </div>
-        <RoadMap v-else />
+        <RoadMap :GPS="result.GPS" v-else />
 
 
     </div>
@@ -42,10 +36,16 @@
 <script>
 import titleBar from '../../components/titleBar.vue';
 import RoadMap from '../../components/RoadMap.vue';
+import {foreign_queryDetails, domestic_queryDetails} from '../../utils/config.js';
 export default {
     data () {
         return {
             currentTab: 0,
+            result: {
+                TI: {},
+                GPS: [],
+                TQ: []
+            },
             titleList: [
                 {
                     key: 'detail',
@@ -61,11 +61,30 @@ export default {
     methods: {
         toogerFn (index) {
             this.currentTab = index;
+        },
+        async getDataList (traQueryId, active) {
+            let url = active === '1' ? domestic_queryDetails.queryDetails : foreign_queryDetails.queryDetails;
+            let params = active === '1' ? {internaId: traQueryId} : {traQueryId: traQueryId};
+            try {
+                let openid = await this.$UTIL.Login();
+                let result = await this.$ajax({
+                    url: url,
+                    data: Object.assign({
+                        openId: openid.openid
+                    }, params)
+                });
+                this.result = result.data;
+            } catch (e) {
+                console.log(e);
+            };
         }
     },
     components: {
         titleBar,
         RoadMap
+    },
+    onLoad (options) {
+        this.getDataList(options.traQueryId, options.active);
     }
 };
 </script>
