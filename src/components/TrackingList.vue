@@ -32,7 +32,7 @@
                     <button v-else
                         class='range-go'
                         @click="goRange(phone_num, domesticIndex)"
-                    >追踪</button>
+                    >去追踪</button>
                 </div>
             </div>
         </scroll-view>
