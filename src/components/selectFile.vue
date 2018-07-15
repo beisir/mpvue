@@ -10,10 +10,8 @@
                         mode="date"
                         :value="validTime0"
                         id="0"
-                        start="2015-07-01"
-                        end=""
                         @change="bindDateChange">
-                        <span class="icon iconfont icon-shijian"></span>
+                        <span class="icon iconfont icon-rili"></span>
                     </picker>
                 </div>
                 <div class="tra-input">
@@ -23,10 +21,8 @@
                         mode="date"
                         :value="validTime1"
                         id="1"
-                        start="2017-07-01"
-                        end=""
                         @change="bindDateChange">
-                        <span class="icon iconfont icon-shijian"></span>
+                        <span class="icon iconfont icon-rili"></span>
                     </picker>
                 </div>
             </div>
@@ -36,21 +32,23 @@
                     <input type="text" v-model="target" />
                 </div>
                 <div class="tra-input">
-                    <span class="tra-btn" @click="slectChange">查询</span>
+                    <span :class=" currentTab === 1 ? 'tra-btnw' : 'tra-btn'" @click="slectChange">查询</span>
                 </div>
             </div>
         </div>
         <scroll-view
-            style="height:450px;"
+            :style="{'height': (scrollH - 110) + 'px'}"
             :scroll-y="true"
             :lower-threshold="true"
             @scrolltolower="scrollChange">
             <ul class="tra-detail">
                 <li v-for="(abroadItem, abroadIndex) in abroadList" :key="abroadItem.trackType">
-                    <p>车皮/集装箱号：{{abroadItem.containerNo}}（{{abroadItem.trackType}}）</p>
+                    <p>车皮/集装箱号：{{abroadItem.containerNo}}（{{currentTab === 0 ? abroadItem.trackType : abroadItem.queryState}}）</p>
                     <div class="tra-pls">
                         <span>{{abroadItem.trackStatus}}</span>
-                        <a :href="'/pages/feedback/main?traQueryId=' + abroadItem.traQueryId + '&active=' + currentTab">查看追踪详情</a>
+                        {{JSON.stringify(abroadItem)}}
+                        <a v-if="currentTab === 0" :href="'/pages/feedback/main?traQueryId=' + abroadItem.traQueryId + '&active=' + currentTab">查看追踪详情</a>
+                        <a v-else :href="'/pages/feedback/main?traQueryId=' + abroadItem.internaId + '&active=' + currentTab">查看追踪详情</a>
                     </div>
                     <div class="tra-date">{{abroadItem.regTime}}</div>
                 </li>
@@ -60,9 +58,9 @@
 </template>
 
 <script>
-import {historyDetail} from '../utils/config.js'; // queryTraceHistroy
+import {foreign, domestic} from '../utils/config.js'; // queryTraceHistroy
 export default {
-    props: ['currentTab', 'active'],
+    props: ['currentTab', 'scrollH'],
     data () {
         return {
             pageNo: 0,
@@ -73,24 +71,10 @@ export default {
         };
     },
     methods: {
-        slectChange () {
-            this.pageNo = 0;
-            this.scrollChange();
-        },
-        scrollChange () {
-            this.pageNo = this.pageNo + 1;
-            this.submitAbroad(this.pageNo);
-        },
-        submitAbroad (pageNow) {
-            const _this = this;
-            let params = {
-                remCus: _this.target,
-                sDate: _this.validTime0,
-                eDate: _this.validTime1,
-                pageNow: pageNow
-            };
-            this.getTraceHistroy(params);
-        },
+        /**
+         * 选择当前时间
+         * @param {object} e - 事件选择picker事件对象
+         */
         bindDateChange (options) {
             let validTime = options.mp.detail.value;
             let index = options.mp.target.id;
@@ -100,11 +84,47 @@ export default {
                 this.validTime1 = validTime;
             };
         },
+        /**
+         * 点击查询事件 将当前分页清0
+         * @param {} null
+         */
+        slectChange () {
+            this.pageNo = 0;
+            this.abroadList = [];
+            this.scrollChange();
+        },
+        /**
+         * iscroll-view 滑动事件 触底事触发上拉加载
+         * @param {} null
+         */
+        scrollChange () {
+            this.pageNo = this.pageNo + 1;
+            this.submitAbroad(this.pageNo);
+        },
+        /**
+         * 组装数据进行渲染
+         * @param {number} pageNow - 当前分页
+         */
+        submitAbroad (pageNow) {
+            const _this = this;
+            let params = {
+                remCus: _this.currentTab === 0 ? _this.target : '',
+                sDate: _this.validTime0,
+                eDate: _this.validTime1,
+                pageNow: pageNow
+            };
+            this.getTraceHistroy(params);
+        },
+        /**
+         * 组装数据进行渲染
+         * @param {object} params - 请求数据参数
+         */
         async getTraceHistroy (params) {
             try {
                 let openid = await this.$UTIL.Login();
+                let url = this.currentTab === 0 ? foreign.queryTraceHistroy : domestic.queryDomesticList;
                 let reslutList = await this.$ajax({
-                    url: historyDetail.queryTraceHistroy,
+                    url: url,
                     method: 'POST',
                     data: Object.assign({
                         openId: openid.openid,

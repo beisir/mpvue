@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {queryCZRecord} from '../../utils/config.js';
+import {util} from '../../utils/config.js';
 export default {
     data () {
         return {
@@ -38,16 +38,14 @@ export default {
         async getCZRecord (pageNo) {
             try {
                 let openid = this.openid;
-                console.log(openid);
                 let datalist = await this.$ajax({
-                    url: queryCZRecord.queryCZRecord,
+                    url: util.queryCZRecord,
                     data: {
                         openId: openid,
                         pageSize: pageNo
                     }
                 });
                 this.dataList = this.dataList.concat(datalist.data);
-                console.log(this.dataList);
             } catch (e) {
                 console.log(e);
             };

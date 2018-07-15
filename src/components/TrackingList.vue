@@ -23,7 +23,7 @@
                             :key="resultItem"
                         >{{resultItem}}</li>
                     </ul>
-                    <button v-if="!phoneNumber"
+                    <button v-if="!phone_num"
                         class='range-go'
                         open-type="getPhoneNumber"
                         :data-domesticIndex="domesticIndex"
@@ -31,7 +31,7 @@
                     >去追踪</button>
                     <button v-else
                         class='range-go'
-                        @click="goRange(phoneNumber, domesticIndex)"
+                        @click="goRange(phone_num, domesticIndex)"
                     >追踪</button>
                 </div>
             </div>
@@ -41,10 +41,9 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+// 注册国内国外全局数据
 import {indexData} from '../utils/data.js';
 import {util} from '../utils/config.js';
-import Vue from 'vue';
 export default {
     props: {
         activeIndex: {
@@ -56,13 +55,19 @@ export default {
     },
     data () {
         return {
-            indexList: indexData.indexContent,
-            phoneNumber: Vue.prototype.$phone_num
+            indexList: indexData.indexContent
         };
     },
-    computed: mapGetters(['phoneNumber']),
+    computed: {
+        phone_num () {
+            return this.$store.state.phone_num;
+        }
+    },
     methods: {
-        // 追踪范围点击事件
+        /**
+         * 点击追踪范围事件 弹框提示
+         * @param {} null
+         */
         trackingRangeFn () {
             wx.showModal({
                 title: '追踪范围',
@@ -70,20 +75,15 @@ export default {
                 showCancel: false
             });
         },
-        heightWin () {
-            const _this = this;
-            wx.getSystemInfo({
-                success: (res) => {
-                    let clientHeight = res.windowHeight;
-                    _this.winHeight = clientHeight;
-                }
-            });
-        },
+        /**
+         * 获取手机号码事件 弹框授权事件
+         * @param {object} e 事件对象
+         */
         async application (e) {
+            // 获取当前按钮下标 匹配range组件
             let domesticindex = e.mp.currentTarget.dataset.domesticindex;
             try {
                 let result = await this.$UTIL.getMobilePhone(e);
-                console.log(result);
                 let openid = await this.$UTIL.Login();
                 let registerInfo = await this.$ajax({
                     url: util.register,
@@ -93,24 +93,21 @@ export default {
                     }
                 });
                 registerInfo && this.goRange(result, domesticindex);
-                this.phoneNumber = result;
+                this.phone_num = result;
             } catch (err) {
                 console.log(err);
             };
-            // this.goRange('13031115726', domesticindex);
         },
+        /**
+         * 跳转页面路由goRange
+         * @param {object} phone: 获取授权手机号码。 domesticindex：按钮下标
+         */
         goRange (phone, domesticindex) {
             let activeIndex = this.activeIndex;
-            // let ruleData = rule[activeIndex][domesticindex];
             let dataString = `phone=${phone}&activeIndex=${activeIndex}&domesticindex=${domesticindex}`;
-
-            // let url = activeIndex ? `/pages/lmmediate/main?${dataString}` : `/pages/range/main?${dataString}`;
             let url = `/pages/range/main?${dataString}`;
             wx.navigateTo({url});
         }
-    },
-    created () {
-        // console.log(this.phoneNumber);
     }
 };
 </script>

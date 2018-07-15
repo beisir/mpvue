@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {customers} from '../../utils/config.js';
+import {util} from '../../utils/config.js';
 export default {
     data () {
         return {
@@ -40,7 +40,7 @@ export default {
     },
     onLoad () {
         const _this = this;
-        let url = customers.queryCustomers;
+        let url = util.queryCustomers;
         this.$ajax({url}).then(res => {
             console.log(res);
             _this.phoneList = res.data;

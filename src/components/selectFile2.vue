@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import {queryDomesticList} from '../utils/config.js'; // queryTraceHistroy
+import {domestic} from '../utils/config.js'; // queryTraceHistroy
 export default {
     props: ['currentTab'],
     data () {
@@ -98,7 +98,7 @@ export default {
             try {
                 let openid = await this.$UTIL.Login();
                 let reslutList = await this.$ajax({
-                    url: queryDomesticList.queryDomesticList,
+                    url: domestic.queryDomesticList,
                     method: 'POST',
                     data: Object.assign({
                         openId: openid.openid,

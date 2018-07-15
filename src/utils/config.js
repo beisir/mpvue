@@ -1,58 +1,66 @@
 const hostName = 'https://www.wuchangwang.cn';
 // const hostName = 'http://localhost:5757/weapp';
 module.exports = {
-    range: {
-        foreign: `${hostName}/miniwc/main/foreign/balance.htm`,
-        domestic: `${hostName}/miniwc/main/domestic/balance.htm`
+    foreign: { // 国外
+        balance: `${hostName}/miniwc/main/foreign/balance.htm`, // 国外运踪 校验通过余额支付红包支付 不满足返回，拉取微信支付 11
+        WxSweep: `${hostName}/miniwc/main/foreign/WxSweep.htm`, // 国外微信支付接口
+        queryTraceHistroy: `${hostName}/miniwc/foreign/queryTraceHistroy.htm`, // 国外运宗历史查询
+        queryInstant: `${hostName}/miniwc/foreign/queryInstant.htm`, // 国外充值轮询接口
+        queryDetails: `${hostName}/miniwc/foreign/queryDetails.htm` // 国外运宗历史详情
+    },
+    domestic: { // 国内
+        balance: `${hostName}/miniwc/main/domestic/balance.htm`, // 国内运踪 校验通过余额支付 红包支付 不满足返回，拉取微信支付 12
+        WxSweep: `${hostName}/miniwc/main/domestic/WxSweep.htm`, // 国内微信支付接口
+        queryDomesticList: `${hostName}/miniwc/domestic/queryDomesticList.htm`, // 国内运宗历史查询
+        queryInstant: `${hostName}/miniwc/domestic/queryInstant.htm`, // 国内充值轮询接口
+        queryDetails: `${hostName}/miniwc/domestic/queryDetails.htm` // 国内运踪历史详情
     },
     util: {
-        login: `${hostName}/miniwc/main/landing.htm`,
+        openid: `${hostName}/miniwc/mini/getOpenid.htm`, // 获取openid
+        login: `${hostName}/miniwc/main/landing.htm`, // 返回结果：返回当前登陆人信息
+        register: `${hostName}/miniwc/main/getRegister.htm`, // 授权获取手机号之后存储后台
 
-        register: `${hostName}/miniwc/main/getRegister.htm`,
-        /* 登陆获取openid */
-        openid: `${hostName}/miniwc/mini/getOpenid.htm`,
-        /* 获取用户手机号 */
         phoneNum: `${hostName}/miniwc/mini/getPhoneNum.htm`,
-        /* 充值红包  */
-        recharge: `${hostName}/springmvc/app/recharge`,
-        app: 'https://www.easy-mock.com/mock/5b39baec73a49f4fe3433dd9/xcx/form',
-        queryTraceType: `${hostName}/miniwc/main/queryTraceType.htm`,
-
-        foreign: `${hostName}/miniwc/main/foreign/WxSweep.htm`, // guowai
-        domestic: `${hostName}/miniwc/main/domestic/WxSweep.htm` // guonei
-    },
-    historyDetail: {
-        queryTraceHistroy: `${hostName}/miniwc/foreign/queryTraceHistroy.htm`
-    },
-    queryDomesticList: {
-        queryDomesticList: `${hostName}/miniwc/domestic/queryDomesticList.htm`
-    },
-    customers: {
-        queryCustomers: `${hostName}/miniwc/main/queryCustomers.htm`,
-        queryDomestic: `${hostName}/miniwc/domestic/queryDomesticList.htm`
-    },
-    querySend: {
-        querySend: `${hostName}/miniwc/main/querySend.htm`
-    },
-    redList: {
-        queryHbDetails: `${hostName}/miniwc/main/queryHbDetails.htm`
-    },
-    queryCZRecord: {
-        queryCZRecord: `${hostName}/miniwc/main/queryCZRecord.htm`
-    },
-    queryInstant: {
-        foreign: `${hostName}/miniwc/foreign/queryInstant.htm`,
-        domestic: `${hostName}/miniwc/domestic/queryInstant.htm`
-    },
-    saveWxXd: {
-        saveWxXd: `${hostName}/miniwc/main/saveWxXd.htm`,
-        query: `${hostName}/miniwc/main/query.htm`
-    },
-    foreign_queryDetails: {
-        queryDetails: `${hostName}/miniwc/foreign/queryDetails.htm`
-    },
-    domestic_queryDetails: {
-        queryDetails: `${hostName}/miniwc/domestic/queryDetails.htm`
+        queryTraceType: `${hostName}/miniwc/main/queryTraceType.htm`, // 获取余额
+        queryCustomers: `${hostName}/miniwc/main/queryCustomers.htm`, // 客服中心
+        querySend: `${hostName}/miniwc/main/querySend.htm`, // 站点搜索接口
+        queryHbDetails: `${hostName}/miniwc/main/queryHbDetails.htm`, // 红包列表
+        queryCZRecord: `${hostName}/miniwc/main/queryCZRecord.htm`, // 充值明细
+        saveWxXd: `${hostName}/miniwc/main/saveWxXd.htm`, // 微信充值订单
+        query: `${hostName}/miniwc/main/query.htm`, // 直接充值金额轮询
+        saveJsInstant: `${hostName}/miniwc/main/saveJsInstant.htm` // 国内即时追踪单点提交查询
     }
-
+    // queryDomesticList: {
+    //     queryDomesticList: `${hostName}/miniwc/domestic/queryDomesticList.htm`
+    // },
+    // customers: {
+    //     queryCustomers: `${hostName}/miniwc/main/queryCustomers.htm`,
+    //     queryDomestic: `${hostName}/miniwc/domestic/queryDomesticList.htm`
+    // },
+    // querySend: {
+    //     querySend: `${hostName}/miniwc/main/querySend.htm`
+    // },
+    // redList: {
+    //     queryHbDetails: `${hostName}/miniwc/main/queryHbDetails.htm`
+    // },
+    // queryCZRecord: {
+    //     queryCZRecord: `${hostName}/miniwc/main/queryCZRecord.htm`
+    // },
+    // queryInstant: {
+    //     foreign: `${hostName}/miniwc/foreign/queryInstant.htm`,
+    //     domestic: `${hostName}/miniwc/domestic/queryInstant.htm`
+    // },
+    // saveWxXd: {
+    //     saveWxXd: `${hostName}/miniwc/main/saveWxXd.htm`,
+    //     query: `${hostName}/miniwc/main/query.htm`
+    // },
+    // foreign_queryDetails: {
+    //     queryDetails: `${hostName}/miniwc/foreign/queryDetails.htm`
+    // },
+    // domestic_queryDetails: {
+    //     queryDetails: `${hostName}/miniwc/domestic/queryDetails.htm`
+    // },
+    // saveJsInstant: {
+    //     saveJsInstant: `${hostName}/miniwc/main/saveJsInstant.htm`
+    // }
 };

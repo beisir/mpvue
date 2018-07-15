@@ -1,6 +1,6 @@
 
 import ajax from './http.js';
-import {util, saveWxXd} from './config.js';
+import {util, domestic, foreign} from './config.js';
 class UTIL {
     constructor () {
         this.introduce = `
@@ -147,7 +147,7 @@ class UTIL {
         const _this = this;
         return new Promise(async (resolve, reject) => {
             try {
-                let url = isurl === '1' ? util.domestic : util.foreign;
+                let url = isurl === '1' ? domestic.WxSweep : foreign.WxSweep;
                 let params = isurl === '1' ? {internaId: msg} : {traQueryId: msg};
                 let {openid} = await _this.Login();
                 let result = await ajax({
@@ -204,7 +204,7 @@ class UTIL {
             try {
                 let {openid} = await _this.Login();
                 let result = await ajax({
-                    url: saveWxXd.saveWxXd,
+                    url: util.saveWxXd,
                     method: 'POST',
                     data: {
                         openId: openid,

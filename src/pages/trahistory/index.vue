@@ -4,14 +4,14 @@
             :titleList="titleList"
             :currentTab="currentTab"
             @toogerTitle="toogerFn" />
-            <swiper style="height: 550px;"
+            <swiper :style="{'height': scrollH + 'px'}"
                 :current="currentTab"
                 @change="changeEvent">
                 <swiper-item>
-                    <selectFile :currentTab="currentTab" />
+                    <selectFile :scrollH="scrollH" :currentTab="0" />
                 </swiper-item>
                 <swiper-item>
-                    <selectFile2 :currentTab="currentTab" />
+                    <selectFile :scrollH="scrollH" :currentTab="1" />
                 </swiper-item>
             </swiper>
 
@@ -28,6 +28,7 @@ export default {
     data () {
         return {
             currentTab: 0,
+            scrollH: 0,
             titleList: [
                 {
                     key: 'detail',
@@ -46,10 +47,19 @@ export default {
         },
         changeEvent (e) {
             this.currentTab = e.mp.detail.current;
+        },
+        getScrollHeiht () {
+            const _this = this;
+            wx.getSystemInfo({
+                success: function (res) {
+                    _this.scrollH = res.windowHeight - 45;
+                }
+            });
         }
     },
-    onLoad () {
-        this.currentTab = this.active;
+    onLoad (options) {
+        this.currentTab = Number(options.active);
+        this.getScrollHeiht();
     },
     components: {
         titleBar,
@@ -67,7 +77,7 @@ export default {
 .tra-time {
     display: flex;
     align-items: center;
-    height: 45px;
+    height: 55px;
     justify-content:center;
 
 }
@@ -88,7 +98,19 @@ export default {
 
 .tra-input {
     width: 115px;
+    height: 30px;
     position: relative;
+}
+picker{
+    width: 100%;
+}
+.tra-input .iconfont {
+    display:block;
+    width: 100%;
+    text-align:right;
+    padding-right: 5px;
+    box-sizing:border-box;
+
 }
 .tra-input .valid-picker {
     position: absolute;
@@ -100,14 +122,27 @@ export default {
     font-size: 12px;
     border: #e8e8e8 1px solid;
     padding-left: 10px;
+    height: 30px;
 }
 .tra-input .tra-btn {
-    padding: 3px 15px;
+    display: block;
+    padding: 6px 15px;
     background: #4aa0e6;
     color: #ffffff;
     border-radius: 3px;
-    margin-left: 20px;
+    text-align: center;
+    /* margin-left: 20px; */
 
+}
+.tra-input .tra-btnw {
+    display:block;
+    padding: 6px 15px;
+    background:#4aa0e6;
+    color:#ffffff;
+    border-radius:6rpx;
+    margin-left:-84rpx;
+    width:241px;
+    text-align:center;
 }
 
 .tra-detail {
@@ -121,7 +156,7 @@ export default {
     color: #4c4c4d;
 }
 .tra-pls a {
-    font-size: 12px;
+    font-size: 14px;
     color: #0076ff;
 }
 .tra-pls {

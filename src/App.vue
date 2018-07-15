@@ -2,24 +2,7 @@
     <div class=""></div>
 </template>
 <script>
-import {util} from './utils/config.js';
 export default {
-    methods: {
-        async getInfo () {
-            let openid = await this.$UTIL.Login();
-            let info = await this.$ajax({
-                url: util.login,
-                data: {
-                    openId: openid.openid
-                }
-            });
-            this.$store.commit('phoneNumber', info.data.phone_num);
-        }
-    },
-    created () {
-        console.log(this.$store);
-        this.getInfo();
-    }
 };
 </script>
 <style media="screen">

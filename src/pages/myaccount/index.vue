@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import {saveWxXd, util} from '../../utils/config.js';
+import {util} from '../../utils/config.js';
 export default {
     data () {
         return {
@@ -66,7 +66,7 @@ export default {
         },
         async timerDate (recOrderNo) {
             const _this = this;
-            let url = saveWxXd.query;
+            let url = util.query;
             let count = 0;
             wx.showLoading({
                 title: '正在支付',

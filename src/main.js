@@ -2,16 +2,35 @@ import Vue from 'vue';
 import App from './App';
 import ajax from './utils/http.js';
 import UTIL from './utils/util.js';
+import {util} from './utils/config.js';
 import store from './store/index.js';
-
-Vue.prototype.$store = store;
-
 Vue.config.productionTip = false;
-Vue.prototype.$ajax = ajax;
+Vue.prototype.$store = store; // 状态管理，
+Vue.prototype.$ajax = ajax; // 服
 Vue.prototype.$UTIL = UTIL;
 App.mpType = 'app';
 const app = new Vue(App);
-app.$mount();
+
+/**
+ * 获取全局 注册信息 手机号 防止在分享出去之后也能从不同入口拿到手机号
+ * @param {object} null
+ */
+const getInfo = async () => {
+    try {
+        let openid = await UTIL.Login();
+        let info = await ajax({
+            url: util.login,
+            data: {
+                openId: openid.openid
+            }
+        });
+        app.$store.commit('phone_num', info.data.phone_num);
+        app.$mount();
+    } catch (e) {
+        app.$mount();
+    };
+};
+getInfo();
 
 export default {
     // 这个字段走 app.json

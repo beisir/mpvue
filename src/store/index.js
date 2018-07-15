@@ -4,21 +4,11 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        phoneNumber: ''
+        phone_num: ''
     },
-    getters: {
-        phoneNumber (state, phoneNumber) {
-            console.log(phoneNumber);
-            state.phoneNumber = phoneNumber;
+    mutations: {
+        phone_num (state, res) {
+            state.phone_num = res;
         }
-    },
-    actions: {
-        phoneNumber ({commit}, num) {
-            console.log(num);
-            commit('phoneNumber', num);
-        }
-    },
-    moutation: {
-
     }
 });

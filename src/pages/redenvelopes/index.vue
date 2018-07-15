@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import {redList} from '../../utils/config.js';
+import {util} from '../../utils/config.js';
 export default {
     data () {
         return {
@@ -59,7 +59,7 @@ export default {
             try {
                 let openid = await this.$UTIL.Login();
                 let result = await this.$ajax({
-                    url: redList.queryHbDetails,
+                    url: util.queryHbDetails,
                     data: {
                         openId: openid.openid
                     }

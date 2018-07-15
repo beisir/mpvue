@@ -6,7 +6,7 @@
             </div>
             <div class="manage-userinfo">
                 <div class="manage-name">{{userInfo.nickName}}</div>
-                <div class="manage-phone">联系电话：13031115726</div>
+                <div class="manage-phone">联系电话：{{phone_num}}</div>
             </div>
             <button
                 class="user-btn"
@@ -60,6 +60,11 @@ export default {
             } catch (err) {
                 console.log(err);
             };
+        }
+    },
+    computed: {
+        phone_num () {
+            return this.$store.state.phone_num;
         }
     },
     created () {

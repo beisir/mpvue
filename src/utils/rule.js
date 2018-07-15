@@ -86,6 +86,7 @@ export default {
     ],
     '1': [
         {
+            btn: true,
             chepi: true,
             kehu: true,
             explain: [],

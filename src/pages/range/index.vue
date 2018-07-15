@@ -28,11 +28,12 @@
                         <div class="valid-left">发站</div>
                         <div class="valid-input">
                             <input
+                                :disabled="true"
                                 placeholder="输入国外的站点编码"
                                 placeholder-class="input"
                                 data-name="sendStationName"
                                 data-codeName="sendStationCode"
-                                @focus="dlongContainer"
+                                @click="dlongContainer"
                                 v-model="sendData.sendStationName"
                             />
                         </div>
@@ -43,11 +44,12 @@
                         <div class="valid-left">到站</div>
                         <div class="valid-input">
                             <input
+                                :disabled="true"
                                 placeholder="输入国内的站点编码"
                                 placeholder-class="input"
                                 data-codeName="arrStationCode"
                                 data-name="arrStationName"
-                                @focus="dlongContainer"
+                                @click="dlongContainer"
                                 v-model="sendData.arrStationName"
                             />
                         </div>
@@ -67,7 +69,7 @@
                                 mode="date"
                                 :value="sendData.sendDates"
                                 @change="bindDateChange">
-                                <span class="icon iconfont icon-shijian"></span>
+                                <span class="icon iconfont icon-rili"></span>
                             </picker>
                         </div>
                     </div>
@@ -109,7 +111,8 @@
                     </div>
                 </li>
             </ul>
-            <button type="button" class="valid-confim" @click="submitVakid">提交查询</button>
+            <button type="button" class="valid-confim" v-if="rule.btn" @click="submitInstant">提交查询</button>
+            <button type="button" class="valid-confim" v-else @click="submitVakid">提交查询</button>
         </div>
         <Explain :explainList="rule.explain"/>
         <inputDlong
@@ -127,7 +130,7 @@ import Balance from '../../components/balance.vue';
 import inputDlong from '../../components/inputDlong.vue';
 import Explain from '../../components/explain.vue';
 import rule from '../../utils/rule.js';
-import {util, range, queryInstant} from '../../utils/config.js';
+import {util, domestict, foreign} from '../../utils/config.js';
 export default {
     data () {
         return {
@@ -197,6 +200,35 @@ export default {
             };
             this.selectArray = selectArray;
         },
+        async submitInstant () {
+            let containerNo = this.sendData.containerNo;
+            let remCus = this.sendData.remCus;
+            if (containerNo !== '') {
+                if (this.validErr) {
+                    return false;
+                };
+                try {
+                    let result = await this.$ajax({
+                        url: util.saveJsInstant,
+                        method: 'POST',
+                        data: {
+                            containerNo: containerNo,
+                            remCus: remCus
+                        }
+                    });
+                    result && wx.navigateTo({
+                        url: `/pages/trahistory/main?active=${this.activeIndex}`
+                    });
+                } catch (e) {
+                    console.log(e);
+                };
+            } else {
+                wx.showToast({
+                    title: '请填写车皮/集装箱号',
+                    icon: 'none'
+                });
+            }
+        },
         /**
          * 提交查询 点击事件
          */
@@ -224,6 +256,9 @@ export default {
             });
             let flag = false;
             let stringTxt = '';
+            if (this.validErr) {
+                return false;
+            };
             if (rule.chepi && data.containerNo === '') {
                 stringTxt = '请填写车皮/集装箱号';
             } else if (rule.fazhan && data.sendStationName === '') {
@@ -247,8 +282,7 @@ export default {
         async submitRange (data) {
             try {
                 let activeIndex = this.activeIndex;
-                let url = activeIndex === '1' ? range.domestic : range.foreign;
-                console.log(url);
+                let url = activeIndex === '1' ? domestict.balance : foreign.balance;
                 let initData = await this.$ajax({
                     url: url,
                     data: data,
@@ -256,7 +290,6 @@ export default {
                 });
                 if (initData.state === '600') {
                     let resultOptions = await this.$UTIL.WeChatPayment(activeIndex, initData.msg);
-                    console.log(resultOptions);
                     this.timerDate(resultOptions.r.traQueryId, activeIndex);
                 } else {
                     wx.navigateTo({
@@ -268,7 +301,7 @@ export default {
             };
         },
         async timerDate (traQueryId, activeIndex) {
-            let url = activeIndex === '1' ? queryInstant.domestic : queryInstant.foreign;
+            let url = activeIndex === '1' ? domestict.queryInstant : foreign.queryInstant;
             let params = activeIndex === '1' ? {internaId: traQueryId} : {traQueryId: traQueryId};
             let count = 0;
             wx.showLoading({
@@ -300,11 +333,9 @@ export default {
                                     clearInterval(timer);
                                 };
                             }
-                            console.log(result);
                         }
                     });
                     count++;
-                    console.log(count);
                 } else {
                     clearInterval(timer);
                     wx.showToast({
@@ -334,7 +365,6 @@ export default {
             this.inputTost = true;
             this.dlongName = dlongName;
             this.codeName = codename;
-            console.log(e.mp);
         },
         /**
          * inputDlong 派发事件，是否关闭 inputDlong 弹框
@@ -386,11 +416,10 @@ export default {
             let date = this.getEndTime(changeTime[0], changeTime[1]);
             this.startTime = e.mp.detail.value;
             this.endTime = `${date.getFullYear()}-${this.transTime(Number(date.getMonth()) + 1)}-${this.transTime(date.getDate())}`;
-            // wx.showModal({
-            //     title: 'time',
-            //     content: `${cdt.getFullYear()},${Number(cdt.getMonth()) + 1},${cdt.getDate()}`
-            // });
         },
+        /**
+         * 获取余额红包等数据
+         */
         async queryTrace () {
             try {
                 let openid = await this.$UTIL.Login();
@@ -414,7 +443,6 @@ export default {
         this.rule = rule[activeIndex][domesticindex];
         this.domesticindex = Number(domesticindex) + 1;
         this.activeIndex = activeIndex;
-        // console.log(this.rule.explain);
         this.sendData = { // 表单数据绑定
             userRedCouId: '', // '红包'
             trackType: Number(domesticindex) + 1, // 查询类型
@@ -448,6 +476,15 @@ export default {
 </script>
 
 <style lang="css">
+picker{
+    width: 100%;
+}
+.valid-input .iconfont {
+    display:block;
+    width: 100%;
+    text-align:right;
+}
+
 .range-fexid {
     position: fixed;
     width: 100%;

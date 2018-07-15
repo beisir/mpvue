@@ -6,40 +6,67 @@
             @toogerTitle="toogerFn"
         />
         <div class="feed-title" v-if="!currentTab">
-            <div class="feed-back">
-                <p class="feed-back-title" v-if="result.TI.trackType === '1'">即时追踪</p>
-                <p class="feed-back-title" v-else-if="result.TI.trackType === '2'">全程追踪</p>
-                <p class="feed-back-title" v-else-if="result.TI.trackType === '3'">时段追踪</p>
-                <ul>
-                    <li v-if="result.TI.containerNo">{{result.TI.queryType === '1' ? '集装箱' : '车号'}}：{{result.TI.containerNo}}</li>
-                    <li v-if="result.TI.sendDate">发运日期 {{result.TI.sendDate}}</li>
-                    <li v-if="result.TI.sendStationName">发站：{{result.TI.sendStationName}}</li>
-                    <li v-if="result.TI.arrStationName">到站：{{result.TI.arrStationName}}</li>
-                </ul>
+            <div class="feed-back" v-if="active === 0">
+                <div v-if="result.TI">
+                    <p class="feed-back-title" v-if="result.TI.trackType == '1'">即时追踪</p>
+                    <p class="feed-back-title" v-else-if="result.TI.trackType == '2'">全程追踪</p>
+                    <p class="feed-back-title" v-else-if="result.TI.trackType == '3'">时段追踪</p>
+                    <ul>
+                        <li v-if="result.TI.containerNo">{{result.TI.queryType === '1' ? '集装箱' : '车号'}}：{{result.TI.containerNo}}</li>
+                        <li v-if="result.TI.sendDate">发运日期 {{result.TI.sendDate}}</li>
+                        <li v-if="result.TI.sendStationName">发站：{{result.TI.sendStationName}}</li>
+                        <li v-if="result.TI.arrStationName">到站：{{result.TI.arrStationName}}</li>
+                        <li v-if="result.TI.trackStartDate">起始日期：{{result.TI.trackStartDate}}</li>
+                        <li v-if="result.TI.trackEndDate">截止日期：{{result.TI.trackEndDate}}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="feed-back" v-else>
+                <div v-if="result.TI">
+                    <p class="feed-back-title" v-if="result.TI.queryState === '1'">即时追踪</p>
+                    <p class="feed-back-title" v-else-if="result.TI.queryState === '2'">全程追踪</p>
+                    <p class="feed-back-title" v-else-if="result.TI.queryState === '3'">时段追踪</p>
+                    <ul>
+                        <li v-if="result.TI.containerNo">{{result.TI.queryType === '1' ? '集装箱' : '车号'}}：{{result.TI.containerNo}}</li>
+                        <li v-if="result.TI.sendDate">发运日期 {{result.TI.sendDate}}</li>
+                        <li v-if="result.TI.sendStationName">发站：{{result.TI.sendStationName}}</li>
+                        <li v-if="result.TI.arrStationName">到站：{{result.TI.arrStationName}}</li>
+                        <li v-if="result.TI.payState === 0">支付状态：未支付</li>
+                        <li v-else-if="result.TI.payState === 1">支付状态：已支付</li>
+                        <li v-if="result.TI.payState === 2">支付状态：支付失败</li>
+                        <li v-if="result.TI.regTime">查询日期：{{result.TI.regTime}}</li>
+                    </ul>
+                </div>
             </div>
             <div class="feed-data" v-if="result.TQ.length">
                 <h3>追踪数据</h3>
-                <ul>
+                <ul v-if="active === 0">
                     <li v-for="(item, index) in result.TQ" :key="item.traOperation">
                         <h4>反馈时间：{{item.opeDatetime}}</h4>
                         <p>当前位置：{{item.opeStation}}，拼车号：{{item.platformNo || ''}}，操作：{{item.operation}}，距离目的地距离：{{item.traEndDis}}</p>
                     </li>
                 </ul>
+                <ul v-else>
+                    <li v-for="(item, index) in result.TQ" :key="item.traOperation">
+                        <h4>反馈时间：{{item.opeDatetime}}</h4>
+                        <!-- <p>当前位置：{{item.opeStation}}，拼车号：{{item.platformNo || ''}}，操作：{{item.operation}}，距离目的地距离：{{item.traEndDis}}</p> -->
+                        <p>站点状态：{{item.stationState}}，最新位置：{{item.currentEntire}}，操作：{{item.operation}}，距目的站距离：{{item.endDistance}}，</p>
+                    </li>
+                </ul>
             </div>
         </div>
-        <RoadMap :GPS="result.GPS" v-else />
-
-
+        <RoadMap :result="result" :active="active" v-else />
     </div>
 </template>
 
 <script>
 import titleBar from '../../components/titleBar.vue';
 import RoadMap from '../../components/RoadMap.vue';
-import {foreign_queryDetails, domestic_queryDetails} from '../../utils/config.js';
+import {foreign, domestic} from '../../utils/config.js';
 export default {
     data () {
         return {
+            active: 0,
             currentTab: 0,
             result: {
                 TI: {},
@@ -59,12 +86,17 @@ export default {
         };
     },
     methods: {
+        data () {
+            return {
+                active: 0
+            };
+        },
         toogerFn (index) {
             this.currentTab = index;
         },
         async getDataList (traQueryId, active) {
-            let url = active === '1' ? domestic_queryDetails.queryDetails : foreign_queryDetails.queryDetails;
-            let params = active === '1' ? {internaId: traQueryId} : {traQueryId: traQueryId};
+            let url = active === 1 ? domestic.queryDetails : foreign.queryDetails;
+            let params = active === 1 ? {internaId: traQueryId} : {traQueryId: traQueryId};
             try {
                 let openid = await this.$UTIL.Login();
                 let result = await this.$ajax({
@@ -73,7 +105,11 @@ export default {
                         openId: openid.openid
                     }, params)
                 });
-                this.result = result.data;
+                if (this.result) {
+                    this.result = (result && result.data);
+                } else {
+                    return false;
+                }
             } catch (e) {
                 console.log(e);
             };
@@ -84,7 +120,10 @@ export default {
         RoadMap
     },
     onLoad (options) {
-        this.getDataList(options.traQueryId, options.active);
+        this.active = Number(options.active);
+        console.log(this.active);
+        this.currentTab = 0;
+        this.getDataList(options.traQueryId, this.active);
     }
 };
 </script>
