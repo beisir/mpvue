@@ -83,9 +83,15 @@ export default {
                         wx_head: userInfo.avatarUrl // 微信头像
                     }
                 });
-                if (index !== undefined) {
-                    this.goPage(index);
+                if (options.state === '200') {
+                    if (index !== undefined) {
+                        this.goPage(index);
+                    };
                 };
+                wx.showToast({
+                    title: options.msg,
+                    icon: 'none'
+                });
             } catch (e) {
                 console.log(e);
             };
