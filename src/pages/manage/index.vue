@@ -9,41 +9,60 @@
                 <div class="manage-phone">联系电话：{{phone_num}}</div>
             </div>
             <button
+                v-if="userBtn"
                 class="user-btn"
                 open-type="getUserInfo"
                 @getuserinfo="userInfoHandler">
             </button>
         </div>
         <div class="manage-list">
-            <a href="/pages/personinfo/main">
-                <span class="icon iconfont icon-wode-"></span>
-                <p>个人信息</p>
+            <a class="aBtn" v-for="(pageItem, index) in pageList" :key="pageItem.title">
+                <span :class="['icon iconfont', pageItem.icon]"></span>
+                <p>{{pageItem.title}}</p>
                 <span class="icon iconfont icon-icon-arrow-right2"></span>
+                <button v-if="userBtn"
+                    :data-index="index"
+                    class="aBtn-button"
+                    open-type="getUserInfo"
+                    @getuserinfo="userInfoHandler">
+                </button>
+                <button class="aBtn-button" type="button" v-else @click="goPage(index)"></button>
             </a>
-            <a href="/pages/trahistory/main?active=0">
-                <span class="icon iconfont icon-icon--"></span>
-                <p>我的踪迹</p>
-                <span class="icon iconfont icon-icon-arrow-right2"></span>
-            </a>
-            <a href="/pages/myaccount/main">
-                <span class="icon iconfont icon-zhanghuxinxi"></span>
-                <p>我的账户</p>
-                <span class="icon iconfont icon-icon-arrow-right2"></span>
-            </a>
-            <a href="/pages/customer/main">
+            <a class="aBtn" @click="toggerCustomer">
                 <span class="icon iconfont icon-msnui-telephone"></span>
                 <p>客服中心</p>
                 <span class="icon iconfont icon-icon-arrow-right2"></span>
             </a>
+        </div>
+        <div class="manage-bottom">
+            <a href="/pages/switchpage/main">切换账号</a>
         </div>
     </div>
 </template>
 
 <script>
 import {manage} from '../../utils/data.js';
+import {util} from '../../utils/config.js';
 export default {
     data () {
         return {
+            pageList: [
+                {
+                    title: '个人信息',
+                    path: '/pages/personinfo/main',
+                    icon: 'icon-wode-'
+                },
+                {
+                    title: '我的踪迹',
+                    path: '/pages/trahistory/main?active=0',
+                    icon: 'icon-icon--'
+                },
+                {
+                    title: '我的账户',
+                    path: '/pages/myaccount/main',
+                    icon: 'icon-zhanghuxinxi'
+                }
+            ],
             userBtn: true,
             userInfo: {
                 nickName: '点击授权',
@@ -52,14 +71,46 @@ export default {
         };
     },
     methods: {
+        async saveUserInfo (userInfo, index) {
+            try {
+                let openid = await this.$UTIL.Login();
+                let options = await this.$ajax({
+                    url: util.grantWXInfor,
+                    method: 'POST',
+                    data: {
+                        openId: openid.openid,
+                        wx_name: userInfo.nickName, // 微信昵称
+                        wx_head: userInfo.avatarUrl // 微信头像
+                    }
+                });
+                if (index !== undefined) {
+                    this.goPage(index);
+                };
+            } catch (e) {
+                console.log(e);
+            };
+        },
         async userInfoHandler (e) {
             try {
                 let userInfo = await this.$UTIL.AuthorIzation(e);
+                let index = e.mp.currentTarget.dataset.index;
+                this.saveUserInfo(userInfo, index);
                 this.userInfo = userInfo;
                 this.userBtn = false;
             } catch (err) {
                 console.log(err);
             };
+        },
+        toggerCustomer () {
+            wx.switchTab({
+                url: '/pages/customer/main'
+            });
+        },
+        goPage (index) {
+            let pageList = this.pageList;
+            wx.navigateTo({
+                url: pageList[index].path
+            });
         }
     },
     computed: {
@@ -112,13 +163,23 @@ export default {
     margin-left: 30px;
 }
 
-.manage-list a {
+.manage-list .aBtn {
+    background-color: none;
     width: 100%;
     padding: 0 20px;
     box-sizing: border-box;
     display: flex;
     line-height: 40px;
-    border-bottom: 1px #f2f1f1 dashed;
+    position: relative;
+}
+.aBtn-button {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    z-index: 5000;
+    opacity: 0;
 }
 .manage-list p {
     padding-left: 30px;
@@ -130,5 +191,16 @@ export default {
 .manage-list .icon-icon-arrow-right2 {
     font-size: 18px;
 }
-
+.manage-bottom {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+.manage-bottom a {
+    display: block;
+    line-height: 50px;
+    width: 100%;
+    text-align: center;
+    border-top: 1px solid #eee;
+}
 </style>

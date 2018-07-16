@@ -1,4 +1,4 @@
-<template lang="html">
+<!-- <template lang="html">
     <div class="map">
         <map id="map"
             longitude="113.324520"
@@ -87,4 +87,17 @@ export default {
     top: 0;
     bottom: 0;
 }
+</style> -->
+<template lang="html">
+    <div class="">
+        <web-view src="https://www.wuchangwang.cn/vendors/map/map.htm"></web-view>
+    </div>
+</template>
+
+<script>
+export default {
+};
+</script>
+
+<style lang="css">
 </style>

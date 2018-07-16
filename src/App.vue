@@ -6,7 +6,7 @@ export default {
 };
 </script>
 <style media="screen">
-    @import url('../static/css/font/iconfont.css');
+    @import url('../static/css/font/iconfont.wcss');
     page{
         font-size: 14px;
     }

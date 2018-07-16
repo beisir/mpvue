@@ -28,7 +28,10 @@ module.exports = {
         queryCZRecord: `${hostName}/miniwc/main/queryCZRecord.htm`, // 充值明细
         saveWxXd: `${hostName}/miniwc/main/saveWxXd.htm`, // 微信充值订单
         query: `${hostName}/miniwc/main/query.htm`, // 直接充值金额轮询
-        saveJsInstant: `${hostName}/miniwc/main/saveJsInstant.htm` // 国内即时追踪单点提交查询
+        saveJsInstant: `${hostName}/miniwc/main/saveJsInstant.htm`, // 国内即时追踪单点提交查询
+        grantWXInfor: `${hostName}/miniwc/main/grantWXInfor.htm`, //
+        validatePhone: `${hostName}/miniwc/main/validatePhone.htm`,
+        sendPhone: `${hostName}/miniwc/main/sendPhone.htm`
     }
     // queryDomesticList: {
     //     queryDomesticList: `${hostName}/miniwc/domestic/queryDomesticList.htm`

@@ -4,10 +4,10 @@
             <li>
                 <span>姓名</span>
                 <div class="personinfo-input">
-                    <input type="text" placeholder="请输入您的姓名" placeholder-class="input" />
+                    <input type="text" placeholder="请输入您的姓名" v-model="personinfo.real_name" placeholder-class="input" />
                 </div>
             </li>
-            <li>
+            <!-- <li>
                 <span>电话</span>
                 <div class="personinfo-input">
                     <input type="text" placeholder="请输入您的手机号码" placeholder-class="input" />
@@ -19,22 +19,22 @@
                     <input type="text" placeholder="请输入验证码" placeholder-class="input" />
                     <span>获取验证码</span>
                 </div>
-            </li>
+            </li> -->
             <li>
                 <span>QQ号</span>
                 <div class="personinfo-input">
-                    <input type="text" placeholder="请输入您的QQ号" placeholder-class="input" />
+                    <input type="text" placeholder="请输入您的QQ号" v-model="personinfo.qq_num" placeholder-class="input" />
                 </div>
             </li>
             <li>
                 <span>微信号</span>
                 <div class="personinfo-input">
-                    <input type="text" placeholder="请输入您的微信号" placeholder-class="input" />
+                    <input type="text" placeholder="请输入您的微信号" v-model="personinfo.wechat_num" placeholder-class="input" />
                 </div>
             </li>
         </ul>
         <div class="personinfo-submit">
-            <span>保存</span>
+            <span @click="savePersoninfo">保存</span>
         </div>
     </div>
 
@@ -42,6 +42,73 @@
 
 <script>
 export default {
+    data () {
+        return {
+            personinfo: {
+    			phone_num: '',                //用户手机号
+    			email: '',               //用户邮箱
+    			qq_num: '',                     //QQ号
+    			wechat_num: '',                      //微信号
+    			real_name: '',                     //用户姓名
+    			user_img: ''
+            }
+        };
+    },
+    methods: {
+        savePersoninfo () {
+            let personinfo = this.personinfo;
+            let text = '';
+            if (personinfo.qq_num.trim() === '') {
+                text = '请填写QQ号';
+            } else if (personinfo.wechat_num.trim() === '') {
+                text = '请填写微信号';
+            } else if (personinfo.real_name.trim() === '') {
+                text = '请填写用户姓名';
+            };
+            if (text.length) {
+                wx.showToast({
+                    title: text,
+                    icon: 'none'
+                });
+            } else {
+                this.sendPersoninfo(personinfo);
+            };
+        },
+        async sendPersoninfo (params) {
+            try {
+                let openid = await this.$UTIL.Login();
+                let options = await this.$ajax({
+                    url: 'http://97a471d6.ngrok.io/miniwc/main/updateAccount.htm',
+                    method: 'POST',
+                    data: Object.assign({
+                        openId: openid.openid
+                    }, params)
+                });
+            } catch (e) {
+                console.log(e);
+            };
+
+        },
+        async getQueryAccount () {
+            try {
+                let openid = await this.$UTIL.Login();
+                let result = await this.$ajax({
+                    url: 'http://97a471d6.ngrok.io/miniwc/main/queryAccount.htm',
+                    data: {
+                        openId: openid.openid
+                    }
+                });
+                if (result && result.data){
+                    this.personinfo = result.data;
+                };
+            } catch (e) {
+                console.log(e);
+            };
+        }
+    },
+    onLoad () {
+        this.getQueryAccount();
+    }
 };
 </script>
 

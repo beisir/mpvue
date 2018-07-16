@@ -8,7 +8,7 @@
                 <div class="range-title">
                     <span :class="['icon', 'iconfont', domesticItem.icon]"></span>
                     <p class="range-head">{{domesticItem.title}}</p>
-                    <span class="icon iconfont icon-huo3"></span>
+                    <span  v-if ="domesticItem.iconrest" class="icon iconfont icon-huo"></span>
                     <button
                         v-if="domesticItem.rangeBtn"
                         class="range-btn"
@@ -92,8 +92,9 @@ export default {
                         userName: result
                     }
                 });
-                registerInfo && this.goRange(result, domesticindex);
+                this.$store.commit('phone_num', result);
                 this.phone_num = result;
+                registerInfo && this.goRange(result, domesticindex);
             } catch (err) {
                 console.log(err);
             };
@@ -136,7 +137,7 @@ export default {
     background-color: #44a0bd;
 }
 
-.range-title .icon-huo3{
+.range-title .icon-huo{
     color: #ff0000;
 }
 
