@@ -290,7 +290,7 @@ export default {
                 });
                 if (!initData.data) {
                     wx.showToast({
-                        title: '参数错误',
+                        title: '返回值为null',
                         icon: 'none'
                     });
                 } else {
