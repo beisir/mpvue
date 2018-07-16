@@ -107,7 +107,7 @@ export default {
             };
         },
         async saveUserInfo (userInfo, index) {
-            console.log(this.userBtn);
+            // console.log(this.userBtn);
             try {
                 let openid = await this.$UTIL.Login();
                 let options = await this.$ajax({
@@ -119,6 +119,7 @@ export default {
                         wx_head: userInfo.avatarUrl // 微信头像
                     }
                 });
+                this.goPage(index);
                 if (options.state === '200') {
                     if (index !== undefined) {
                         this.userInfo = userInfo;

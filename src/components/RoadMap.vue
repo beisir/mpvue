@@ -179,7 +179,7 @@ export default {
             // 此处需要在相应路径放置图片文件
             iconTapPath: '../../static/image/location.png'
         });
-        // this.getMapData();
+        this.getMapData();
     }
 };
 </script>
