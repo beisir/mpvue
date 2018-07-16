@@ -6,7 +6,7 @@
             </div>
             <div class="manage-userinfo">
                 <div class="manage-name">{{userInfo.nickName}}</div>
-                <div class="manage-phone">联系电话：{{phone_num}}</div>
+                <div class="manage-phone">联系电话：{{new_phone}}</div>
             </div>
             <button
                 v-if="userBtn"
@@ -71,7 +71,43 @@ export default {
         };
     },
     methods: {
+        // 获取手机号
+        async getPhoneNum () {
+            const _this = this;
+            try {
+                let openid = await this.$UTIL.Login();
+                let data = await this.$ajax({
+                    url: util.queryAccount,
+                    data: {
+                        openId: openid.openid
+                    }
+                });
+                if (data.state === '20') {
+                    if (!data.data.userName) {
+                        _this.userInfo = {
+                            nickName: '点击授权',
+                            avatarUrl: manage.avatarUrl
+                        };
+                        _this.userBtn = true;
+                    } else {
+                        this.$UTIL.AuthorIzation().then(result => {
+                            _this.userInfo = result;
+                            _this.userBtn = false;
+                        });
+                    };
+                    _this.$store.commit('new_phone', data.data.phone_num);
+                } else {
+                    wx.showToast({
+                        title: data.msg,
+                        icon: 'none'
+                    });
+                };
+            } catch (e) {
+                console.log(e);
+            };
+        },
         async saveUserInfo (userInfo, index) {
+            console.log(this.userBtn);
             try {
                 let openid = await this.$UTIL.Login();
                 let options = await this.$ajax({
@@ -85,7 +121,15 @@ export default {
                 });
                 if (options.state === '200') {
                     if (index !== undefined) {
+                        this.userInfo = userInfo;
+                        this.userBtn = false;
                         this.goPage(index);
+                    };
+                } else {
+                    this.userBtn = true;
+                    this.userInfo = {
+                        nickName: '点击授权',
+                        avatarUrl: manage.avatarUrl
                     };
                 };
                 wx.showToast({
@@ -99,10 +143,10 @@ export default {
         async userInfoHandler (e) {
             try {
                 let userInfo = await this.$UTIL.AuthorIzation(e);
+                console.log(userInfo)
                 let index = e.mp.currentTarget.dataset.index;
                 this.saveUserInfo(userInfo, index);
-                this.userInfo = userInfo;
-                this.userBtn = false;
+
             } catch (err) {
                 console.log(err);
             };
@@ -120,16 +164,14 @@ export default {
         }
     },
     computed: {
-        phone_num () {
-            return this.$store.state.phone_num;
+        new_phone () {
+            return this.$store.state.new_phone;
         }
     },
-    created () {
+    onLoad () {
         const _this = this;
-        this.$UTIL.AuthorIzation().then(result => {
-            _this.userInfo = result;
-            _this.userBtn = false;
-        });
+
+        this.getPhoneNum();
     }
 };
 </script>

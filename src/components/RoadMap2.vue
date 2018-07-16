@@ -4,27 +4,28 @@
         <!-- :latitude="23.099994" -->
         <!-- :polyline="polyline" -->
         <!-- :controls="controls" -->
+
         <map id="map"
-            scale="14"
-            :longitude="longitude"
-            :latitude="latitude"
-            :show-location="true"
+            scale="5"
             :markers="markers"
-            @markertap="makertap"
+            :polyline="polyline"
+            @markertap="markertap"
+            @regionchange="regionchange"
+            show-location
+            @callouttap="bindcallouttapFn"
+            @controltap="bindcontroltapFn"
         ></map>
     </div>
 </template>
 
 <script>
-import bmap from '../libs/bmap-wx.js';
+// let bmap = require('../../libs/bmap-wx.js');
+import BMapWX from '../libs/bmap-wx.js';
+console.log(BMapWX);
 export default {
     props: ['result', 'active'],
     data () {
         return {
-            latitude: '',
-            longitude: '',
-            placeData: {},
-
             mapDataOptions: {
                 iconPath: '/static/image/location.png',
                 width: 24,
@@ -42,41 +43,24 @@ export default {
             },
             markers: [],
             polyline: []
+
         };
     },
     methods: {
-        makertap: function(e) {
-            var that = this;
-            var id = e.markerId;
-            that.showSearchInfo(wxMarkerData, id);
-            that.changeMarkerColor(wxMarkerData, id);
+        bindcallouttapFn (e) {
+            console.log(e);
         },
-        showSearchInfo: function(data, i) {
-            var that = this;
-            that.setData({
-                placeData: {
-                    title: '名称：' + data[i].title + '\n',
-                    address: '地址：' + data[i].address + '\n',
-                    telephone: '电话：' + data[i].telephone
-                }
-            });
+        bindcontroltapFn (e) {
+            console.log(e);
         },
-        changeMarkerColor: function(data, i) {
-            var that = this;
-            var markers = [];
-            for (var j = 0; j < data.length; j++) {
-                if (j == i) {
-                    // 此处需要在相应路径放置图片文件
-                    data[j].iconPath = "../../img/marker_yellow.png";
-                } else {
-                    // 此处需要在相应路径放置图片文件
-                    data[j].iconPath = "../../img/marker_red.png";
-                }
-                markers[j](data[j]);
-            }
-            that.setData({
-                markers: markers
-            });
+        regionchange (e) {
+            console.log(e.type);
+        },
+        markertap (e) {
+            console.log(e.markerId);
+        },
+        controltap (e) {
+            console.log(e.controlId);
         },
         async getMapData () {
             const _this = this;
@@ -119,8 +103,7 @@ export default {
                     };
                 };
                 newList[newList.length - 1].iconPath = '/static/image/end.png';
-                // return _this.markers = newList;
-                return _this.markers = newList;
+                _this.markers = newList;
                 // _this.polyline = [{
                 //     points: points,
                 //     color:"#FF0000DD",
@@ -151,34 +134,7 @@ export default {
         }
     },
     mounted () {
-        const _this = this;
-        let wxMarkerData;
-        // 新建百度地图对象
-        var BMap = new bmap({
-            ak: '8ITmCGEknm0bdf2xGrN2xZ7lxrCu1PPn'
-        });
-        // console.log(bmap);
-        console.log(BMap);
-        var fail = function(data) {
-            console.log(data)
-        };
-        var success = function(data) {
-            console.log(data);
-            wxMarkerData = data.wxMarkerData;
-            _this.markers = wxMarkerData;
-            _this.latitude = wxMarkerData[0].latitude;
-            _this.longitude = wxMarkerData[0].longitude
-        }
-        BMap.regeocoding({
-            // wxMarkerData: ['49.6249456465,117.3559570313', '49.6249456465,117.3559570313'],
-            location: '49.6249456465,117.3559570313',
-            fail: fail,
-            success: success,
-            // 此处需要在相应路径放置图片文件
-            iconPath: '../../static/image/location.png',
-            // 此处需要在相应路径放置图片文件
-            iconTapPath: '../../static/image/location.png'
-        });
+        console.log(BMapWX());
         // this.getMapData();
     }
 };

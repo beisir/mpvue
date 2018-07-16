@@ -40,22 +40,21 @@ export default {
                     let openid = await this.$UTIL.Login();
                     let data = await this.$ajax({
                         url: util.validatePhone,
+                        method: 'POST',
                         data: {
                             openId: openid.openid,
                             phone_num: _this.phone,
     	                    checkCode: _this.code
                         }
                     });
+
+                    if (data.state === '200') {
+                        this.$store.commit('new_phone', _this.phone);
+                    };
                     wx.showToast({
                         title: data.msg,
                         icon: 'none'
                     });
-                    // if (data.state === '200') {
-                    //
-                    // } else {
-                    //
-                    // }
-                    console.log(data);
                 } catch (e) {
                     console.log(e);
                 };

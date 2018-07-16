@@ -77,7 +77,7 @@
                 <li v-if="rule.shiduan">
                     <div class="valid-box">
                         <div class="valid-left">时段追踪</div>
-                        <div class="valid-input" style="font-size:12px;position:relative;">
+                        <div class="valid-input" style="font-size:11px;position:relative;">
                             {{startTime}} 至 {{endTime}}
                             <picker
                                 class="valid-shiduan"
@@ -130,7 +130,7 @@ import Balance from '../../components/balance.vue';
 import inputDlong from '../../components/inputDlong.vue';
 import Explain from '../../components/explain.vue';
 import rule from '../../utils/rule.js';
-import {util, domestict, foreign} from '../../utils/config.js';
+import {util, domestic, foreign} from '../../utils/config.js';
 export default {
     data () {
         return {
@@ -282,26 +282,33 @@ export default {
         async submitRange (data) {
             try {
                 let activeIndex = this.activeIndex;
-                let url = activeIndex === '1' ? domestict.balance : foreign.balance;
+                let url = activeIndex === '1' ? domestic.balance : foreign.balance;
                 let initData = await this.$ajax({
                     url: url,
                     data: data,
                     method: 'POST'
                 });
-                if (initData.state === '600') {
-                    let resultOptions = await this.$UTIL.WeChatPayment(activeIndex, initData.msg);
-                    this.timerDate(resultOptions.r.traQueryId, activeIndex);
-                } else {
-                    wx.navigateTo({
-                        url: `/pages/trahistory/main?active=${activeIndex}`
+                if (!initData.data) {
+                    wx.showToast({
+                        title: '参数错误',
+                        icon: 'none'
                     });
+                } else {
+                    if (initData.state === '600') {
+                        let resultOptions = await this.$UTIL.WeChatPayment(activeIndex, initData.msg);
+                        this.timerDate(resultOptions.r.traQueryId, activeIndex);
+                    } else {
+                        wx.navigateTo({
+                            url: `/pages/trahistory/main?active=${activeIndex}`
+                        });
+                    };
                 };
             } catch (e) {
                 console.log(e);
             };
         },
         async timerDate (traQueryId, activeIndex) {
-            let url = activeIndex === '1' ? domestict.queryInstant : foreign.queryInstant;
+            let url = activeIndex === '1' ? domestic.queryInstant : foreign.queryInstant;
             let params = activeIndex === '1' ? {internaId: traQueryId} : {traQueryId: traQueryId};
             let count = 0;
             wx.showLoading({

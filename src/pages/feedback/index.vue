@@ -71,7 +71,9 @@ export default {
             result: {
                 TI: {},
                 GPS: [],
-                TQ: []
+                TQ: [],
+                end: '',
+                start: ''
             },
             titleList: [
                 {
@@ -105,11 +107,22 @@ export default {
                         openId: openid.openid
                     }, params)
                 });
-                if (this.result) {
-                    this.result = (result && result.data);
+                console.log(result);
+                if (!result) {
+                    wx.showToast({
+                        title: '没有返回值',
+                        icon: 'none'
+                    });
                 } else {
-                    return false;
-                }
+                    if (result.state === '20') {
+                        this.result = result.data;
+                    } else {
+                        wx.showToast({
+                            title: result.msg,
+                            icon: 'none'
+                        });
+                    };
+                };
             } catch (e) {
                 console.log(e);
             };
@@ -121,8 +134,14 @@ export default {
     },
     onLoad (options) {
         this.active = Number(options.active);
-        console.log(this.active);
         this.currentTab = 0;
+        this.result = {
+            TI: {},
+            GPS: [],
+            TQ: [],
+            end: '',
+            start: ''
+        };
         this.getDataList(options.traQueryId, this.active);
     }
 };

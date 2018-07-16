@@ -7,19 +7,6 @@
                     <input type="text" placeholder="请输入您的姓名" v-model="personinfo.real_name" placeholder-class="input" />
                 </div>
             </li>
-            <!-- <li>
-                <span>电话</span>
-                <div class="personinfo-input">
-                    <input type="text" placeholder="请输入您的手机号码" placeholder-class="input" />
-                </div>
-            </li>
-            <li>
-                <span>验证码</span>
-                <div class="personinfo-input personinfo-code">
-                    <input type="text" placeholder="请输入验证码" placeholder-class="input" />
-                    <span>获取验证码</span>
-                </div>
-            </li> -->
             <li>
                 <span>QQ号</span>
                 <div class="personinfo-input">
@@ -41,6 +28,7 @@
 </template>
 
 <script>
+import {util} from '../../utils/config.js';
 export default {
     data () {
         return {
@@ -71,18 +59,26 @@ export default {
                     icon: 'none'
                 });
             } else {
-                this.sendPersoninfo(personinfo);
+                this.sendPersoninfo({
+        			qq_num: personinfo.qq_num, // QQ号
+        			wechat_num: personinfo.wechat_num, // 微信号
+        			real_name: personinfo.wechat_num // 用户姓名
+                });
             };
         },
         async sendPersoninfo (params) {
             try {
                 let openid = await this.$UTIL.Login();
                 let options = await this.$ajax({
-                    url: 'http://97a471d6.ngrok.io/miniwc/main/updateAccount.htm',
+                    url: util.updateAccount,
                     method: 'POST',
                     data: Object.assign({
                         openId: openid.openid
                     }, params)
+                });
+                wx.showToast({
+                    title: options.msg,
+                    icon: 'none'
                 });
             } catch (e) {
                 console.log(e);
@@ -93,13 +89,23 @@ export default {
             try {
                 let openid = await this.$UTIL.Login();
                 let result = await this.$ajax({
-                    url: 'http://97a471d6.ngrok.io/miniwc/main/queryAccount.htm',
+                    url: util.queryAccount,
                     data: {
                         openId: openid.openid
                     }
                 });
                 if (result && result.data){
-                    this.personinfo = result.data;
+                    if (result.state === '20') {
+                        this.personinfo.phone_num = result.data.phone_num;
+                        this.personinfo.qq_num = result.data.qq_num;
+                        this.personinfo.wechat_num = result.data.wechat_num;
+                        this.personinfo.real_name = result.data.real_name;
+                    } else {
+                        wx.showToast({
+                            title: result.msg,
+                            icon: 'none'
+                        });
+                    };
                 };
             } catch (e) {
                 console.log(e);

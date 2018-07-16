@@ -23,7 +23,7 @@ const getInfo = async () => {
             data: {
                 openId: openid.openid
             }
-        });
+        }, true);
         app.$store.commit('phone_num', info.data.phone_num);
         app.$mount();
     } catch (e) {

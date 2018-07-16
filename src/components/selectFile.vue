@@ -131,6 +131,7 @@ export default {
                         pageSize: 6
                     }, params)
                 });
+                // console.log(reslutList);
                 if (reslutList && reslutList.data.length !== 0) {
                     this.abroadList = this.abroadList.concat(reslutList.data);
                 } else {

@@ -31,7 +31,9 @@ module.exports = {
         saveJsInstant: `${hostName}/miniwc/main/saveJsInstant.htm`, // 国内即时追踪单点提交查询
         grantWXInfor: `${hostName}/miniwc/main/grantWXInfor.htm`, //
         validatePhone: `${hostName}/miniwc/main/validatePhone.htm`,
-        sendPhone: `${hostName}/miniwc/main/sendPhone.htm`
+        sendPhone: `${hostName}/miniwc/main/sendPhone.htm`,
+        queryAccount: `${hostName}/miniwc/main/queryAccount.htm`,
+        updateAccount: `${hostName}/miniwc/main/updateAccount.htm` // 保存个人信息
     }
     // queryDomesticList: {
     //     queryDomesticList: `${hostName}/miniwc/domestic/queryDomesticList.htm`

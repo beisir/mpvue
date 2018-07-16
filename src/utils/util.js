@@ -93,7 +93,7 @@ class UTIL {
                                 title: '授权失败',
                                 icon: 'none'
                             });
-                            resolve();
+                            reject('失败');
                         };
                     }
                 }
@@ -157,6 +157,13 @@ class UTIL {
                         openId: openid
                     }, params)
                 });
+                if (typeof result === 'string') {
+                    wx.showToast({
+                        title: '系统异常',
+                        icon: 'none'
+                    });
+                    return false;
+                }
                 wx.requestPayment({
                     timeStamp: result.timeStamp,
                     nonceStr: result.nonceStr,
@@ -180,7 +187,6 @@ class UTIL {
                         };
                     },
                     fail (res) {
-                        console.log(res);
                         reject(res);
                         let errMsg = res.errMsg.includes('cancel') ? '取消支付' : '支付失败，请重试';
                         wx.showToast({
@@ -190,6 +196,7 @@ class UTIL {
                     }
                 });
             } catch (err) {
+                console.log(err);
                 wx.showToast({
                     title: '请求错误',
                     icon: 'none'
