@@ -40,7 +40,6 @@ export default {
             '^pages/index/main', // 首页
             'pages/switchpage/main', // 切换页面
             'pages/domestic/main', // 首页2
-            'pages/map/main', // 地图
             'pages/range/main', // 国外全程运踪
             'pages/picker/main',
             'pages/personinfo/main', // 个人信息
@@ -49,7 +48,6 @@ export default {
             'pages/lmmediate/main', // 国内即时运踪
             'pages/myaccount/main', // 我的账户
             'pages/recharge/main', // 充值明细
-            // 'pages/map/main',
             'pages/customer/main', // 客服中心
             'pages/redenvelopes/main', // 我的红包
             'pages/manage/main'

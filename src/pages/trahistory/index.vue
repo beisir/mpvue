@@ -22,7 +22,6 @@
 
 import titleBar from '../../components/titleBar.vue';
 import selectFile from '../../components/selectFile.vue';
-import selectFile2 from '../../components/selectFile2.vue';
 export default {
     props: ['active'],
     data () {
@@ -63,8 +62,7 @@ export default {
     },
     components: {
         titleBar,
-        selectFile,
-        selectFile2
+        selectFile
     }
 };
 </script>

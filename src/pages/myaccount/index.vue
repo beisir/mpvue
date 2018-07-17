@@ -37,7 +37,7 @@ export default {
         return {
             some: 0,
             isshow: false,
-            priceList: [0.01, 100, 200, 500, 1000, 2000]
+            priceList: [50, 100, 200, 500, 1000, 2000]
         };
     },
     methods: {

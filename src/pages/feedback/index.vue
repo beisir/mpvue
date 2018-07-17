@@ -55,7 +55,7 @@
                 </ul>
             </div>
         </div>
-        <RoadMap :result="result" :active="active" v-else />
+        <RoadMap :urlParams="urlParams" :active="active" v-else />
     </div>
 </template>
 
@@ -68,6 +68,7 @@ export default {
         return {
             active: 0,
             currentTab: 0,
+            urlParams: '',
             result: {
                 TI: {},
                 GPS: [],
@@ -99,6 +100,7 @@ export default {
         async getDataList (traQueryId, active) {
             let url = active === 1 ? domestic.queryDetails : foreign.queryDetails;
             let params = active === 1 ? {internaId: traQueryId} : {traQueryId: traQueryId};
+            this.urlParams = active === 1 ? 'internaId=' + traQueryId : 'traQueryId=' + traQueryId;
             try {
                 let openid = await this.$UTIL.Login();
                 let result = await this.$ajax({
@@ -107,7 +109,6 @@ export default {
                         openId: openid.openid
                     }, params)
                 });
-                console.log(result);
                 if (!result) {
                     wx.showToast({
                         title: '没有返回值',

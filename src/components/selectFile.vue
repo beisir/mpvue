@@ -37,7 +37,7 @@
             </div>
         </div>
         <scroll-view
-            :style="{'height': (scrollH - 110) + 'px'}"
+            :style="{'height': (scrollH - 120) + 'px'}"
             :scroll-y="true"
             :lower-threshold="true"
             @scrolltolower="scrollChange">
