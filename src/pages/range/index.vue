@@ -200,6 +200,7 @@ export default {
             };
             this.selectArray = selectArray;
         },
+        // 单独提交 国内及时
         async submitInstant () {
             let containerNo = this.sendData.containerNo;
             let remCus = this.sendData.remCus;
@@ -259,13 +260,13 @@ export default {
             if (this.validErr) {
                 return false;
             };
-            if (rule.chepi && data.containerNo === '') {
+            if (rule.chepi && data.containerNo.trim() === '') {
                 stringTxt = '请填写车皮/集装箱号';
-            } else if (rule.fazhan && data.sendStationName === '') {
+            } else if (rule.fazhan && data.sendStationName.trim() === '') {
                 stringTxt = '请填选择发站编码';
-            } else if (rule.daozhan && data.arrStationName === '') {
+            } else if (rule.daozhan && data.arrStationName.trim() === '') {
                 stringTxt = '请填选择到站编码';
-            } else if (rule.fayun && data.sendDates === '') {
+            } else if (rule.fayun && data.sendDates.trim() === '') {
                 stringTxt = '请选择发运日期';
             } else {
                 flag = true;
@@ -288,12 +289,12 @@ export default {
                     data: data,
                     method: 'POST'
                 });
-                if (!initData.data) {
-                    wx.showToast({
-                        title: '返回值为null',
-                        icon: 'none'
-                    });
-                } else {
+                // if (!initData.data) {
+                //     wx.showToast({
+                //         title: '返回值为null',
+                //         icon: 'none'
+                //     });
+                // } else {
                     if (initData.state === '600') {
                         let resultOptions = await this.$UTIL.WeChatPayment(activeIndex, initData.msg);
                         this.timerDate(resultOptions.r.traQueryId, activeIndex);
@@ -302,7 +303,7 @@ export default {
                             url: `/pages/trahistory/main?active=${activeIndex}`
                         });
                     };
-                };
+                // };
             } catch (e) {
                 console.log(e);
             };

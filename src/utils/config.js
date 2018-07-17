@@ -1,5 +1,5 @@
 const hostName = 'https://www.wuchangwang.cn';
-// const hostName = 'http://localhost:5757/weapp';
+// const hostName = 'http://7e0048fa.ngrok.io/WCW';
 module.exports = {
     foreign: { // 国外
         balance: `${hostName}/miniwc/main/foreign/balance.htm`, // 国外运踪 校验通过余额支付红包支付 不满足返回，拉取微信支付 11
@@ -29,43 +29,10 @@ module.exports = {
         saveWxXd: `${hostName}/miniwc/main/saveWxXd.htm`, // 微信充值订单
         query: `${hostName}/miniwc/main/query.htm`, // 直接充值金额轮询
         saveJsInstant: `${hostName}/miniwc/main/saveJsInstant.htm`, // 国内即时追踪单点提交查询
-        grantWXInfor: `${hostName}/miniwc/main/grantWXInfor.htm`, //
+        grantWXInfor: `${hostName}/miniwc/main/grantWXInfor.htm`, // 保存微信头像，微信用户名
         validatePhone: `${hostName}/miniwc/main/validatePhone.htm`,
         sendPhone: `${hostName}/miniwc/main/sendPhone.htm`,
         queryAccount: `${hostName}/miniwc/main/queryAccount.htm`,
         updateAccount: `${hostName}/miniwc/main/updateAccount.htm` // 保存个人信息
     }
-    // queryDomesticList: {
-    //     queryDomesticList: `${hostName}/miniwc/domestic/queryDomesticList.htm`
-    // },
-    // customers: {
-    //     queryCustomers: `${hostName}/miniwc/main/queryCustomers.htm`,
-    //     queryDomestic: `${hostName}/miniwc/domestic/queryDomesticList.htm`
-    // },
-    // querySend: {
-    //     querySend: `${hostName}/miniwc/main/querySend.htm`
-    // },
-    // redList: {
-    //     queryHbDetails: `${hostName}/miniwc/main/queryHbDetails.htm`
-    // },
-    // queryCZRecord: {
-    //     queryCZRecord: `${hostName}/miniwc/main/queryCZRecord.htm`
-    // },
-    // queryInstant: {
-    //     foreign: `${hostName}/miniwc/foreign/queryInstant.htm`,
-    //     domestic: `${hostName}/miniwc/domestic/queryInstant.htm`
-    // },
-    // saveWxXd: {
-    //     saveWxXd: `${hostName}/miniwc/main/saveWxXd.htm`,
-    //     query: `${hostName}/miniwc/main/query.htm`
-    // },
-    // foreign_queryDetails: {
-    //     queryDetails: `${hostName}/miniwc/foreign/queryDetails.htm`
-    // },
-    // domestic_queryDetails: {
-    //     queryDetails: `${hostName}/miniwc/domestic/queryDetails.htm`
-    // },
-    // saveJsInstant: {
-    //     saveJsInstant: `${hostName}/miniwc/main/saveJsInstant.htm`
-    // }
 };

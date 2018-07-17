@@ -112,7 +112,6 @@ class UTIL {
             let {encryptedData, iv, errMsg} = e.mp.detail;
             if (errMsg.includes('ok')) {
                 let {session_key} = await _this.Login(true);
-                console.log(session_key);
                 ajax({
                     url: util.phoneNum,
                     method: 'POST',
@@ -164,6 +163,7 @@ class UTIL {
                     });
                     return false;
                 }
+                console.log(result);
                 wx.requestPayment({
                     timeStamp: result.timeStamp,
                     nonceStr: result.nonceStr,

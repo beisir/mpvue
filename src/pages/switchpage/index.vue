@@ -29,7 +29,8 @@ export default {
             code: '',
             phone: '',
             isshow: true,
-            shengyu: '60重新发送'
+            shengyu: '60重新发送',
+            sessionId: ''
         }
     },
     methods: {
@@ -41,15 +42,22 @@ export default {
                     let data = await this.$ajax({
                         url: util.validatePhone,
                         method: 'POST',
+                        header: {
+                            'Cookie': 'JSESSIONID=' + _this.sessionId,
+                            'Accept': 'application/json, text/javascript, */*',
+                            'Content-type': 'application/x-www-form-urlencoded;charset=utf-8;' // 默认值
+                        },
                         data: {
                             openId: openid.openid,
                             phone_num: _this.phone,
     	                    checkCode: _this.code
                         }
                     });
-
                     if (data.state === '200') {
                         this.$store.commit('new_phone', _this.phone);
+                        wx.switchTab({
+                            url: '/pages/manage/main'
+                        });
                     };
                     wx.showToast({
                         title: data.msg,
@@ -92,6 +100,7 @@ export default {
                             }
                         });
                         if (data.state === '30') {
+                            this.sessionId = data.data;
                             this.isshow = false;
                             this.timerOut();
                         };

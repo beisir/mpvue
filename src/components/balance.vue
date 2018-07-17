@@ -33,7 +33,7 @@ export default {
             type: Boolean
         }
     },
-    onLoad () {
+    mounted () {
         const title = this.ruleOptions.name;
         wx.setNavigationBarTitle({
             title: title

@@ -12,21 +12,18 @@
                 v-if="userBtn"
                 class="user-btn"
                 open-type="getUserInfo"
-                @getuserinfo="userInfoHandler">
+                @getuserinfo="saveUserInfo">
             </button>
         </div>
         <div class="manage-list">
-            <a class="aBtn" v-for="(pageItem, index) in pageList" :key="pageItem.title">
+            <a class="aBtn"
+                v-for="(pageItem, pageIndex) in pageList"
+                :key="pageItem.icon"
+                :href="pageItem.path">
                 <span :class="['icon iconfont', pageItem.icon]"></span>
                 <p>{{pageItem.title}}</p>
                 <span class="icon iconfont icon-icon-arrow-right2"></span>
-                <button v-if="userBtn"
-                    :data-index="index"
-                    class="aBtn-button"
-                    open-type="getUserInfo"
-                    @getuserinfo="userInfoHandler">
-                </button>
-                <button class="aBtn-button" type="button" v-else @click="goPage(index)"></button>
+                <!-- <button class="aBtn-button" type="button" v-else @click="goPage(0)"></button> -->
             </a>
             <a class="aBtn" @click="toggerCustomer">
                 <span class="icon iconfont icon-msnui-telephone"></span>
@@ -37,6 +34,12 @@
         <div class="manage-bottom">
             <a href="/pages/switchpage/main">切换账号</a>
         </div>
+        <button
+            v-if="phoneBtn"
+            class="fiexd"
+            open-type="getPhoneNumber"
+            @getphonenumber="userInfoHandler">
+        </button>
     </div>
 </template>
 
@@ -63,6 +66,7 @@ export default {
                     icon: 'icon-zhanghuxinxi'
                 }
             ],
+            phoneBtn: true,
             userBtn: true,
             userInfo: {
                 nickName: '点击授权',
@@ -71,7 +75,7 @@ export default {
         };
     },
     methods: {
-        // 获取手机号
+        // 获取手机号 等用户信息
         async getPhoneNum () {
             const _this = this;
             try {
@@ -82,23 +86,25 @@ export default {
                         openId: openid.openid
                     }
                 });
-                if (data.state === '20') {
-                    if (!data.data.userName) {
-                        _this.userInfo = {
-                            nickName: '点击授权',
-                            avatarUrl: manage.avatarUrl
-                        };
-                        _this.userBtn = true;
+                if (data.state === '34' || data.state === '35') {
+                    if (data.data.phone_num) {
+                        _this.phoneBtn = false;
+                        _this.$store.commit('new_phone', data.data.phone_num);
                     } else {
-                        this.$UTIL.AuthorIzation().then(result => {
-                            _this.userInfo = result;
-                            _this.userBtn = false;
-                        });
+                        _this.phoneBtn = true;
                     };
-                    _this.$store.commit('new_phone', data.data.phone_num);
+                    if (data.data.wxHead && data.data.wxName) {
+                        this.userInfo = {
+                            nickName: data.data.wxName,
+                            avatarUrl: data.data.wxHead
+                        };
+                        this.userBtn = false;
+                    } else {
+                        this.userBtn = true;
+                    };
                 } else {
                     wx.showToast({
-                        title: data.msg,
+                        title: data.msg || '错误',
                         icon: 'none'
                     });
                 };
@@ -106,32 +112,29 @@ export default {
                 console.log(e);
             };
         },
-        async saveUserInfo (userInfo, index) {
-            // console.log(this.userBtn);
+        // 获取保存微信用户头像 微信名称
+        async saveUserInfo (e) {
             try {
+                let userInfo = await this.$UTIL.AuthorIzation(e);
                 let openid = await this.$UTIL.Login();
                 let options = await this.$ajax({
                     url: util.grantWXInfor,
                     method: 'POST',
                     data: {
                         openId: openid.openid,
-                        wx_name: userInfo.nickName, // 微信昵称
-                        wx_head: userInfo.avatarUrl // 微信头像
+                        wxName: userInfo.nickName, // 微信昵称
+                        wxHead: userInfo.avatarUrl // 微信头像
                     }
                 });
-                this.goPage(index);
                 if (options.state === '200') {
-                    if (index !== undefined) {
-                        this.userInfo = userInfo;
-                        this.userBtn = false;
-                        this.goPage(index);
-                    };
+                    this.userInfo = userInfo;
+                    this.userBtn = false;
                 } else {
-                    this.userBtn = true;
                     this.userInfo = {
                         nickName: '点击授权',
                         avatarUrl: manage.avatarUrl
                     };
+                    this.userBtn = true;
                 };
                 wx.showToast({
                     title: options.msg,
@@ -141,43 +144,60 @@ export default {
                 console.log(e);
             };
         },
+        // 保存手机号码
         async userInfoHandler (e) {
             try {
-                let userInfo = await this.$UTIL.AuthorIzation(e);
-                console.log(userInfo)
-                let index = e.mp.currentTarget.dataset.index;
-                this.saveUserInfo(userInfo, index);
-
+                let result = await this.$UTIL.getMobilePhone(e);
+                let openid = await this.$UTIL.Login();
+                let registerInfo = await this.$ajax({
+                    url: util.register,
+                    data: {
+                        openId: openid.openid,
+                        userName: result
+                    }
+                });
+                if (registerInfo.state === '20') {
+                    let index = e.mp.currentTarget.dataset.index;
+                    this.$store.commit('phone_num', result);
+                    this.phoneBtn = false;
+                } else {
+                    this.phoneBtn = true;
+                    wx.showToast({
+                        title: registerInfo.msg,
+                        icon: 'none'
+                    });
+                };
             } catch (err) {
                 console.log(err);
             };
         },
+        // 跳转客服页面
         toggerCustomer () {
             wx.switchTab({
                 url: '/pages/customer/main'
             });
-        },
-        goPage (index) {
-            let pageList = this.pageList;
-            wx.navigateTo({
-                url: pageList[index].path
-            });
         }
+    },
+    mounted () {
+        this.getPhoneNum();
     },
     computed: {
         new_phone () {
             return this.$store.state.new_phone;
         }
-    },
-    onLoad () {
-        const _this = this;
-
-        this.getPhoneNum();
     }
 };
 </script>
 
 <style lang="css">
+.fiexd {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    opacity: 0;
+}
 .manage-top {
     padding: 20px;
     position: relative;
