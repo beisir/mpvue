@@ -32,12 +32,6 @@ export default {
         yu: {
             type: Boolean
         }
-    },
-    mounted () {
-        const title = this.ruleOptions.name;
-        wx.setNavigationBarTitle({
-            title: title
-        });
     }
 };
 </script>

@@ -10,17 +10,13 @@ export default {
     props: ['urlParams', 'active'],
     data () {
         return {
-            url: 'http://192.168.16.103:8000/static/html/index4.html?'
+            url: 'https://www.wuchangwang.cn/railway.html?'
         };
-    },
-    methods: {
-
     },
     mounted () {
         const _this = this;
         this.$UTIL.Login().then(res => {
             _this.url = `${_this.url}openId=${res.openid}&${_this.urlParams}`;
-            console.log(_this.url)
         });
     }
 };

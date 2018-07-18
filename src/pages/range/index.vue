@@ -448,7 +448,11 @@ export default {
         }
     },
     onLoad ({activeIndex, domesticindex}) {
+        const _this = this;
         this.rule = rule[activeIndex][domesticindex];
+        wx.setNavigationBarTitle({
+            title: _this.rule.ruleOptions.name
+        });
         this.domesticindex = Number(domesticindex) + 1;
         this.activeIndex = activeIndex;
         this.sendData = { // 表单数据绑定
@@ -472,7 +476,6 @@ export default {
         this.validErr = false;
         this.selectArray = ['无红包'];
         this.initData();
-
         this.queryTrace();
     },
     components: {

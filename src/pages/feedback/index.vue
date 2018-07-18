@@ -111,7 +111,7 @@ export default {
                 });
                 if (!result) {
                     wx.showToast({
-                        title: '没有返回值',
+                        title: '暂无数据',
                         icon: 'none'
                     });
                 } else {

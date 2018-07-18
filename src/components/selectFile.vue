@@ -39,7 +39,7 @@
         <scroll-view
             :style="{'height': (scrollH - 120) + 'px'}"
             :scroll-y="true"
-            :lower-threshold="true"
+            :lower-threshold="30"
             @scrolltolower="scrollChange">
             <ul class="tra-detail">
                 <li v-for="(abroadItem, abroadIndex) in abroadList" :key="abroadItem.trackType">
