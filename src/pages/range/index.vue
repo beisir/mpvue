@@ -196,7 +196,6 @@ export default {
                 selectArray = ['无红包'];
             } else {
                 selectArray = selectArray.map(item => item.redAmount + '');
-                selectArray = selectArray.concat(defaultSelect);
             };
             this.selectArray = selectArray;
         },
@@ -437,11 +436,19 @@ export default {
                         openId: openid.openid
                     }
                 });
-                this.queryTraceData = result.data;
-                let key = this.rule.key;
-                this.price = result.data.amountTimes[key];
-                this.redList(result.data.hb);
-                this.sendData.sendDates = result.data.date;
+                console.log(result.data);
+                if (result.data) {
+                    this.queryTraceData = result.data;
+                    let key = this.rule.key;
+                    this.price = result.data.amountTimes[key];
+                    this.redList(result.data.hb);
+                    this.sendData.sendDates = result.data.date;
+                } else {
+                    wx.showToast({
+                        title: result.msg,
+                        icon: 'none'
+                    });
+                };
             } catch (e) {
                 console.log(e);
             };

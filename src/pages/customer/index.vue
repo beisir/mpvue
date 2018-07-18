@@ -17,7 +17,6 @@
                     <a class="customer-link" @click="callTel(telItem.cuserPhone)">联系他</a>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -50,6 +49,20 @@ export default {
 </script>
 
 <style lang="css">
+/* .follow-btn {
+    width: 100px;
+    position: absolute;
+    background-color: #fea200;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    left: 50%;
+    margin-left: -50px;
+    bottom: 30px;
+    border-radius: 3px;
+
+} */
 .customer-title {
     padding-left: 15px;
     line-height: 40px;

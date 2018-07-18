@@ -56,7 +56,7 @@ export default {
                     icon: 'icon-wode-'
                 },
                 {
-                    title: '我的踪迹',
+                    title: '查询历史',
                     path: '/pages/trahistory/main?active=0',
                     icon: 'icon-icon--'
                 },
@@ -87,13 +87,13 @@ export default {
                     }
                 });
                 if (data.state === '34' || data.state === '35') {
-                    if (data.data.phone_num) {
+                    if (data.data && data.data.phone_num) {
                         _this.phoneBtn = false;
                         _this.$store.commit('new_phone', data.data.phone_num);
                     } else {
                         _this.phoneBtn = true;
                     };
-                    if (data.data.wxHead && data.data.wxName) {
+                    if (data.data && data.data.wxHead && data.data.wxName) {
                         this.userInfo = {
                             nickName: data.data.wxName,
                             avatarUrl: data.data.wxHead
@@ -178,7 +178,7 @@ export default {
             });
         }
     },
-    mounted () {
+    onShow () {
         this.getPhoneNum();
     },
     computed: {

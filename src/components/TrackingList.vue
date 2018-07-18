@@ -8,7 +8,20 @@
                 <div class="range-title">
                     <span :class="['icon', 'iconfont', domesticItem.icon]"></span>
                     <p class="range-head">{{domesticItem.title}}</p>
-                    <span  v-if ="domesticItem.iconrest" class="icon iconfont icon-huo"></span>
+                    <span v-if ="domesticItem.iconrest" class="icon iconfont icon-huo"></span>
+                    <button
+                        v-if="!phone_num && domesticItem.rangeBtn"
+                        open-type="getPhoneNumber"
+                        class="range-btn select-history"
+                        :data-history="true"
+                        @getphonenumber="application"
+                    >查询历史</button>
+                    <button
+                        v-else-if="domesticItem.rangeBtn"
+                        class="range-btn select-history"
+                        @click="goTrahistory"    
+                    >查询历史</button>
+                    <!-- <a href="" v-else class='range-go select-history'>去追踪</a> -->
                     <button
                         v-if="domesticItem.rangeBtn"
                         class="range-btn"
@@ -81,7 +94,8 @@ export default {
          */
         async application (e) {
             // 获取当前按钮下标 匹配range组件
-            let domesticindex = e.mp.currentTarget.dataset.domesticindex;
+            let domesticindex = e.mp.currentTarget.dataset.domesticindex,
+                history = e.mp.currentTarget.dataset.history;
             try {
                 let result = await this.$UTIL.getMobilePhone(e);
                 let openid = await this.$UTIL.Login();
@@ -94,7 +108,11 @@ export default {
                 });
                 this.$store.commit('phone_num', result);
                 this.phone_num = result;
-                registerInfo && this.goRange(result, domesticindex);
+                if (history) {
+                    this.goTrahistory();
+                } else {
+                    registerInfo && this.goRange(result, domesticindex);
+                };
             } catch (err) {
                 console.log(err);
             };
@@ -108,17 +126,21 @@ export default {
             let dataString = `phone=${phone}&activeIndex=${activeIndex}&domesticindex=${domesticindex}`;
             let url = `/pages/range/main?${dataString}`;
             wx.navigateTo({url});
+        },
+        goTrahistory () {
+            let url = '/pages/trahistory/main?active=0';
+            wx.navigateTo({url});
         }
     }
 };
 </script>
 
 <style lang="css">
+
 .railt-title {
     line-height: 40px;
     padding-left: 20px;
     box-shadow: 0rpx 0rpx 10px #ddd;
-
 }
 
 /* 国外样式 */
@@ -171,5 +193,12 @@ export default {
     position: absolute;
     bottom: 60px;
     right: 24px;
+}
+.select-history {
+    background-color: #fff;
+    color: #385ad3;
+    outline: none;
+    border-width: 0;
+    border-color: #ffffff;
 }
 </style>

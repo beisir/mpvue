@@ -1,7 +1,7 @@
 <template lang="html">
     <div class="">
         <TrackingList :activeIndex="0" />
-        <SementAlert />
+        <SementAlert :isShow="isShow" @closeAlert="closeAlert" />
     </div>
 </template>
 
@@ -10,9 +10,22 @@
 import TrackingList from '../../components/TrackingList.vue';
 import SementAlert from '../../components/sementAlert.vue';
 export default {
+    data () {
+        return {
+            isShow: true
+        };
+    },
+    onShow () {
+        this.isShow = true;
+    },
     components: {
         TrackingList,
         SementAlert
+    },
+    methods: {
+        closeAlert () {
+            this.isShow = false;
+        }
     },
     onShareAppMessage: function (options) {
         const _this = this;

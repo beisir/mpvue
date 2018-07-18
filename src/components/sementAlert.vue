@@ -1,16 +1,12 @@
 <template lang="html">
-    <div class="sementAlert" v-if="isShow" @click="closeDlong">
-        <div class="sementAlert-content sementAlert-animate">
+    <div class="sementAlert" v-if="isShow">
+        <div class="sementAlert-content sementAlert-animate" @click="closeDlong">
             <img class="sementAlert-banner"
                 src="https://wuchangwang.cn/vendorDoc/whd/0/activ.jpg" />
-            <!-- <div class="sementAlert-contaienr">
-                <h3>{{'很 sad 将阿克索德教练卡睡觉了'}}</h3>
-                <p>大家好才是你自己嗲激动啊睡觉滴哦啊睡觉滴哦啊睡觉滴哦啊睡觉的</p>
-            </div> -->
-            <!-- <div class="sementAlert-button">
-                <a href="" class="cancel">取消</a>
-                <a href="" class="confim">强制体验</a>
-            </div> -->
+            <div class="sementAlert-button">
+                <!-- <button type="button" @click="closeDlong">确定</button> -->
+                <button type="button" open-type="share">分享</button>
+            </div>
             <span class="close-btn" @click="closeDlong">X</span>
         </div>
     </div>
@@ -18,14 +14,10 @@
 
 <script>
 export default {
-    data () {
-        return {
-            isShow: true
-        };
-    },
+    props: ['isShow'],
     methods: {
         closeDlong () {
-            this.isShow = false;
+            this.$emit('closeAlert', false);
         }
     }
 };
@@ -45,7 +37,7 @@ export default {
         align-items:center;
     }
     .sementAlert-content {
-        height: 300px;
+        /* height: 300px; */
         width: 70%;
         margin: 50px auto;
         /* background-color: #ffffff; */
@@ -91,23 +83,33 @@ export default {
         line-height: 20px;
     }
     .sementAlert-button {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        width: 100%;
         display: flex;
         height: 50px;
         align-items: center;
-        justify-content: space-between;
-        padding: 15px;
+        justify-content: space-around;
+        /* padding: 15px; */
+        /* margin-top: -30px; */
     }
-    .sementAlert-button a {
-        width: 45%;
-        line-height: 35px;
+    .sementAlert-button button {
+        font-size: 14px;
+        display: block;
+        width: 30%;
+        height: 30px;
+        line-height: 30px;
         text-align: center;
+        background-color: #f00;
         border-radius: 3px;
+        color: #fff;
     }
-    .sementAlert-button .cancel {
+    /* .sementAlert-button .cancel {
         background-color: #ccc;
     }
     .sementAlert-button .confim {
         background-color: rgb(76, 85, 91);
         color: #fff;
-    }
+    } */
 </style>
