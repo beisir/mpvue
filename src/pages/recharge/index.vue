@@ -45,7 +45,7 @@ export default {
                         pageSize: pageNo
                     }
                 });
-                this.dataList = this.dataList.concat(datalist.data);
+                this.dataList = datalist.data;
             } catch (e) {
                 console.log(e);
             };

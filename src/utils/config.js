@@ -1,5 +1,5 @@
 const hostName = 'https://www.wuchangwang.cn/miniwc';
-// const hostName = 'http://8228d2da.ngrok.io/WCW/miniwc';
+// const hostName = 'http://077e1194.ngrok.io/WCW/miniwc';
 module.exports = {
     foreign: { // 国外
         balance: `${hostName}/main/foreign/balance.htm`, // 国外运踪 校验通过余额支付红包支付 不满足返回，拉取微信支付 11

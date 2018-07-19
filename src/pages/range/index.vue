@@ -195,7 +195,7 @@ export default {
             if (!selectArray.length) {
                 selectArray = ['无红包'];
             } else {
-                selectArray = selectArray.map(item => item.redAmount + '');
+                selectArray = selectArray.map(item => item.remain + '');
             };
             this.selectArray = selectArray;
         },

@@ -5,10 +5,10 @@
             <li v-for="(redItem, redIndex) in resultList"
                 :key="redItem.regTime">
                 <div class="red-top">
-                    <div class="red-price">{{redItem.redAmount}}<span>元</span></div>
+                    <div class="red-price">{{redItem.remain}}<span>元</span></div>
                     <div class="">
                         <p>无门槛使用（剩余：{{redItem.remain}}元）</p>
-                        <p class="red-ps">适用于国外追踪所有产品</p>
+                        <p class="red-ps">{{redItem.useRange}}</p>
                     </div>
                 </div>
                 <div class="red-bottom">
@@ -16,32 +16,6 @@
                     <span class="red-time">{{redItem.sdate}} 至 {{redItem.edate}}</span>
                 </div>
             </li>
-            <!-- <li>
-                <div class="red-top">
-                    <div class="red-price">100<span>元</span></div>
-                    <div class="">
-                        <p>无门槛使用（剩余：10元）</p>
-                        <p class="red-ps">适用于国外追踪所有产品</p>
-                    </div>
-                </div>
-                <div class="red-bottom">
-                    <span class="red-span">有效日期</span>
-                    <span class="red-time">2018-06-21 00:00:00 至 2018-06-21 00:00:00</span>
-                </div>
-            </li>
-            <li>
-                <div class="red-top">
-                    <div class="red-price">100<span>元</span></div>
-                    <div class="">
-                        <p>无门槛使用（剩余：10元）</p>
-                        <p class="red-ps">适用于国外追踪所有产品</p>
-                    </div>
-                </div>
-                <div class="red-bottom">
-                    <span class="red-span">有效日期</span>
-                    <span class="red-time">2018-06-21 00:00:00 至 2018-06-21 00:00:00</span>
-                </div>
-            </li> -->
         </ul>
     </div>
 </template>

@@ -23,8 +23,8 @@ export default {
             ruleOptions: {
                 name: '国外全程追踪',
                 every: '全程',
-                price: 52,
-                discount: 21
+                price: 15,
+                discount: 15
             }
         },
         {
@@ -53,9 +53,9 @@ export default {
             trackType: '1',
             ruleOptions: {
                 name: '国外即时运踪',
-                price: 30,
+                price: 15,
                 every: '即时',
-                discount: 21
+                discount: 15
             }
 
         },
@@ -83,9 +83,9 @@ export default {
             trackType: '3',
             ruleOptions: {
                 name: '国外时段运踪',
-                price: 60,
+                price: 15,
                 every: '时段',
-                discount: 21
+                discount: 15
             }
 
         }
@@ -109,9 +109,9 @@ export default {
             explain: [],
             ruleOptions: {
                 name: '国内全程运踪',
-                price: 10,
+                price: 15,
                 every: '全程',
-                discount: 7
+                discount: 15
             }
         },
         {
@@ -126,7 +126,7 @@ export default {
                 name: '国内时段运踪',
                 price: 15,
                 every: '时段',
-                discount: 7
+                discount: 15
             }
         }
     ]
