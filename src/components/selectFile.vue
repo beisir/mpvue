@@ -50,7 +50,7 @@
                         <a v-if="currentTab === 0" :href="'/pages/feedback/main?traQueryId=' + abroadItem.traQueryId + '&active=' + currentTab">查看追踪详情</a>
                         <a v-else :href="'/pages/feedback/main?traQueryId=' + abroadItem.internaId + '&active=' + currentTab">查看追踪详情</a>
                     </div>
-                    <div class="tra-date">{{abroadItem.regTime}}</div>
+                    <div class="tra-date">{{abroadItem.date}}</div>
                 </li>
             </ul>
         </scroll-view>

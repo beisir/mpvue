@@ -19,8 +19,10 @@ export default {
                     '适用情形：经常查某个车皮/集装箱运踪，最划算'
                 ]
             ],
+            trackType: '2',
             ruleOptions: {
                 name: '国外全程追踪',
+                every: '全程',
                 price: 52,
                 discount: 21
             }
@@ -48,9 +50,11 @@ export default {
                     '俄罗斯、白俄罗斯、蒙古、哈萨克斯坦、乌兹别克斯坦、吉尔吉斯斯坦、塔吉克斯坦、土库曼斯坦、乌克兰、摩尔多瓦、阿塞拜疆、格鲁吉亚、拉脱维亚、立、陶宛、爱沙尼亚、芬兰'
                 ]
             ],
+            trackType: '1',
             ruleOptions: {
                 name: '国外即时运踪',
                 price: 30,
+                every: '即时',
                 discount: 21
             }
 
@@ -76,9 +80,11 @@ export default {
                     '适用情形：常年管理某个集装箱/车皮运踪'
                 ]
             ],
+            trackType: '3',
             ruleOptions: {
                 name: '国外时段运踪',
                 price: 60,
+                every: '时段',
                 discount: 21
             }
 
@@ -104,6 +110,7 @@ export default {
             ruleOptions: {
                 name: '国内全程运踪',
                 price: 10,
+                every: '全程',
                 discount: 7
             }
         },
@@ -118,6 +125,7 @@ export default {
             ruleOptions: {
                 name: '国内时段运踪',
                 price: 15,
+                every: '时段',
                 discount: 7
             }
         }

@@ -8,8 +8,8 @@
             </div>
         </div>
         <div class="range-whole">
-            <p>￥{{price}}/次·全程</p>
-            <p>物畅网会员尊享7折—9折优惠，低至{{ruleOptions.discount}}元</p>
+            <p>￥{{price}}/次·{{ruleOptions.every}}</p>
+            <p>活动期间优惠低至{{ruleOptions.discount}}元，会员尊享折上折</p>
         </div>
     </div>
 </template>

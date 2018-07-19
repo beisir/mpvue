@@ -19,6 +19,12 @@
                     <input type="text" placeholder="请输入您的微信号" v-model="personinfo.wechat_num" placeholder-class="input" />
                 </div>
             </li>
+            <li>
+                <span>邮箱</span>
+                <div class="personinfo-input">
+                    <input type="text" placeholder="请输入您的微信号" v-model="personinfo.email" placeholder-class="input" />
+                </div>
+            </li>
         </ul>
         <div class="personinfo-submit">
             <span @click="savePersoninfo">保存</span>
@@ -52,6 +58,8 @@ export default {
                 text = '请填写微信号';
             } else if (personinfo.real_name.trim() === '') {
                 text = '请填写用户姓名';
+            } else if (personinfo.email.trim() === '') {
+                text = '请填写用邮箱账号';
             };
             if (text.length) {
                 wx.showToast({
@@ -62,7 +70,8 @@ export default {
                 this.sendPersoninfo({
         			qq_num: personinfo.qq_num, // QQ号
         			wechat_num: personinfo.wechat_num, // 微信号
-        			real_name: personinfo.wechat_num // 用户姓名
+        			real_name: personinfo.wechat_num, // 用户姓名
+                    email: personinfo.email
                 });
             };
         },

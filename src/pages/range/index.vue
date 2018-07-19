@@ -464,7 +464,7 @@ export default {
         this.activeIndex = activeIndex;
         this.sendData = { // 表单数据绑定
             userRedCouId: '', // '红包'
-            trackType: Number(domesticindex) + 1, // 查询类型
+            trackType: this.rule.trackType, // 查询类型
             queryType: '', // 集装箱/整车
             containerNo: '', // 箱号
             sourceData: '04', // 接口类型

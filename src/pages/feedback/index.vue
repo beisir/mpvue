@@ -42,13 +42,13 @@
                 <h3>追踪数据</h3>
                 <ul v-if="active === 0">
                     <li v-for="(item, index) in result.TQ" :key="item.traOperation">
-                        <h4>反馈时间：{{item.opeDatetime}}</h4>
+                        <h4>反馈时间：{{item.date}}</h4>
                         <p>当前位置：{{item.opeStation}}，拼车号：{{item.platformNo || ''}}，操作：{{item.operation}}，距离目的地距离：{{item.traEndDis}}</p>
                     </li>
                 </ul>
                 <ul v-else>
                     <li v-for="(item, index) in result.TQ" :key="item.traOperation">
-                        <h4>反馈时间：{{item.opeDatetime}}</h4>
+                        <h4>反馈时间：{{item.date}}</h4>
                         <!-- <p>当前位置：{{item.opeStation}}，拼车号：{{item.platformNo || ''}}，操作：{{item.operation}}，距离目的地距离：{{item.traEndDis}}</p> -->
                         <p>站点状态：{{item.stationState}}，最新位置：{{item.currentEntire}}，操作：{{item.operation}}，距目的站距离：{{item.endDistance}}，</p>
                     </li>

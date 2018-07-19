@@ -10,7 +10,7 @@ export default {
     props: ['urlParams', 'active'],
     data () {
         return {
-            url: 'https://www.wuchangwang.cn/railway.html?'
+            url: 'http://www.wuchangwang.cn/railway.html?'
         };
     },
     mounted () {
