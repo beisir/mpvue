@@ -21,7 +21,8 @@
                         </div>
                         <span class="valid-err" v-if="validErr">格式错误</span>
                     </div>
-                    <div class="valid-prompt">示例：集装箱号：TKRU4096807  车皮号：44472058</div>
+                    <div class="valid-prompt" v-if="activeIndex == 0">示例：集装箱号：TKRU4096807  车皮号：44472058</div>
+                    <div class="valid-prompt" v-else>示例：集装箱号  TBJU4876492  车皮号：5487242</div>
                 </li>
                 <li v-if="rule.fazhan">
                     <div class="valid-box">

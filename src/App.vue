@@ -7,6 +7,9 @@ export default {
 </script>
 <style media="screen">
     @import url('../static/css/font/iconfont.wcss');
+    input:-moz-placeholder { color: #839ab4 }
+    input:-ms-input-placeholder { color: #839ab4; }
+    input::-webkit-input-placeholder { color: #839ab4; }
     page{
         font-size: 14px;
     }
@@ -43,6 +46,7 @@ export default {
     }
     .input {
         text-align:center;
+        color: #bfbfbf;
     }
 
     /* range */
@@ -54,7 +58,6 @@ export default {
         display: flex;
         align-items: center;
         padding: 8px  10px;
-
     }
     .valid-left{
         /* flex: 3; */
