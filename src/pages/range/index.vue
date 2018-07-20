@@ -29,7 +29,7 @@
                         <div class="valid-input">
                             <input
                                 :disabled="true"
-                                placeholder="输入国外的站点编码"
+                                :placeholder="'输入'+ (activeIndex == 0 ? '国外': '国内' )+'的站点编码'"
                                 placeholder-class="input"
                                 data-name="sendStationName"
                                 data-codeName="sendStationCode"
@@ -45,7 +45,7 @@
                         <div class="valid-input">
                             <input
                                 :disabled="true"
-                                placeholder="输入国内的站点编码"
+                                :placeholder="'输入'+ (activeIndex == 0 ? '国外': '国内' )+'的站点编码'"
                                 placeholder-class="input"
                                 data-codeName="arrStationCode"
                                 data-name="arrStationName"
