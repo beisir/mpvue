@@ -22,7 +22,7 @@
             <li>
                 <span>邮箱</span>
                 <div class="personinfo-input">
-                    <input type="text" placeholder="请输入您的邮箱账号" v-model="personinfo.email" placeholder-class="input" />
+                    <input type="text" placeholder="请输入您的邮箱" v-model="personinfo.email" placeholder-class="input" />
                 </div>
             </li>
         </ul>

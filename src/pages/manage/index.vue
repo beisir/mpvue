@@ -85,7 +85,7 @@ export default {
                     data: {
                         openId: openid.openid
                     }
-                });
+                }, true);
                 if (data.state === '34' || data.state === '35') {
                     if (data.data && data.data.phone_num) {
                         _this.phoneBtn = false;
