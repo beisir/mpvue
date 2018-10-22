@@ -2,6 +2,10 @@
     <div class="">
         <TrackingList :activeIndex="0" />
         <SementAlert :isShow="isShow" @closeAlert="closeAlert" />
+
+        <!-- <view style="width:100%;position:relative;background:gray;"> -->
+           <official-account style="position:absolute;bottom:0;width:100%;height:168rpx;border-top: solid #ccc 1px;"></official-account>
+        <!-- </view> -->
     </div>
 </template>
 
