@@ -7,9 +7,9 @@ export default {
 </script>
 <style media="screen">
     @import url('../static/css/font/iconfont.wcss');
-    input:-moz-placeholder { color: #839ab4 }
-    input:-ms-input-placeholder { color: #839ab4; }
-    input::-webkit-input-placeholder { color: #839ab4; }
+    input:-moz-placeholder { color: #839ab4;font-weight:900; }
+    input:-ms-input-placeholder { color: #839ab4;font-weight:900; }
+    input::-webkit-input-placeholder { color: #839ab4;font-weight:900; }
     page{
         font-size: 14px;
     }

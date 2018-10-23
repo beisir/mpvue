@@ -25,6 +25,12 @@
                     <input type="text" placeholder="请输入您的邮箱" v-model="personinfo.email" placeholder-class="input" />
                 </div>
             </li>
+            <li>
+                <span>公司</span>
+                <div class="personinfo-input">
+                    <input type="text" placeholder="请输入您的公司" v-model="personinfo.company" placeholder-class="input" />
+                </div>
+            </li>
         </ul>
         <div class="personinfo-submit">
             <span @click="savePersoninfo">保存</span>
@@ -39,12 +45,14 @@ export default {
     data () {
         return {
             personinfo: {
-    			phone_num: '',                //用户手机号
     			email: '',               //用户邮箱
     			qq_num: '',                     //QQ号
     			wechat_num: '',                      //微信号
     			real_name: '',                     //用户姓名
-    			user_img: ''
+    			company: '',
+    			phone_num: '',                //用户手机号
+    			user_img: '',
+
             }
         };
     },
@@ -59,7 +67,9 @@ export default {
             } else if (personinfo.real_name.trim() === '') {
                 text = '请填写用户姓名';
             } else if (personinfo.email.trim() === '') {
-                text = '请填写用邮箱账号';
+                text = '请填写邮箱账号';
+            } else if (personinfo.company.trim() === '') {
+                text = '请填写公司名称';
             };
             if (text.length) {
                 wx.showToast({
@@ -70,8 +80,9 @@ export default {
                 this.sendPersoninfo({
         			qq_num: personinfo.qq_num, // QQ号
         			wechat_num: personinfo.wechat_num, // 微信号
-        			real_name: personinfo.wechat_num, // 用户姓名
-                    email: personinfo.email
+        			real_name: personinfo.real_name, // 用户姓名
+                    email: personinfo.email,
+                    company: personinfo.company
                 });
             };
         },
@@ -86,9 +97,15 @@ export default {
                     }, params)
                 });
                 wx.showToast({
-                    title: options.msg,
+                    title: options.msg+",即将跳转上一页",
                     icon: 'none'
                 });
+ 				setTimeout(function () {
+				     //要延时执行的代码
+				     wx.switchTab({
+					       url: "../manage/main"
+					 });
+				}, 1600);
             } catch (e) {
                 console.log(e);
             };
@@ -104,11 +121,13 @@ export default {
                     }
                 });
                 if (result && result.data){
-                    if (result.state === '20') {
+                    if (result.state === '34') {
                         this.personinfo.phone_num = result.data.phone_num;
                         this.personinfo.qq_num = result.data.qq_num;
                         this.personinfo.wechat_num = result.data.wechat_num;
                         this.personinfo.real_name = result.data.real_name;
+                        this.personinfo.company = result.data.company;
+                        this.personinfo.email = result.data.email;
                     } else {
                         wx.showToast({
                             title: result.msg,

@@ -145,7 +145,7 @@ export default {
             };
         }
     },
-    onLoad () {
+    onShow () {
         this.slectChange();
     }
 

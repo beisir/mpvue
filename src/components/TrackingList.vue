@@ -53,6 +53,7 @@
     </div>
 </template>
 
+
 <script>
 // 注册国内国外全局数据
 import {indexData} from '../utils/data.js';
@@ -98,6 +99,7 @@ export default {
                 history = e.mp.currentTarget.dataset.history;
             try {
                 let result = await this.$UTIL.getMobilePhone(e);
+                console.log(result);
                 let openid = await this.$UTIL.Login();
                 let registerInfo = await this.$ajax({
                     url: util.register,
@@ -106,12 +108,19 @@ export default {
                         userName: result
                     }
                 });
-                this.$store.commit('phone_num', result);
+                if(registerInfo['data']==null){
+            	        wx.showToast({
+                            title: '数据异常，请联系客服',
+                            icon: 'none'
+                        });
+                        return ;
+                }
+                await this.$store.commit('phone_num', result);
                 this.phone_num = result;
                 if (history) {
-                    this.goTrahistory();
+                   this.goTrahistory();
                 } else {
-                    registerInfo && this.goRange(result, domesticindex);
+                   this.goRange(result, domesticindex);
                 };
             } catch (err) {
                 console.log(err);
@@ -195,8 +204,8 @@ export default {
     right: 24px;
 }
 .select-history {
-    background-color: #fff;
-    color: #385ad3;
+    background-color: #4ba0e5;
+    color: #ffffff;
     outline: none;
     border-width: 0;
     border-color: #ffffff;
