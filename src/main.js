@@ -55,7 +55,7 @@ export default {
         'window': {
             'backgroundTextStyle': 'light',
             'navigationBarBackgroundColor': '#fea200',
-            'navigationBarTitleText': '铁路追中',
+            'navigationBarTitleText': '铁路运踪',
             'navigationBarTextStyle': 'light'
         },
         'tabBar': {

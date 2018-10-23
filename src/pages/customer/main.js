@@ -5,6 +5,7 @@ const app = new Vue(Customer);
 app.$mount();
 export default {
     config: {
-        navigationBarTitleText: '客服中心'
+        navigationBarTitleText: '客服中心',
+        enablePullDownRefresh:true
     }
 };

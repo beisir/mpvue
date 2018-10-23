@@ -12,7 +12,7 @@
                         <div class="valid-left">车皮/集装箱号</div>
                         <div class="valid-input">
                             <input
-                                placeholder="TKRU4096807"
+                                :placeholder="(activeIndex == 0 ? 'TKRU4096807': 'TBJU4876492' )"
                                 placeholder-class="input"
                                 v-model="sendData.containerNo"
                                 @blur="inputBlur"
@@ -166,7 +166,7 @@ export default {
          * @param {object} e - 事件对象.
          */
         inputBlur (e) {
-            let reg = this.activeIndex ? /^([A-Z]{4}\d{7}|\d{7})$/ : /^([A-Z]{4}\d{7}|\d{8})$/;
+            let reg = this.activeIndex==0 ? /^([A-Z]{4}\d{7}|\d{8})$/ : /^([A-Z]{4}\d{7}|\d{7})$/;
             let containerNo = this.sendData.containerNo;
             this.validErr = reg.test(containerNo) ? 0 : 1;
         },

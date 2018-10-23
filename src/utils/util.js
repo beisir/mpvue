@@ -163,38 +163,45 @@ class UTIL {
                     });
                     return false;
                 }
-                console.log(result);
-                wx.requestPayment({
-                    timeStamp: result.timeStamp,
-                    nonceStr: result.nonceStr,
-                    package: result['package'],
-                    signType: 'MD5',
-                    paySign: result.paySign,
-                    success (res) {
-                        // 如果支付成功 发送推送消息模板
-                        let prepay_id = result['package'].split('=')[1];
-                        if (res.errMsg.includes('ok')) {
-                            resolve({
-                                prepay_id: prepay_id,
-                                r: result.r
+                wx.showModal({
+                    title:'提示',
+                    content:'您确认查询吗？',
+                    success:function(res) {
+                        if(res.confirm) {
+                            wx.requestPayment({
+                                timeStamp: result.timeStamp,
+                                nonceStr: result.nonceStr,
+                                package: result['package'],
+                                signType: 'MD5',
+                                paySign: result.paySign,
+                                success (res) {
+                                    // 如果支付成功 发送推送消息模板
+                                    let prepay_id = result['package'].split('=')[1];
+                                    if (res.errMsg.includes('ok')) {
+                                        resolve({
+                                            prepay_id: prepay_id,
+                                            r: result.r
+                                        });
+                                        wx.showToast({
+                                            title: '支付成功',
+                                            icon: 'none'
+                                        });
+                                    } else {
+                                        reject('失败');
+                                    };
+                                },
+                                fail (res) {
+                                    reject(res);
+                                    let errMsg = res.errMsg.includes('cancel') ? '取消支付' : '支付失败，请重试';
+                                    wx.showToast({
+                                        title: errMsg,
+                                        icon: 'none'
+                                    });
+                                }
                             });
-                            wx.showToast({
-                                title: '支付成功',
-                                icon: 'none'
-                            });
-                        } else {
-                            reject('失败');
-                        };
-                    },
-                    fail (res) {
-                        reject(res);
-                        let errMsg = res.errMsg.includes('cancel') ? '取消支付' : '支付失败，请重试';
-                        wx.showToast({
-                            title: errMsg,
-                            icon: 'none'
-                        });
+                        }
                     }
-                });
+                })
             } catch (err) {
                 console.log(err);
                 wx.showToast({

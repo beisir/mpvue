@@ -9,7 +9,8 @@
         </div>
         <div class="range-whole">
             <p>￥{{price}}/次·{{ruleOptions.every}}</p>
-            <p>活动期间优惠低至{{ruleOptions.discount}}元，会员尊享折上折</p>
+            <!-- <p>活动期间优惠低至{{ruleOptions.discount}}元，会员尊享折上折</p> -->
+            <p>会员尊享折上折</p>
         </div>
     </div>
 </template>

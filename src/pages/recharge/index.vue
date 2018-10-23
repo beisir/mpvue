@@ -61,7 +61,6 @@ export default {
         this.getCZRecord(this.pageNo);
     },
     onLoad () {
-        console.log(123123);
         const _this = this;
         this.$UTIL.Login().then(openid => {
             console.log(openid);

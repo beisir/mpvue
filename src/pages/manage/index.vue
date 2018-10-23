@@ -30,9 +30,10 @@
                 <p>客服中心</p>
                 <span class="icon iconfont icon-icon-arrow-right2"></span>
             </a>
+            <p v-if="!tipsBtn" style="text-align: center;">请完善您的个人信息呦！</p>
         </div>
         <div class="manage-bottom">
-            <a href="/pages/switchpage/main">切换账号</a>
+            <button @click="switchAccount" class="account_a">切换账号</button>
         </div>
         <button
             v-if="phoneBtn"
@@ -40,6 +41,8 @@
             open-type="getPhoneNumber"
             @getphonenumber="userInfoHandler">
         </button>
+
+           <official-account style="position:absolute;bottom:0;width:100%;height:200rpx;"></official-account>
     </div>
 </template>
 
@@ -68,6 +71,7 @@ export default {
             ],
             phoneBtn: true,
             userBtn: true,
+            tipsBtn: true,
             userInfo: {
                 nickName: '点击授权',
                 avatarUrl: manage.avatarUrl
@@ -102,6 +106,19 @@ export default {
                     } else {
                         this.userBtn = true;
                     };
+                    if (data.data.qq_num === '') {
+		                this.tipsBtn = false;
+		            } else if (data.data.wechat_num === '') {
+		                this.tipsBtn = false;
+		            } else if (data.data.real_name=== '') {
+		                this.tipsBtn = false;
+		            } else if (data.data.email=== '') {
+		                this.tipsBtn = false;
+		            } else if (data.data.company=== '') {
+		                this.tipsBtn = false;
+		            }else{
+		            	this.tipsBtn = true;
+		            };
                 } else {
                     wx.showToast({
                         title: data.msg || '错误',
@@ -171,12 +188,18 @@ export default {
                 console.log(err);
             };
         },
+        switchAccount(){
+        	wx.navigateTo({
+                url: '/pages/switchpage/main'
+            });
+        },
         // 跳转客服页面
         toggerCustomer () {
             wx.switchTab({
                 url: '/pages/customer/main'
             });
-        }
+        },
+  
     },
     onShow () {
         this.getPhoneNum();
@@ -185,11 +208,19 @@ export default {
         new_phone () {
             return this.$store.state.new_phone;
         }
-    }
+    },
 };
 </script>
 
 <style lang="css">
+.account_a {
+	background-color:#00BFFF;
+	width: 32%;
+	height: 4%;
+	font-size: 16px;
+	color: white;
+	margin-bottom: 30%;
+}	
 .fiexd {
     position: fixed;
     top: 0;
@@ -264,6 +295,7 @@ export default {
     width: 100%;
     position: absolute;
     bottom: 0;
+    text-align: center;
 }
 .manage-bottom a {
     display: block;
