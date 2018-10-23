@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="">
-    	<!-- <Advertising /> -->
+    	<Advertising />
         <TrackingList :activeIndex="0" />
         <!-- <SementAlert :isShow="isShow" @closeAlert="closeAlert" /> -->
 
