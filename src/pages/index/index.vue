@@ -1,10 +1,11 @@
 <template lang="html">
     <div class="">
+    	<!-- <Advertising /> -->
         <TrackingList :activeIndex="0" />
-        <SementAlert :isShow="isShow" @closeAlert="closeAlert" />
+        <!-- <SementAlert :isShow="isShow" @closeAlert="closeAlert" /> -->
 
         <!-- <view style="width:100%;position:relative;background:gray;"> -->
-           <official-account style="position:absolute;bottom:0;width:100%;height:168rpx;border-top: solid #ccc 1px;"></official-account>
+           <official-account style="position:absolute;bottom:0;width:100%;height:200rpx;"></official-account>
         <!-- </view> -->
     </div>
 </template>
@@ -13,6 +14,9 @@
 // 引入国内国外组件
 import TrackingList from '../../components/TrackingList.vue';
 import SementAlert from '../../components/sementAlert.vue';
+//引入轮播图组件
+import Advertising from '../../components/swiper/advertising.vue';
+
 export default {
     data () {
         return {
@@ -24,7 +28,8 @@ export default {
     },
     components: {
         TrackingList,
-        SementAlert
+        //SementAlert,
+        Advertising
     },
     methods: {
         closeAlert () {
